@@ -19,11 +19,27 @@ type DefaultArgumentList struct {
 	Metrics   bool `default:"false" help:"Publish metrics data."`
 	Inventory bool `default:"false" help:"Publish inventory data."`
 	Events    bool `default:"false" help:"Publish events data."`
+	Metadata  bool `default:"false" help:"Add customer defined key-value attributes to the samples."`
 }
 
 // All returns if all data should be published
 func (d *DefaultArgumentList) All() bool {
 	return !d.Inventory && !d.Metrics && !d.Events
+}
+
+// HasMetrics returns if metrics should be published
+func (d *DefaultArgumentList) HasMetrics() bool {
+	return d.Metrics || d.All()
+}
+
+// HasEvents returns if events should be published
+func (d *DefaultArgumentList) HasEvents() bool {
+	return d.Events || d.All()
+}
+
+// HasInventory returns if inventory should be published
+func (d *DefaultArgumentList) HasInventory() bool {
+	return d.Inventory || d.All()
 }
 
 // HTTPClientArgumentList are meant to be used as flags from a custom integrations. With this you could
