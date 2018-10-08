@@ -9,6 +9,13 @@ import (
 
 type argumentList struct {
 	sdkArgs.DefaultArgumentList
+	Hostname     string `default:"localhost" help:"The hostname or IP of the F5 BIG IP device to monitor."`
+	Port         int    `default:"443" help:"The port of the iControl API to connect to."`
+	Username     string `default:"" help:"The username to connect to the F5 API with."`
+	Password     string `default:"" help:"The password to connect to the F5 API with."`
+	Timeout      int    `default:"30" help:"The number of seconds to wait before a request times out."`
+	CABundleFile string `default:"" help:"Alternative Certificate Authority bundle file"`
+	CABundleDir  string `default:"" help:"Alternative Certificate Authority bundle directory"`
 }
 
 const (
