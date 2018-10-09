@@ -26,8 +26,61 @@ type CloudSysHostInfoStatItem struct {
 
 // ======================
 
+type SysCPU struct {
+  Entries []SysCPUEntryValue
+}
+
 type SysCPUEntryValue struct {
   NestedStats struct {
+    Entries map[string]SysCPUNestedStatsEntryValue
+  }
+}
 
+type SysCPUNestedStatsEntryValue struct {
+  NestedStats struct {
+    Entries map[string]SysCpuSecondNestedStatsEntryValue
+  }
+}
+
+type SysCPUSecondNestedStatsEntryValue struct {
+  NestedStats struct {
+    Entries struct {
+      CpuID struct {
+        Value int
+      }, `json:"cpuId"`
+      AverageCPUIdle struct {
+        Value int
+      }, `json:"oneMinAvgIdle"`
+      AverageCPUInterruptRequest struct {
+        Value int
+      }, `json:"oneMinAvgIrq"`
+      AverageCPUIoWait struct {
+        Value int
+      }, `json:"oneMinAvgIowait"`
+      AverageCPUNice struct {
+        Value int
+      }, `json:"oneMinAvgNiced"`
+      AverageCPUSoftirq struct {
+        Value int
+      }, `json:"oneMinSoftirq"`
+      AverageCPUStolen struct {
+        Value int
+      }, `json:"oneMinStolen"`
+      AverageCPUSystem struct {
+        Value int
+      }, `json:"oneMinSystem"`
+      AverageCPUUser struct {
+        Value int
+      }, `json:"oneMinUser"`
+      CPUIdleTicks struct {
+        Value int
+      }, `json:"idle"`
+      CPUSystemTicks struct {
+        Value int
+      }, `json:"system"`
+      CPUUserTicks struct {
+        Value int
+      }, `json:"user"`
+    }
   }
 }
