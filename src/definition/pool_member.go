@@ -1,40 +1,28 @@
 package definition
 
-type LtmNode struct {
-	Kind  string        `json:"kind"`
-	Items []LtmNodeItem `json:"items"`
+type LtmPoolMember struct {
+	Kind  string              `json:"kind"`
+	Items []LtmPoolMemberItem `json:"items"`
 }
 
-type LtmNodeItem struct {
-	Name           string          `json:"name"`
-	Partition      string          `json:"partition"`
-	FullPath       string          `json:"fullPath"`
-	MonitorRule    string          `json:"monitor"`
-	Session        string          `json:"user-enabled"`
-	State          string          `json:"state"`
-	Kind           string          `json:"kind"`
-	Address        string          `json:"address"`
-	MaxConnections int             `json:"connectionLimit"`
-	FQDN           LtmNodeItemFQDN `json:"fqdn"`
-}
-
-type LtmNodeItemFQDN struct {
-	TMName string `json:"tmName"`
+type LtmPoolMemberItem struct {
+	Name string `json:"name"`
+	Kind string `json:"kind"`
 }
 
 // ===============
 
-type LtmNodeStats struct {
-	Kind    string                            `json:"kind"`
-	Entries map[string]LtmNodeStatsEntryValue `json:"entries"`
+type LtmPoolMemberStats struct {
+	Kind    string                                  `json:"kind"`
+	Entries map[string]LtmPoolMemberStatsEntryValue `json:"entries"`
 }
 
-type LtmNodeStatsEntryValue struct {
-	NestedStats LtmNodeStatsEntryValueNestedStats `json:"nestedStats"`
+type LtmPoolMemberStatsEntryValue struct {
+	NestedStats LtmPoolMemberStatsEntryValueNestedStats `json:"nestedStats"`
 }
 
 // TODO add metric names and types when those are determined
-type LtmNodeStatsEntryValueNestedStats struct {
+type LtmPoolMemberStatsEntryValueNestedStats struct {
 	Kind    string `json:"kind"`
 	Entries struct {
 		AvailabilityState struct {
@@ -73,5 +61,21 @@ type LtmNodeStatsEntryValueNestedStats struct {
 		StatusReason struct {
 			Description string
 		} `json:"status.statusReason"`
+		// inventory
+		MaximumConnections struct {
+			Value int
+		} `json:"serverside.maxConns"`
+		MonitorRule struct {
+			Description string
+		} `json:"monitorRule"`
+		NodeName struct {
+			Description string
+		} `json:"nodeName"`
+		PoolName struct {
+			Description string
+		} `json:"poolName"`
+		Port struct {
+			Value int
+		} `json:"port"`
 	}
 }
