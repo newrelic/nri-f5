@@ -1,3 +1,5 @@
+package definition
+
 type LtmPoolItem struct {
   Name              string `json:"name"`
   Partition         string `json:"partition"`

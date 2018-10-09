@@ -1,3 +1,5 @@
+package definition
+
 type LtmNodeItem struct {
   Name           string `json:"name"`
   Partition      string `json:"partition"`
