@@ -1,5 +1,10 @@
 package definition
 
+type LtmNode struct {
+  Kind string `json:"kind"`
+  Items []LtmNodeItem `json:"items"`
+}
+
 type LtmNodeItem struct {
   Name           string `json:"name"`
   Partition      string `json:"partition"`
@@ -14,6 +19,10 @@ type LtmNodeItem struct {
 
 // ===============
 
+type LtmNodeStats struct {
+  Kind string `json:"kind"`
+  Entries map[string]LtmNodeStatsEntryValue `json:"entries"`
+}
 
 type LtmNodeStatsEntryValue struct {
   NestedStats LtmNodeStatsEntryValueNestedStats `json:"nestedStats"`

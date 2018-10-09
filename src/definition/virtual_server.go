@@ -1,5 +1,10 @@
 package definition
 
+type LtmVirtual struct {
+  Kind string `json:"kind"`
+  Items []LtmVirtualItem `json:"items"`
+}
+
 type LtmVirtualItem struct {
   Kind           string `json:"kind"`
   Name           string `json:"name"`
@@ -11,6 +16,11 @@ type LtmVirtualItem struct {
 }
 
 // =================
+
+type LtmVirtualStats struct {
+  Kind string `json:"kind"`
+  Entries map[string]LtmVirtualStatsEntryValue
+}
 
 type LtmVirtualStatsEntryValue struct {
   NestedStats LtmVirtualStatsNestedStats

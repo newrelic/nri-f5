@@ -1,5 +1,10 @@
 package definition
 
+type LtmPool struct {
+  Kind string `json:"kind"`
+  Items []LtmPoolItem `json:"items"`
+}
+
 type LtmPoolItem struct {
   Name              string `json:"name"`
   Partition         string `json:"partition"`
@@ -7,7 +12,13 @@ type LtmPoolItem struct {
   Kind              string `json:"kind"`
   LoadBalancingMode string `json:"loadBalancingMode"`
 }
- // =============
+
+// =============
+
+type LtmPoolStats struct {
+  Kind string `json:"kind"`
+  Entries map[string]LtmPoolStatsEntryValue
+}
 
 type LtmPoolStatsEntryValue struct {
   NestedStats LtmNodeStatsEntryValueNestedStats `json:"nestedStats"`
