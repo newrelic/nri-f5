@@ -79,7 +79,6 @@ func (c *F5Client) DoRequest(method, endpoint, body string, model interface{}) e
 // Login attempts to retrieve an auth token from the API using the credentials the client was created with and returns nil.
 // If login is unsuccessful an error is returned
 func (c *F5Client) Login() error {
-	loginEndpoint := "/mgmt/shared/authn/login"
 	loginArgs := map[string]string{
 		"loginProviderName": "tmos",
 		"username":          c.username,
