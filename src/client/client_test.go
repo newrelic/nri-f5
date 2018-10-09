@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/newrelic/nri-f5/src/arguments"
+	"github.com/stretchr/testify/assert"
 )
 
 func Test_CreateClient(t *testing.T) {
