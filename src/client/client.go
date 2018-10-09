@@ -1,4 +1,4 @@
-package main
+package client
 
 import (
 	"encoding/json"
@@ -9,6 +9,7 @@ import (
 	"time"
 
 	nrHttp "github.com/newrelic/infra-integrations-sdk/http"
+	"github.com/newrelic/nri-f5/src/arguments"
 )
 
 // F5Client represents a client that is able to make requests to the F5 iControl API.
@@ -23,7 +24,7 @@ type F5Client struct {
 const loginEndpoint = "/mgmt/shared/authn/login"
 
 // NewClient takes in arguments and creates and returns a client that will talk to the F5 API, or an error if one cannot be created
-func NewClient(args *argumentList) (*F5Client, error) {
+func NewClient(args *arguments.ArgumentList) (*F5Client, error) {
 	httpClient, err := nrHttp.New(args.CABundleFile, args.CABundleDir, time.Duration(args.Timeout)*time.Second)
 	if err != nil {
 		return nil, err

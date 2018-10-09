@@ -1,4 +1,4 @@
-package main
+package client
 
 import (
 	"encoding/json"
@@ -8,10 +8,11 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/newrelic/nri-f5/src/arguments"
 )
 
 func Test_CreateClient(t *testing.T) {
-	args := argumentList{
+	args := arguments.ArgumentList{
 		Username: "testUser",
 		Password: "testPass",
 		Hostname: "testHost",

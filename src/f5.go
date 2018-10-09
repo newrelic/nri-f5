@@ -3,22 +3,11 @@ package main
 import (
 	"os"
 
-	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/newrelic/nri-f5/src/arguments"
+	"github.com/newrelic/nri-f5/src/client"
 )
-
-type argumentList struct {
-	sdkArgs.DefaultArgumentList
-	Hostname     string `default:"localhost" help:"The hostname or IP of the F5 BIG IP device to monitor."`
-	Port         int    `default:"443" help:"The port of the iControl API to connect to."`
-	Username     string `default:"" help:"The username to connect to the F5 API with."`
-	Password     string `default:"" help:"The password to connect to the F5 API with."`
-	Timeout      int    `default:"30" help:"The number of seconds to wait before a request times out."`
-	UseSSL       bool   `default:"true" help:"Whether or not to use SSL to connect to the API. The F5 API only allows connections using SSL."`
-	CABundleFile string `default:"" help:"Alternative Certificate Authority bundle file"`
-	CABundleDir  string `default:"" help:"Alternative Certificate Authority bundle directory"`
-}
 
 const (
 	integrationName    = "com.newrelic.f5"
@@ -26,7 +15,7 @@ const (
 )
 
 var (
-	args argumentList
+	args arguments.ArgumentList
 )
 
 func main() {
@@ -34,8 +23,12 @@ func main() {
 	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
 	exitOnErr(err)
 
-	_, err = NewClient(&args)
+	client, err = client.NewClient(&args)
 	exitOnErr(err)
+
+	// set up and run goroutines for each entity
+
+	// go 
 
 	exitOnErr(i.Publish())
 }
