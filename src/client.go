@@ -95,13 +95,12 @@ func (c *F5Client) Login() error {
 		return err
 	}
 
-	// successful request, extract token
-	c.authToken = *loginResponse.Token.Token
-
-	if c.authToken == "" {
+	if loginResponse.Token.Token == nil {
 		return fmt.Errorf("couldn't get auth token from response")
 	}
 
+	// successful request, extract token
+	c.authToken = *loginResponse.Token.Token
 	return nil
 }
 
