@@ -20,6 +20,8 @@ type F5Client struct {
 	baseURL    string
 }
 
+const loginEndpoint = "/mgmt/shared/authn/login"
+
 // NewClient takes in arguments and creates and returns a client that will talk to the F5 API, or an error if one cannot be created
 func NewClient(args *argumentList) (*F5Client, error) {
 	httpClient, err := nrHttp.New(args.CABundleFile, args.CABundleDir, time.Duration(args.Timeout)*time.Second)
@@ -44,13 +46,17 @@ func (c *F5Client) Request(endpoint string, model interface{}) error {
 // DoRequest makes a request to the given endpoint using the given request body, storing the result in the model if possible.
 // An error is returned if either step cannot be completed.
 func (c *F5Client) DoRequest(method, endpoint, body string, model interface{}) error {
-	if c.authToken == "" {
-		return fmt.Errorf("client not logged in")
-	}
-
 	req, err := http.NewRequest(method, c.baseURL+endpoint, strings.NewReader(body))
 	if err != nil {
 		return err
+	}
+
+	if c.authToken == "" {
+		if endpoint != loginEndpoint {
+			return fmt.Errorf("client is not logged in")
+		}
+	} else {
+		req.Header.Add("X-F5-Auth-Token", c.authToken)
 	}
 
 	res, err := c.httpClient.Do(req)
@@ -85,7 +91,7 @@ func (c *F5Client) Login() error {
 	}
 
 	var loginResponse tokenResponse
-	err = c.DoRequest(http.MethodPost, c.baseURL+loginEndpoint, string(loginBody), &loginResponse)
+	err = c.DoRequest(http.MethodPost, loginEndpoint, string(loginBody), &loginResponse)
 	if err != nil {
 		return err
 	}
