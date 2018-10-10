@@ -2,23 +2,15 @@ package main
 
 import (
 	"os"
+	"sync"
+  "regexp"
 
-	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/newrelic/nri-f5/src/arguments"
+	"github.com/newrelic/nri-f5/src/client"
+	"github.com/newrelic/nri-f5/src/entities"
 )
-
-type argumentList struct {
-	sdkArgs.DefaultArgumentList
-	Hostname     string `default:"localhost" help:"The hostname or IP of the F5 BIG IP device to monitor."`
-	Port         int    `default:"443" help:"The port of the iControl API to connect to."`
-	Username     string `default:"" help:"The username to connect to the F5 API with."`
-	Password     string `default:"" help:"The password to connect to the F5 API with."`
-	Timeout      int    `default:"30" help:"The number of seconds to wait before a request times out."`
-	UseSSL       bool   `default:"true" help:"Whether or not to use SSL to connect to the API. The F5 API only allows connections using SSL."`
-	CABundleFile string `default:"" help:"Alternative Certificate Authority bundle file"`
-	CABundleDir  string `default:"" help:"Alternative Certificate Authority bundle directory"`
-}
 
 const (
 	integrationName    = "com.newrelic.f5"
@@ -26,7 +18,7 @@ const (
 )
 
 var (
-	args argumentList
+	args arguments.ArgumentList
 )
 
 func main() {
@@ -34,10 +26,30 @@ func main() {
 	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
 	exitOnErr(err)
 
-	_, err = NewClient(&args)
+  poolFilter, nodeFilter, err := args.Parse()
+  exitOnErr(err)
+
+	client, err := client.NewClient(&args)
 	exitOnErr(err)
 
+  err = client.LogIn()
+  exitOnErr(err)
+
+	collectEntities(i, client, poolFilter, nodeFilter)
+
 	exitOnErr(i.Publish())
+}
+
+func collectEntities(i *integration.Integration, client *client.F5Client, poolFilter, nodeFilter []*regexp.Regexp) {
+	// set up and run goroutines for each entity
+	var wg sync.WaitGroup
+	wg.Add(5)
+	go entities.CollectSystem(i, client, &wg)
+	go entities.CollectApplications(i, client, &wg)
+	go entities.CollectVirtualServers(i, client, &wg)
+	go entities.CollectPools(i, client, &wg, poolFilter)
+	go entities.CollectNodes(i, client, &wg, nodeFilter)
+	wg.Wait()
 }
 
 func exitOnErr(err error) {

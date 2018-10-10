@@ -1,4 +1,4 @@
-package main
+package client
 
 import (
 	"encoding/json"
@@ -7,11 +7,12 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/newrelic/nri-f5/src/arguments"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_CreateClient(t *testing.T) {
-	args := argumentList{
+	args := arguments.ArgumentList{
 		Username: "testUser",
 		Password: "testPass",
 		Hostname: "testHost",
@@ -26,7 +27,7 @@ func Test_CreateClient(t *testing.T) {
 	assert.Equal(t, "", client.authToken)
 }
 
-func Test_Login(t *testing.T) {
+func Test_LogIn(t *testing.T) {
 	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		t.Logf("Received request for %s", req.URL)
 		res.WriteHeader(200)
@@ -57,7 +58,7 @@ func Test_Login(t *testing.T) {
 	err := client.Request("/some-endpoint", nil)
 	assert.Error(t, err)
 
-	err = client.Login()
+	err = client.LogIn()
 	assert.NoError(t, err)
 
 	assert.Equal(t, "this-is-a-token", client.authToken)
