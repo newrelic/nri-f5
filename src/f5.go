@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"sync"
+	"strconv"
 
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
@@ -27,6 +28,8 @@ func main() {
 
 	client, err := client.NewClient(&args)
 	exitOnErr(err)
+	err = client.Login()
+	exitOnErr(err)
 
 	collectEntities(i, client)
 
@@ -34,10 +37,12 @@ func main() {
 }
 
 func collectEntities(i *integration.Integration, client *client.F5Client) {
+	hostPort := args.Hostname + ":" + strconv.Itoa(args.Port)
+
 	// set up and run goroutines for each entity
 	var wg sync.WaitGroup
 	wg.Add(5)
-	go entities.CollectSystem(i, client, &wg)
+	go entities.CollectSystem(i, client, hostPort, &wg)
 	go entities.CollectApplications(i, client, &wg)
 	go entities.CollectVirtualServers(i, client, &wg)
 	go entities.CollectNodes(i, client, &wg, args.NodeFilter)
