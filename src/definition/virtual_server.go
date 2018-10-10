@@ -31,31 +31,34 @@ type LtmVirtualStatsNestedStats struct {
 	Kind    string `json:"kind"`
 	Entries struct {
 		AvailabilityState struct {
-			Description string
-		} `json:"status.availabilityState"`
+			ParsedDescription *int `metric_name:"virtualserver.availabilityState" source_type:"gauge"`
+      Description string
+    } `json:"status.availabilityState"`
 		CurrentConnections struct {
-			Value int
-		} `json:"clientside.curConns"`
+			Value int `metric_name:"virtualserver.connections" source_type:"gauge"`
+    } `json:"clientside.curConns"`
 		DataIn struct {
-			Value int
-		} `json:"clientside.bitsIn"`
+			ParsedValue *int `metric_name:"virtualserver.inDataInBytes" source_type:"rate"`
+      Value int
+    } `json:"clientside.bitsIn"`
 		DataOut struct {
-			Value int
-		} `json:"clientside.bitsOut"`
+			ParsedValue *int `metric_name:"virtualserver.outDataInBytes" source_type:"rate"`
+      Value int
+    } `json:"clientside.bitsOut"`
 		EnabledState struct {
-			Description string
-		} `json:"status.enabledState"`
+			ParsedDescription *int  `metric_name:"virtualserver.enabled" source_type:"gauge"`
+    } `json:"status.enabledState"`
 		PacketsIn struct {
-			Value int
-		} `json:"clientside.pktsIn"`
+      Value int `metric_name:"virtualserver.packetsReceived" source_type:"rate"`
+    } `json:"clientside.pktsIn"`
 		PacketsOut struct {
-			Value int
-		} `json:"clientside.pktsOut"`
+      Value int `metric_name:"virtualserver.packetsSent" source_type:"rate"`
+    } `json:"clientside.pktsOut"`
 		Requests struct {
-			Value int
-		} `json:"totRequests"`
+      Value int `metric_name:"virtualserver.requests" source_type:"rate"`
+    } `json:"totRequests"`
 		StatusReason struct {
-			Description string
-		} `json:"status.statusReason"`
+      Description string `metric_name:"virtualserver.statusReason" source_type:"attribute"`
+    } `json:"status.statusReason"`
 	}
 }
