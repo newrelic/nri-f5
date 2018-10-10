@@ -29,40 +29,45 @@ type LtmPoolStatsEntryValueNestedStats struct {
 	Kind    string `json:"kind"`
 	Entries struct {
 		ActiveMemberCount struct {
-			Value int
+      Value int `metric_name:"pool.activeMembers" source_type:"gauge"`
 		} `json:"activeMemberCnt"`
 		AvailabilityState struct {
-			Description string
+      ProcessedDescription *int `metric_name:"pool.availabilityState" source_type:"gauge"`
+      Description string
 		} `json:"status.availabilityState"`
 		CurrentConnections struct {
-			Value int
+      Value int `metric_name:"pool.connections" source_type:"gauge"`
 		} `json:"serverside.curConns"`
 		DataIn struct {
-			Value int
+      ProcessedValue *int `metric_name:"pool.inDataInBytes" source_type:"rate"`
+      Value int
 		} `json:"serverside.bitsIn"`
 		DataOut struct {
-			Value int
+      ProcessedValue *int  `metric_name:"pool.outDataInBytes" source_type:"rate"`
+      Value int
 		} `json:"serverside.bitsOut"`
 		EnabledState struct {
-			Description string
+      ProcessedDescription *int `metric_name:"pool.enabled" source_type:"rate"`
+      Description string
 		} `json:"status.enabledState"`
 		PacketsIn struct {
-			Value int
+      Value int `metric_name:"pool.packetsReceived" source_type:"rate"`
 		} `json:"serverside.pktsIn"`
 		PacketsOut struct {
-			Value int
+      Value int `metric_name:"pool.packetsSent" source_type:"rate"`
 		} `json:"serverside.pktsOut"`
 		Requests struct {
-			Value int
+      Value int `metric_name:"pool.requests" source_type:"rate"`
 		} `json:"totRequests"`
 		StatusReason struct {
-			Description string
+      Description string `metric_name:"pool.statusReason" source_type:"gauge"`
 		} `json:"status.statusReason"`
 		MonitorRule struct {
-			Description string
+      Description string 
 		} `json:"monitorRule"`
 		MaxConnections struct {
-			Value int
+      Value int
 		} `json:"serverside.maxConns"`
 	}
 }
+
