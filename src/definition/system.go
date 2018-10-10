@@ -47,40 +47,40 @@ type SysCPUSecondNestedStatsEntryValue struct {
 		Entries struct {
 			CpuID struct {
 				Value int
-			} `json:"cpuId"`
+      } `json:"cpuId" metric_name:"system.cpuID" source_type:"attribute"`
 			AverageCPUIdle struct {
 				Value int
 			} `json:"oneMinAvgIdle"`
 			AverageCPUInterruptRequest struct {
 				Value int
-			} `json:"oneMinAvgIrq"`
+      } `json:"oneMinAvgIrq"`
 			AverageCPUIoWait struct {
 				Value int
 			} `json:"oneMinAvgIowait"`
 			AverageCPUNice struct {
 				Value int
-			} `json:"oneMinAvgNiced"`
+      } `json:"oneMinAvgNiced" metric_name:"system.cpuNiceLevelUtilization" source_type:"gauge"`
 			AverageCPUSoftirq struct {
 				Value int
-			} `json:"oneMinSoftirq"`
+      } `json:"oneMinSoftirq" metric_name:"system.cpuSoftInterruptRequestUtilization" source_type:"gauge"`
 			AverageCPUStolen struct {
 				Value int
-			} `json:"oneMinStolen"`
+      } `json:"oneMinStolen" metric_name:"system.cpuStolenUtilization" source_type:"gauge"`
 			AverageCPUSystem struct {
 				Value int
-			} `json:"oneMinSystem"`
+      } `json:"oneMinSystem" metric_name:"system.cpuSystemUtilization" source_type:"gauge"`
 			AverageCPUUser struct {
 				Value int
-			} `json:"oneMinUser"`
+      } `json:"oneMinUser" metric_name:"system.cpuUserUtilization" source_type:"gauge"`
 			CPUIdleTicks struct {
 				Value int
-			} `json:"idle"`
+      } `json:"idle" metric_name:"system.cpuIdleTicksPerSecond" source_type:"rate"`
 			CPUSystemTicks struct {
 				Value int
-			} `json:"system"`
+      } `json:"system" metric_name:"system.cpuSystemTicksPerSecond" source_type:"rate"`
 			CPUUserTicks struct {
 				Value int
-			} `json:"user"`
+      } `json:"user" metric_name:"system.cpuUserTicksPerSecond" source_type:"rate"`
 		}
 	}
 }

@@ -18,16 +18,19 @@ type LtmPoolItem struct {
 
 type LtmPoolStats struct {
 	Kind    string `json:"kind"`
-	Entries map[string]LtmPoolStatsEntryValue
+  Entries map[string]LtmPoolStatsEntryValue `json:"entries"`
 }
 
 type LtmPoolStatsEntryValue struct {
-	NestedStats LtmNodeStatsEntryValueNestedStats `json:"nestedStats"`
+	NestedStats LtmPoolStatsEntryValueNestedStats `json:"nestedStats"`
 }
 
 type LtmPoolStatsEntryValueNestedStats struct {
 	Kind    string `json:"kind"`
 	Entries struct {
+    Name struct {
+      Description string
+    } `json:"tmName"`
 		ActiveMemberCount struct {
       Value int `metric_name:"pool.activeMembers" source_type:"gauge"`
 		} `json:"activeMemberCnt"`
