@@ -35,9 +35,6 @@ func main() {
 	err = client.LogIn()
 	exitOnErr(err)
 
-	err = client.LogIn()
-	exitOnErr(err)
-
 	collectEntities(i, client, poolFilter, nodeFilter)
 
 	exitOnErr(i.Publish())
