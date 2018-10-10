@@ -32,45 +32,44 @@ type LtmPoolStatsEntryValueNestedStats struct {
       Description string
     } `json:"tmName"`
 		ActiveMemberCount struct {
-      Value int `metric_name:"pool.activeMembers" source_type:"gauge"`
+			Value int `metric_name:"pool.activeMembers" source_type:"gauge"`
 		} `json:"activeMemberCnt"`
 		AvailabilityState struct {
-      ProcessedDescription *int `metric_name:"pool.availabilityState" source_type:"gauge"`
-      Description string
+			ProcessedDescription *int `metric_name:"pool.availabilityState" source_type:"gauge"`
+			Description          string
 		} `json:"status.availabilityState"`
 		CurrentConnections struct {
-      Value int `metric_name:"pool.connections" source_type:"gauge"`
+			Value int `metric_name:"pool.connections" source_type:"gauge"`
 		} `json:"serverside.curConns"`
 		DataIn struct {
-      ProcessedValue *int `metric_name:"pool.inDataInBytes" source_type:"rate"`
-      Value int
+			ProcessedValue *int `metric_name:"pool.inDataInBytes" source_type:"rate"`
+			Value          int
 		} `json:"serverside.bitsIn"`
 		DataOut struct {
-      ProcessedValue *int  `metric_name:"pool.outDataInBytes" source_type:"rate"`
-      Value int
+			ProcessedValue *int `metric_name:"pool.outDataInBytes" source_type:"rate"`
+			Value          int
 		} `json:"serverside.bitsOut"`
 		EnabledState struct {
-      ProcessedDescription *int `metric_name:"pool.enabled" source_type:"rate"`
-      Description string
+			ProcessedDescription *int `metric_name:"pool.enabled" source_type:"rate"`
+			Description          string
 		} `json:"status.enabledState"`
 		PacketsIn struct {
-      Value int `metric_name:"pool.packetsReceived" source_type:"rate"`
+			Value int `metric_name:"pool.packetsReceived" source_type:"rate"`
 		} `json:"serverside.pktsIn"`
 		PacketsOut struct {
-      Value int `metric_name:"pool.packetsSent" source_type:"rate"`
+			Value int `metric_name:"pool.packetsSent" source_type:"rate"`
 		} `json:"serverside.pktsOut"`
 		Requests struct {
-      Value int `metric_name:"pool.requests" source_type:"rate"`
+			Value int `metric_name:"pool.requests" source_type:"rate"`
 		} `json:"totRequests"`
 		StatusReason struct {
-      Description string `metric_name:"pool.statusReason" source_type:"gauge"`
+			Description string `metric_name:"pool.statusReason" source_type:"gauge"`
 		} `json:"status.statusReason"`
 		MonitorRule struct {
-      Description string 
+			Description string
 		} `json:"monitorRule"`
 		MaxConnections struct {
-      Value int
+			Value int
 		} `json:"serverside.maxConns"`
 	}
 }
-

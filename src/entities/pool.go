@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"regexp"
 	"sync"
   "regexp"
 
