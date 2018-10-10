@@ -32,33 +32,33 @@ type LtmVirtualStatsNestedStats struct {
 	Entries struct {
 		AvailabilityState struct {
 			ParsedDescription *int `metric_name:"virtualserver.availabilityState" source_type:"gauge"`
-      Description string
-    } `json:"status.availabilityState"`
+			Description       string
+		} `json:"status.availabilityState"`
 		CurrentConnections struct {
 			Value int `metric_name:"virtualserver.connections" source_type:"gauge"`
-    } `json:"clientside.curConns"`
+		} `json:"clientside.curConns"`
 		DataIn struct {
 			ParsedValue *int `metric_name:"virtualserver.inDataInBytes" source_type:"rate"`
-      Value int
-    } `json:"clientside.bitsIn"`
+			Value       int
+		} `json:"clientside.bitsIn"`
 		DataOut struct {
 			ParsedValue *int `metric_name:"virtualserver.outDataInBytes" source_type:"rate"`
-      Value int
-    } `json:"clientside.bitsOut"`
+			Value       int
+		} `json:"clientside.bitsOut"`
 		EnabledState struct {
-			ParsedDescription *int  `metric_name:"virtualserver.enabled" source_type:"gauge"`
-    } `json:"status.enabledState"`
+			ParsedDescription *int `metric_name:"virtualserver.enabled" source_type:"gauge"`
+		} `json:"status.enabledState"`
 		PacketsIn struct {
-      Value int `metric_name:"virtualserver.packetsReceived" source_type:"rate"`
-    } `json:"clientside.pktsIn"`
+			Value int `metric_name:"virtualserver.packetsReceived" source_type:"rate"`
+		} `json:"clientside.pktsIn"`
 		PacketsOut struct {
-      Value int `metric_name:"virtualserver.packetsSent" source_type:"rate"`
-    } `json:"clientside.pktsOut"`
+			Value int `metric_name:"virtualserver.packetsSent" source_type:"rate"`
+		} `json:"clientside.pktsOut"`
 		Requests struct {
-      Value int `metric_name:"virtualserver.requests" source_type:"rate"`
-    } `json:"totRequests"`
+			Value int `metric_name:"virtualserver.requests" source_type:"rate"`
+		} `json:"totRequests"`
 		StatusReason struct {
-      Description string `metric_name:"virtualserver.statusReason" source_type:"attribute"`
-    } `json:"status.statusReason"`
+			Description string `metric_name:"virtualserver.statusReason" source_type:"attribute"`
+		} `json:"status.statusReason"`
 	}
 }
