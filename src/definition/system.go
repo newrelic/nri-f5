@@ -89,15 +89,15 @@ type SysCPUSecondNestedStatsEntryValue struct {
 }
 
 type ProcessedCPUMetrics struct {
-	AverageCPUIdle *float64 `metric_name:"system.cpuIdleUtilization" source_type:"gauge"`
+	AverageCPUIdle             *float64 `metric_name:"system.cpuIdleUtilization" source_type:"gauge"`
 	AverageCPUInterruptRequest *float64 `metric_name:"system.cpuInterruptRequestUtilization" source_type:"gauge"`
-	AverageCPUIoWait *float64 `metric_name:"system.cpuIOWaitUtilization" source_type:"gauge"`
-	AverageCPUNice *float64 `metric_name:"system.cpuNiceLevelUtilization" source_type:"gauge"`
-	AverageCPUSoftirq *float64 `metric_name:"system.cpuSoftInterruptRequestUtilization" source_type:"gauge"`
-	AverageCPUStolen *float64 `metric_name:"system.cpuStolenUtilization" source_type:"gauge"`
-	AverageCPUSystem *float64 `metric_name:"system.cpuSystemUtilization" source_type:"gauge"`
-	AverageCPUUser *float64 `metric_name:"system.cpuUserUtilization" source_type:"gauge"`
-	CPUIdleTicks *float64 `metric_name:"system.cpuIdleTicksPerSecond" source_type:"rate"`
-	CPUSystemTicks *float64 `metric_name:"system.cpuSystemTicksPerSecond" source_type:"rate"`
-	CPUUserTicks *float64 `metric_name:"system.cpuUserTicksPerSecond" source_type:"rate"`
+	AverageCPUIoWait           *float64 `metric_name:"system.cpuIOWaitUtilization" source_type:"gauge"`
+	AverageCPUNice             *float64 `metric_name:"system.cpuNiceLevelUtilization" source_type:"gauge"`
+	AverageCPUSoftirq          *float64 `metric_name:"system.cpuSoftInterruptRequestUtilization" source_type:"gauge"`
+	AverageCPUStolen           *float64 `metric_name:"system.cpuStolenUtilization" source_type:"gauge"`
+	AverageCPUSystem           *float64 `metric_name:"system.cpuSystemUtilization" source_type:"gauge"`
+	AverageCPUUser             *float64 `metric_name:"system.cpuUserUtilization" source_type:"gauge"`
+	CPUIdleTicks               *float64 `metric_name:"system.cpuIdleTicksPerSecond" source_type:"rate"`
+	CPUSystemTicks             *float64 `metric_name:"system.cpuSystemTicksPerSecond" source_type:"rate"`
+	CPUUserTicks               *float64 `metric_name:"system.cpuUserTicksPerSecond" source_type:"rate"`
 }

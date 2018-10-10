@@ -1,9 +1,10 @@
 package arguments
 
 import (
-  "regexp"
-  "errors"
-  "encoding/json"
+	"encoding/json"
+	"errors"
+	"regexp"
+
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 )
 
@@ -24,38 +25,38 @@ type ArgumentList struct {
 
 // Parse validates and parses out regex patterns from the input arguments
 func (al *ArgumentList) Parse() ([]*regexp.Regexp, []*regexp.Regexp, error) {
-  if al.Username == "" || al.Password == "" {
-    return nil, nil, errors.New("both username and password must be provided")
-  }
+	if al.Username == "" || al.Password == "" {
+		return nil, nil, errors.New("both username and password must be provided")
+	}
 
-  var poolMemberRegexStrings []string
-  if err := json.Unmarshal([]byte(al.PoolMemberFilter), &poolMemberRegexStrings); err != nil {
-    return nil, nil, err
-  }
+	var poolMemberRegexStrings []string
+	if err := json.Unmarshal([]byte(al.PoolMemberFilter), &poolMemberRegexStrings); err != nil {
+		return nil, nil, err
+	}
 
-  poolMemberRegexPatterns := make([]*regexp.Regexp, len(poolMemberRegexStrings))
-  for i, regexString := range poolMemberRegexStrings {
-    pattern, err := regexp.Compile(regexString)
-    if err != nil {
-      return nil, nil, err
-    }
-    poolMemberRegexPatterns[i] = pattern
-  }
+	poolMemberRegexPatterns := make([]*regexp.Regexp, len(poolMemberRegexStrings))
+	for i, regexString := range poolMemberRegexStrings {
+		pattern, err := regexp.Compile(regexString)
+		if err != nil {
+			return nil, nil, err
+		}
+		poolMemberRegexPatterns[i] = pattern
+	}
 
-  var nodeRegexStrings []string
-  if err := json.Unmarshal([]byte(al.NodeFilter), &nodeRegexStrings); err != nil {
-    return nil, nil, err
-  }
+	var nodeRegexStrings []string
+	if err := json.Unmarshal([]byte(al.NodeFilter), &nodeRegexStrings); err != nil {
+		return nil, nil, err
+	}
 
-  nodeRegexPatterns := make([]*regexp.Regexp, len(nodeRegexStrings))
-  for i, regexString := range nodeRegexStrings {
-    pattern, err := regexp.Compile(regexString)
-    if err != nil {
-      return nil, nil, err
-    }
-    nodeRegexPatterns[i] = pattern
-  }
+	nodeRegexPatterns := make([]*regexp.Regexp, len(nodeRegexStrings))
+	for i, regexString := range nodeRegexStrings {
+		pattern, err := regexp.Compile(regexString)
+		if err != nil {
+			return nil, nil, err
+		}
+		nodeRegexPatterns[i] = pattern
+	}
 
-  return poolMemberRegexPatterns, nodeRegexPatterns, nil
+	return poolMemberRegexPatterns, nodeRegexPatterns, nil
 
 }

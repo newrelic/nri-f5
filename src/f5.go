@@ -2,9 +2,9 @@ package main
 
 import (
 	"os"
-	"sync"
+	"regexp"
 	"strconv"
-  "regexp"
+	"sync"
 
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
@@ -27,16 +27,16 @@ func main() {
 	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
 	exitOnErr(err)
 
-  poolFilter, nodeFilter, err := args.Parse()
-  exitOnErr(err)
+	poolFilter, nodeFilter, err := args.Parse()
+	exitOnErr(err)
 
 	client, err := client.NewClient(&args)
 	exitOnErr(err)
 	err = client.LogIn()
 	exitOnErr(err)
 
-  err = client.LogIn()
-  exitOnErr(err)
+	err = client.LogIn()
+	exitOnErr(err)
 
 	collectEntities(i, client, poolFilter, nodeFilter)
 

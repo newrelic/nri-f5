@@ -1,14 +1,14 @@
 package entities
 
 import (
-	"sync"
 	"strings"
+	"sync"
 
+	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
+	"github.com/newrelic/infra-integrations-sdk/log"
 	"github.com/newrelic/nri-f5/src/client"
 	"github.com/newrelic/nri-f5/src/definition"
-	"github.com/newrelic/infra-integrations-sdk/log"
-	"github.com/newrelic/infra-integrations-sdk/data/metric"
 )
 
 // CollectSystem collects the system entity from F5 and adds it to the integration
@@ -20,7 +20,7 @@ func CollectSystem(integration *integration.Integration, client *client.F5Client
 		log.Error("Couldn't create system entity: %v", err)
 		return
 	}
-	systemMetrics := systemEntity.NewMetricSet("F5SystemSample", 
+	systemMetrics := systemEntity.NewMetricSet("F5SystemSample",
 		metric.Attribute{Key: "displayName", Value: systemEntity.Metadata.Name},
 		metric.Attribute{Key: "entityName", Value: systemEntity.Metadata.Namespace + ":" + systemEntity.Metadata.Name},
 	)
@@ -52,8 +52,8 @@ func marshalSystemInfo(systemEntity *integration.Entity, client *client.F5Client
 
 	for k, v := range map[string]interface{}{
 		"chassisSerialNumber": sysInfoItem.ChassisSerialNumber,
-		"platform": sysInfoItem.Platform,
-		"product": sysInfoItem.Product,
+		"platform":            sysInfoItem.Platform,
+		"product":             sysInfoItem.Product,
 	} {
 		if err := systemEntity.SetInventoryItem(k, "value", v); err != nil {
 			log.Error("Couldn't set inventory item '%s' on system entity: %v", k, err)
@@ -97,17 +97,17 @@ func marshalCPUStats(systemMetrics *metric.Set, client *client.F5Client, wg *syn
 	}
 
 	processedCPU := definition.ProcessedCPUMetrics{
-		AverageCPUIdle: new(float64),
+		AverageCPUIdle:             new(float64),
 		AverageCPUInterruptRequest: new(float64),
-		AverageCPUIoWait: new(float64),
-		AverageCPUNice: new(float64),
-		AverageCPUSoftirq: new(float64),
-		AverageCPUStolen: new(float64),
-		AverageCPUSystem: new(float64),
-		AverageCPUUser: new(float64),
-		CPUIdleTicks: new(float64),
-		CPUSystemTicks: new(float64),
-		CPUUserTicks: new(float64),
+		AverageCPUIoWait:           new(float64),
+		AverageCPUNice:             new(float64),
+		AverageCPUSoftirq:          new(float64),
+		AverageCPUStolen:           new(float64),
+		AverageCPUSystem:           new(float64),
+		AverageCPUUser:             new(float64),
+		CPUIdleTicks:               new(float64),
+		CPUSystemTicks:             new(float64),
+		CPUUserTicks:               new(float64),
 	}
 	cpuCounter := 0.0
 	for cpuKey, cpu := range cpuInfo.Entries {
