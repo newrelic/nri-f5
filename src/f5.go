@@ -27,7 +27,7 @@ func main() {
 	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
 	exitOnErr(err)
 
-	poolFilter, nodeFilter, err := args.Parse()
+	pathFilter, err := args.Parse()
 	exitOnErr(err)
 
 	client, err := client.NewClient(&args)
@@ -35,12 +35,12 @@ func main() {
 	err = client.LogIn()
 	exitOnErr(err)
 
-	collectEntities(i, client, poolFilter, nodeFilter)
+	collectEntities(i, client, pathFilter)
 
 	exitOnErr(i.Publish())
 }
 
-func collectEntities(i *integration.Integration, client *client.F5Client, poolFilter, nodeFilter []*regexp.Regexp) {
+func collectEntities(i *integration.Integration, client *client.F5Client, pathFilter []*regexp.Regexp) {
 	hostPort := args.Hostname + ":" + strconv.Itoa(args.Port)
 	// set up and run goroutines for each entity
 	var wg sync.WaitGroup
@@ -48,8 +48,8 @@ func collectEntities(i *integration.Integration, client *client.F5Client, poolFi
 	go entities.CollectSystem(i, client, hostPort, &wg)
 	go entities.CollectApplications(i, client, &wg)
 	go entities.CollectVirtualServers(i, client, &wg)
-	go entities.CollectPools(i, client, &wg, poolFilter)
-	go entities.CollectNodes(i, client, &wg, nodeFilter)
+	go entities.CollectPools(i, client, &wg, pathFilter)
+	go entities.CollectNodes(i, client, &wg, pathFilter)
 	wg.Wait()
 }
 
