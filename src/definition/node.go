@@ -78,5 +78,8 @@ type LtmNodeStatsEntryValueNestedStats struct {
 		StatusReason struct {
 			Description string `metric_name:"node.statusReason" source_type:"attribute"`
 		} `json:"status.statusReason"`
+		TmName struct {
+			Description string `json:"description"`
+		} `json:"tmName"`
 	}
 }

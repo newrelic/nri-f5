@@ -49,7 +49,7 @@ func collectEntities(i *integration.Integration, client *client.F5Client, pathFi
 	go entities.CollectApplications(i, client, &wg)
 	go entities.CollectVirtualServers(i, client, &wg)
 	go entities.CollectPools(i, client, &wg, pathFilter)
-	go entities.CollectNodes(i, client, &wg, pathFilter)
+	go entities.CollectNodes(i, client, &wg)
 	wg.Wait()
 }
 
