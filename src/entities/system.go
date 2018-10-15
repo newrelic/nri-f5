@@ -110,14 +110,12 @@ func marshalCPUStats(systemMetrics *metric.Set, client *client.F5Client, wg *syn
 		CPUUserTicks:               new(float64),
 	}
 	cpuCounter := 0.0
-	for cpuKey, cpu := range cpuInfo.Entries {
-		log.Info("Looping %s", cpuKey)
+	for _, cpu := range cpuInfo.Entries {
 		for cpuInfoKey, cpuInfo := range cpu.NestedStats.Entries {
 			if !strings.HasSuffix(cpuInfoKey, "cpuInfo") {
 				continue
 			}
-			for cpuCoreKey, cpuCore := range cpuInfo.NestedStats.Entries {
-				log.Info("\tLooping %s", cpuCoreKey)
+			for _, cpuCore := range cpuInfo.NestedStats.Entries {
 				// core stats, add to counters
 				coreStats := cpuCore.NestedStats.Entries
 				cpuCounter++
