@@ -21,7 +21,6 @@ type LtmPoolMemberStatsEntryValue struct {
 	NestedStats LtmPoolMemberStatsEntryValueNestedStats `json:"nestedStats"`
 }
 
-// TODO add metric names and types when those are determined
 type LtmPoolMemberStatsEntryValueNestedStats struct {
 	Kind    string `json:"kind"`
 	Entries struct {
