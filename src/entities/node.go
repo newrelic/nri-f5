@@ -3,7 +3,6 @@ package entities
 import (
 	"regexp"
 	"sync"
-  "regexp"
 
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/nri-f5/src/client"
