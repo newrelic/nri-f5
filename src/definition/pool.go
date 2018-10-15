@@ -12,13 +12,23 @@ type LtmPoolItem struct {
 	Kind              string `json:"kind"`
 	LoadBalancingMode string `json:"loadBalancingMode"`
 	Description       string `json:"description"`
+	MembersReference  struct {
+		Items []LtmPoolItemMember `json:"items"`
+	} `json:"membersReference"`
+}
+
+type LtmPoolItemMember struct {
+	Kind string `json:"kind"`
+}
+
+type LtmPoolItemMembers struct {
 }
 
 // =============
 
 type LtmPoolStats struct {
-	Kind    string `json:"kind"`
-  Entries map[string]LtmPoolStatsEntryValue `json:"entries"`
+	Kind    string                            `json:"kind"`
+	Entries map[string]LtmPoolStatsEntryValue `json:"entries"`
 }
 
 type LtmPoolStatsEntryValue struct {
@@ -28,9 +38,9 @@ type LtmPoolStatsEntryValue struct {
 type LtmPoolStatsEntryValueNestedStats struct {
 	Kind    string `json:"kind"`
 	Entries struct {
-    Name struct {
-      Description string
-    } `json:"tmName"`
+		Name struct {
+			Description string
+		} `json:"tmName"`
 		ActiveMemberCount struct {
 			Value int `metric_name:"pool.activeMembers" source_type:"gauge"`
 		} `json:"activeMemberCnt"`
@@ -63,7 +73,7 @@ type LtmPoolStatsEntryValueNestedStats struct {
 			Value int `metric_name:"pool.requests" source_type:"rate"`
 		} `json:"totRequests"`
 		StatusReason struct {
-			Description string `metric_name:"pool.statusReason" source_type:"gauge"`
+			Description string `metric_name:"pool.statusReason" source_type:"attribute"`
 		} `json:"status.statusReason"`
 		MonitorRule struct {
 			Description string
