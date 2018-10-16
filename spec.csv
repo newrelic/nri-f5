@@ -26,7 +26,7 @@ f5,pool.availabilityState,gauge,true,Current availability state 0 = Offline 1 = 
 f5,pool.connections,gauge,true,Current number of connections
 f5,pool.inDataInBytes,gauge,true,The amount of data received from the BIG-IP Pool
 f5,pool.outDataInBytes,gauge,true,The amount of data sent to the BIG-IP Pool
-f5,pool.enabled,gauge,true,Current enabled state, can be user defined 0 = Disabled, 1 = Enabled
+f5,pool.enabled,gauge,true,Current enabled state, can be user defined 0 = Disabled 1 = Enabled
 f5,pool.packetsReceived,gauge,true,The number of packets received from the BIG-IP Pool
 f5,pool.packetsSent,gauge,true,The number of packets sent to the BIG-IP Pool
 f5,pool.requests,gauge,true,The total number of requests to the Pool
