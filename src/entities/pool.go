@@ -44,13 +44,9 @@ func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPo
 			log.Error("Failed to get entity object for pool %s: %s", pool.Name, err.Error())
 		}
 
-		// TODO handle errors
-		err = poolEntity.SetInventoryItem("Description", "value", pool.Description)
-		if err != nil {
-			log.Error("Failed to set inventory item: %s", err.Error())
-		}
-		err = poolEntity.SetInventoryItem("Kind", "value", pool.Kind)
-		err = poolEntity.SetInventoryItem("Current Load Mode", "value", pool.LoadBalancingMode)
+		logOnError("Description", pool.Name, poolEntity.SetInventoryItem("Description", "value", pool.Description))
+		logOnError("Kind", pool.Name, poolEntity.SetInventoryItem("Kind", "value", pool.Kind))
+		logOnError("Current Load Mode", pool.Name, poolEntity.SetInventoryItem("Current Load Mode", "value", pool.LoadBalancingMode))
 	}
 
 	for _, pool := range ltmPoolStats.Entries {
@@ -61,9 +57,8 @@ func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPo
 			log.Error("Failed to get entity object for pool %s: %s", poolName, err.Error())
 		}
 
-		// TODO handle errors
-		err = poolEntity.SetInventoryItem("Maximum Connections", "value", entries.MaxConnections.Value)
-		err = poolEntity.SetInventoryItem("Monitor Rule", "value", entries.MonitorRule.Description)
+		logOnError("Maximum Connections", poolName, poolEntity.SetInventoryItem("Maximum Connections", "value", entries.MaxConnections.Value))
+		logOnError("Monitor Rule", poolName, poolEntity.SetInventoryItem("Monitor Rule", "value", entries.MonitorRule.Description))
 	}
 }
 

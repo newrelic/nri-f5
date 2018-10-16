@@ -35,15 +35,11 @@ func populateNodesInventory(i *integration.Integration, ltmNode definition.LtmNo
 			log.Error("Failed to get entity object for node %s: %s", node.Name, err.Error())
 		}
 
-		// TODO handle errors
-		err = nodeEntity.SetInventoryItem("FQDN", "value", node.FQDN.TMName)
-		if err != nil {
-			log.Error("Failed to set inventory item: %s", err.Error())
-		}
-		err = nodeEntity.SetInventoryItem("Kind", "value", node.Kind)
-		err = nodeEntity.SetInventoryItem("IP Address", "value", node.Address)
-		err = nodeEntity.SetInventoryItem("Maximum Connections", "value", node.MaxConnections)
-		err = nodeEntity.SetInventoryItem("Monitor Rule", "value", node.MonitorRule)
+		logOnError("FQDN", node.Name, nodeEntity.SetInventoryItem("FQDN", "value", node.FQDN.TMName))
+		logOnError("Kind", node.Name, nodeEntity.SetInventoryItem("Kind", "value", node.Kind))
+		logOnError("IP Address", node.Name, nodeEntity.SetInventoryItem("IP Address", "value", node.Address))
+		logOnError("Maximum Connections", node.Name, nodeEntity.SetInventoryItem("Maximum Connections", "value", node.MaxConnections))
+		logOnError("Monitor Rule", node.Name, nodeEntity.SetInventoryItem("Monitor Rule", "value", node.MonitorRule))
 	}
 }
 
