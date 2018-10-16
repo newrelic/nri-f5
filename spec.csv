@@ -1,0 +1,58 @@
+integration,metric_name,metric_type,metric_enabled,metric_description
+f5,system.cpuIdleUtilization,gauge,true,Average percentage of time the CPU is idle
+f5,system.cpuInterruptRequestUtilization,gauge,true,Average percentage of time the CPU is handling interrupt requests
+f5,system.cpuIOWaitUtilization,gauge,true,Average percentage of time the CPU is waiting on IO
+f5,system.cpuNiceLevelUtilization,gauge,true,Average percentage of time the CPU is handling nice level processes
+f5,system.cpuSoftInterruptRequestUtilization,gauge,true,Average percentage of time the CPU is handling soft interrupt requests
+f5,system.cpuStolenUtilization,gauge,true,Average percentage of time the CPU is handling reclaimed cycles by the hypervisor
+f5,system.cpuSystemUtilization,gauge,true,Average percentage of time the CPU is used by the kernel
+f5,system.cpuUserUtilization,gauge,true,Average percentage of time the CPU is used by user processes
+f5,system.cpuIdleTicksPerSecond,gauge,true,Amount of CPU ticks that the CPU was idle
+f5,system.cpuSystemTicksPerSecond,gauge,true,Amount of CPU ticks used by the kernel processes
+f5,system.cpuUserTicksPerSecond,gauge,true,Amount of CPU ticks used by user processes
+f5,system.memoryTotalInBytes,gauge,true,Total amount of Memory available on the current device
+f5,system.memoryUsedInBytes,gauge,true,Current Memory being used on the current device
+f5,virtualserver.avaibilityState,gauge,true,BIG-IP defined availability 0 = Offline, 1 = Unknown, 2 = Online
+f5,virtualserver.connections,gauge,true,Current number of connections from BIG-IP
+f5,virtualserver.inDataInBytes,gauge,true,The amount of data received from the BIG-IP Virtual Server
+f5,virtualserver.outDataInBytes,gauge,true,The amount of data sent to the BIG-IP Virtual Server
+f5,virtualserver.enabled,gauge,true,Current enabled state 0 = Disabled, 1 = Enabled
+f5,virtualserver.packetsReceived,gauge,true,The number of packets received from the BIG-IP Virtual Server
+f5,virtualserver.packetsSent,gauge,true,The number of packets sent to the BIG-IP Virtual Server
+f5,virtualserver.requests,gauge,true,Number of requests in the last collection interval to BIG-IP
+f5,virtualserver.statusReason,gauge,true,Explanation of the current status
+f5,pool.activeMembers,gauge,true,Number of active pool members
+f5,pool.availabilityState,gauge,true,Current availability state 0 = Offline, 1 = Unknown, 2 = Online
+f5,pool.connections,gauge,true,Current number of connections
+f5,pool.inDataInBytes,gauge,true,The amount of data received from the BIG-IP Pool
+f5,pool.outDataInBytes,gauge,true,The amount of data sent to the BIG-IP Pool
+f5,pool.enabled,gauge,true,Current enabled state, can be user defined 0 = Disabled, 1 = Enabled
+f5,pool.packetsReceived,gauge,true,The number of packets received from the BIG-IP Pool
+f5,pool.packetsSent,gauge,true,The number of packets sent to the BIG-IP Pool
+f5,pool.requests,gauge,true,The total number of requests to the Pool
+f5,pool.statusReason,gauge,true,Textual Property explaining the overall health reason
+f5,member.availabilityState,gauge,true,Current availability from the BIG-IP System 0 = Offline, 1 = Unknown, 2 = Online
+f5,member.connections,gauge,true,Current Connections
+f5,member.sessions,gauge,true,Current session count
+f5,member.inDataInBytes,gauge,true,The amount of data received from the BIG-IP Pool Member
+f5,member.outDataInBytes,gauge,true,The amount of data sent to the BIG-IP Pool Member
+f5,member.enabled,gauge,true,Enabled state of the Pool Member with regards to the parent pool 0 = Disabled, 1 = Enabled
+f5,member.monitorStatus,gauge,true,Monitor Status 0 = Down, 1 = Unchecked, 2 = Any other status
+f5,member.packetsReceived,gauge,true,The number of packets received from the BIG-IP Pool Member
+f5,member.packetsSent,gauge,true,The number of packets sent to the BIG-IP Pool Member
+f5,member.requests,gauge,true,Current number of requests over the last collection interval
+f5,member.sessionStatus,gauge,true,Current session health status 0 = Disabled, 1 = Enabled
+f5,member.state,gauge,true,Current state 0 = Down, 1 = Up
+f5,member.statusReasion,gauge,true,Explanation of the current status
+f5,node.availabilityState,gauge,true,Current BIG-IP availability state to the Node 0 = Offline, 1 = Unknown, 2 = Online
+f5,node.connections,gauge,true,Current number of network connections from BIG-IP
+f5,node.sessions,gauge,true,Current number of sessions
+f5,node.inDataInBytes,gauge,true,The amount of data received from the BIG-IP Node
+f5,node.outDataInBytes,gauge,true,The amount of data sent to the BIG-IP Node
+f5,node.enabled,gauge,true,Current BIG-IP enabled state 0 = Disabled, 1 = Enabled
+f5,node.monitorStatus,gauge,true,Current Health Monitor rule status 0 = Down, 1 = Unchecked, 2 = Any other status
+f5,node.packetsReceived,gauge,true,The number of packets received from the BIG-IP Node
+f5,node.packetsSent,gauge,true,The number of packets sent to the BIG-IP Node
+f5,node.requests,gauge,true,Current number of requests over the last collection from BIG-IP
+f5,node.sessionStatus,gauge,true,Current status of the session 0 = Disabled, 1 = Enabled
+f5,node.statusReason,gauge,true,BIG-IP reason for the current status
