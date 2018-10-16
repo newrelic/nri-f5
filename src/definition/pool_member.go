@@ -1,26 +1,31 @@
 package definition
 
-type LtmPoolMember struct {
-	Kind  string              `json:"kind"`
-	Items []LtmPoolMemberItem `json:"items"`
-}
-
-type LtmPoolMemberItem struct {
-	Name string `json:"name"`
-	Kind string `json:"kind"`
-}
-
+/*
+ *type LtmPoolMember struct {
+ *  Kind  string              `json:"kind"`
+ *  Items []LtmPoolMemberItem `json:"items"`
+ *}
+ *
+ *type LtmPoolMemberItem struct {
+ *  Name string `json:"name"`
+ *  Kind string `json:"kind"`
+ *}
+ *
+ */
 // ===============
 
+// LtmPoolMemberStats is an unmarshalling struct
 type LtmPoolMemberStats struct {
 	Kind    string                                  `json:"kind"`
 	Entries map[string]LtmPoolMemberStatsEntryValue `json:"entries"`
 }
 
+// LtmPoolMemberStatsEntryValue is an unmarshalling struct
 type LtmPoolMemberStatsEntryValue struct {
 	NestedStats LtmPoolMemberStatsEntryValueNestedStats `json:"nestedStats"`
 }
 
+// LtmPoolMemberStatsEntryValueNestedStats is an unmarshalling struct
 type LtmPoolMemberStatsEntryValueNestedStats struct {
 	Kind    string `json:"kind"`
 	Entries struct {

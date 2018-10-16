@@ -1,10 +1,12 @@
 package definition
 
+// LtmVirtual is an unmarshalling struct
 type LtmVirtual struct {
 	Kind  string           `json:"kind"`
 	Items []LtmVirtualItem `json:"items"`
 }
 
+// LtmVirtualItem is an unmarshalling struct
 type LtmVirtualItem struct {
 	Kind           string `json:"kind"`
 	Name           string `json:"name"`
@@ -18,15 +20,18 @@ type LtmVirtualItem struct {
 
 // =================
 
+// LtmVirtualStats is an unmarshalling struct
 type LtmVirtualStats struct {
 	Kind    string `json:"kind"`
 	Entries map[string]LtmVirtualStatsEntryValue
 }
 
+// LtmVirtualStatsEntryValue is an unmarshalling struct
 type LtmVirtualStatsEntryValue struct {
 	NestedStats LtmVirtualStatsNestedStats
 }
 
+// LtmVirtualStatsNestedStats is an unmarshalling struct
 type LtmVirtualStatsNestedStats struct {
 	Kind    string `json:"kind"`
 	Entries struct {

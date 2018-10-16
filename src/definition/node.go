@@ -1,10 +1,12 @@
 package definition
 
+// LtmNode is an unmarshalling struct
 type LtmNode struct {
 	Kind  string        `json:"kind"`
 	Items []LtmNodeItem `json:"items"`
 }
 
+// LtmNodeItem is an unmarshalling struct
 type LtmNodeItem struct {
 	Name           string          `json:"name"`
 	Partition      string          `json:"partition"`
@@ -18,22 +20,25 @@ type LtmNodeItem struct {
 	FQDN           LtmNodeItemFQDN `json:"fqdn"`
 }
 
+// LtmNodeItemFQDN is an unmarshalling struct
 type LtmNodeItemFQDN struct {
 	TMName string `json:"tmName"`
 }
 
 // ===============
 
+// LtmNodeStats is an unmarshalling struct
 type LtmNodeStats struct {
 	Kind    string                            `json:"kind"`
 	Entries map[string]LtmNodeStatsEntryValue `json:"entries"`
 }
 
+// LtmNodeStatsEntryValue is an unmarshalling struct
 type LtmNodeStatsEntryValue struct {
 	NestedStats LtmNodeStatsEntryValueNestedStats `json:"nestedStats"`
 }
 
-// TODO add metric names and types when those are determined
+// LtmNodeStatsEntryValueNestedStats is an unmarshalling struct
 type LtmNodeStatsEntryValueNestedStats struct {
 	Kind    string `json:"kind"`
 	Entries struct {

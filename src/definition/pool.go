@@ -1,10 +1,12 @@
 package definition
 
+// LtmPool is an unmarshalling struct
 type LtmPool struct {
 	Kind  string        `json:"kind"`
 	Items []LtmPoolItem `json:"items"`
 }
 
+// LtmPoolItem is an unmarshalling struct
 type LtmPoolItem struct {
 	Name              string `json:"name"`
 	Partition         string `json:"partition"`
@@ -17,28 +19,33 @@ type LtmPoolItem struct {
 	} `json:"membersReference"`
 }
 
+// LtmPoolItemMember is an unmarshalling struct
 type LtmPoolItemMember struct {
 	Kind string `json:"kind"`
 }
 
+// LtmPoolItemMembers is an unmarshalling struct
 type LtmPoolItemMembers struct {
 }
 
 // =============
 
+// LtmPoolStats is an unmarshalling struct
 type LtmPoolStats struct {
 	Kind    string                            `json:"kind"`
 	Entries map[string]LtmPoolStatsEntryValue `json:"entries"`
 }
 
+// LtmPoolStatsEntryValue is an unmarshalling struct
 type LtmPoolStatsEntryValue struct {
 	NestedStats LtmPoolStatsEntryValueNestedStats `json:"nestedStats"`
 }
 
+// LtmPoolStatsEntryValueNestedStats is an unmarshalling struct
 type LtmPoolStatsEntryValueNestedStats struct {
 	Kind    string `json:"kind"`
 	Entries struct {
-		Name struct {
+		FullPath struct {
 			Description string
 		} `json:"tmName"`
 		ActiveMemberCount struct {
