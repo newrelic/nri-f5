@@ -13,49 +13,49 @@ func TestParseError(t *testing.T) {
 	}{
 		{
 			ArgumentList{
-				Username:   "",
-				Password:   "",
-				PathFilter: "[]",
+				Username:        "",
+				Password:        "",
+				PartitionFilter: "[]",
 			},
 			true,
 		},
 		{
 			ArgumentList{
-				Username:   "test",
-				Password:   "",
-				PathFilter: "[]",
+				Username:        "test",
+				Password:        "",
+				PartitionFilter: "[]",
 			},
 			true,
 		},
 		{
 			ArgumentList{
-				Username:   "test",
-				Password:   "test",
-				PathFilter: "[]",
+				Username:        "test",
+				Password:        "test",
+				PartitionFilter: "[]",
 			},
 			false,
 		},
 		{
 			ArgumentList{
-				Username:   "test",
-				Password:   "test",
-				PathFilter: `["test2"]`,
+				Username:        "test",
+				Password:        "test",
+				PartitionFilter: `["test2"]`,
 			},
 			false,
 		},
 		{
 			ArgumentList{
-				Username:   "test",
-				Password:   "test",
-				PathFilter: `["test2("]`,
+				Username:        "test",
+				Password:        "test",
+				PartitionFilter: `["test2]`,
 			},
 			true,
 		},
 		{
 			ArgumentList{
-				Username:   "test",
-				Password:   "test",
-				PathFilter: `["test2"`,
+				Username:        "test",
+				Password:        "test",
+				PartitionFilter: `["test2"`,
 			},
 			true,
 		},
