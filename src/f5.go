@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-	"regexp"
 	"strconv"
 	"sync"
 
@@ -27,6 +26,8 @@ func main() {
 	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
 	exitOnErr(err)
 
+	log.SetupLogging(args.Verbose)
+
 	pathFilter, err := args.Parse()
 	exitOnErr(err)
 
@@ -40,7 +41,7 @@ func main() {
 	exitOnErr(i.Publish())
 }
 
-func collectEntities(i *integration.Integration, client *client.F5Client, pathFilter []*regexp.Regexp) {
+func collectEntities(i *integration.Integration, client *client.F5Client, pathFilter *arguments.PathMatcher) {
 	hostPort := args.Hostname + ":" + strconv.Itoa(args.Port)
 	// set up and run goroutines for each entity
 	var wg sync.WaitGroup
