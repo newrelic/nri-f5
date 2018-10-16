@@ -1,18 +1,18 @@
 package entities
 
 import (
-	"regexp"
 	"sync"
 
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/newrelic/nri-f5/src/arguments"
 	"github.com/newrelic/nri-f5/src/client"
 	"github.com/newrelic/nri-f5/src/definition"
 )
 
 // CollectPools collects pool and pool member entities from F5 and adds them to the integration, using the filter as a whitelist
-func CollectPools(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, poolMemberFilter []*regexp.Regexp) {
+func CollectPools(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, partitionFilter *arguments.PathMatcher) {
 	defer wg.Done()
 
 	var ltmPool definition.LtmPool
@@ -25,8 +25,8 @@ func CollectPools(i *integration.Integration, client *client.F5Client, wg *sync.
 		log.Error("Failed to collect metrics for pools: %s", err.Error())
 	}
 
-	populatePoolsInventory(i, ltmPool, ltmPoolStats, poolMemberFilter)
-	populatePoolsMetrics(i, ltmPoolStats, poolMemberFilter)
+	populatePoolsInventory(i, ltmPool, ltmPoolStats, partitionFilter)
+	populatePoolsMetrics(i, ltmPoolStats, partitionFilter)
 
 	for _, pool := range ltmPool.Items {
 		wg.Add(1)
@@ -37,8 +37,12 @@ func CollectPools(i *integration.Integration, client *client.F5Client, wg *sync.
 	}
 }
 
-func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPool, ltmPoolStats definition.LtmPoolStats, poolMemberFilter []*regexp.Regexp) {
+func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPool, ltmPoolStats definition.LtmPoolStats, partitionFilter *arguments.PathMatcher) {
 	for _, pool := range ltmPool.Items {
+		if !partitionFilter.Matches(pool.FullPath) {
+			continue
+		}
+
 		poolEntity, err := i.Entity(pool.FullPath, "pool") // TODO ensure everywhere is using FullPath as pool name
 		if err != nil {
 			log.Error("Failed to get entity object for pool %s: %s", pool.Name, err.Error())
@@ -51,7 +55,11 @@ func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPo
 
 	for _, pool := range ltmPoolStats.Entries {
 		entries := pool.NestedStats.Entries
-		poolName := entries.Name.Description
+		poolName := entries.FullPath.Description
+		if !partitionFilter.Matches(poolName) {
+			continue
+		}
+
 		poolEntity, err := i.Entity(poolName, "pool")
 		if err != nil {
 			log.Error("Failed to get entity object for pool %s: %s", poolName, err.Error())
@@ -62,10 +70,14 @@ func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPo
 	}
 }
 
-func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.LtmPoolStats, poolMemberFilter []*regexp.Regexp) {
+func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.LtmPoolStats, partitionFilter *arguments.PathMatcher) {
 	for _, pool := range ltmPoolStats.Entries {
 		entries := pool.NestedStats.Entries
-		poolName := entries.Name.Description
+		poolName := entries.FullPath.Description
+		if !partitionFilter.Matches(poolName) {
+			continue
+		}
+
 		poolEntity, err := i.Entity(poolName, "pool")
 		if err != nil {
 			log.Error("Failed to get entity object for pool %s: %s", poolName, err.Error())

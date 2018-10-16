@@ -1,17 +1,18 @@
 package entities
 
 import (
+	"strings"
+
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
 	"github.com/newrelic/nri-f5/src/client"
 	"github.com/newrelic/nri-f5/src/definition"
-	"strings"
 )
 
 // CollectPoolMembers collects metrics and inventory for every member of a pool given its path
 func CollectPoolMembers(fullPath string, i *integration.Integration, client *client.F5Client) {
-	tildePath := strings.Replace(fullPath, "/", "~", -1)
+	tildePath := strings.Replace(fullPath, "/", "~", -1) // f5 uses tildes in requests rather than slashes
 
 	var memberStats definition.LtmPoolMemberStats
 	if err := client.Request("/mgmt/tm/ltm/pool/"+tildePath+"/members/stats", &memberStats); err != nil {
@@ -19,6 +20,7 @@ func CollectPoolMembers(fullPath string, i *integration.Integration, client *cli
 	}
 
 	populatePoolMembersInventory(memberStats, i)
+	populatePoolMembersMetrics(memberStats, i)
 }
 
 func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *integration.Integration) {
@@ -56,7 +58,11 @@ func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *in
 			metric.Attribute{Key: "poolName", Value: entries.PoolName.Description},
 		)
 
-		ms.MarshalMetrics(entries)
+		err = ms.MarshalMetrics(entries)
+		if err != nil {
+			log.Error("Failed to marshal metrics for pool %s: %s", memberName, err.Error())
+			continue
+		}
 	}
 
 }
