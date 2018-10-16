@@ -12,7 +12,7 @@ f5,system.cpuSystemTicksPerSecond,gauge,true,Amount of CPU ticks used by the ker
 f5,system.cpuUserTicksPerSecond,gauge,true,Amount of CPU ticks used by user processes
 f5,system.memoryTotalInBytes,gauge,true,Total amount of Memory available on the current device
 f5,system.memoryUsedInBytes,gauge,true,Current Memory being used on the current device
-f5,virtualserver.avaibilityState,gauge,true,BIG-IP defined availability 0 = Offline, 1 = Unknown, 2 = Online
+f5,virtualserver.avaibilityState,gauge,true,BIG-IP defined availability 0 = Offline 1 = Unknown 2 = Online
 f5,virtualserver.connections,gauge,true,Current number of connections from BIG-IP
 f5,virtualserver.inDataInBytes,gauge,true,The amount of data received from the BIG-IP Virtual Server
 f5,virtualserver.outDataInBytes,gauge,true,The amount of data sent to the BIG-IP Virtual Server
