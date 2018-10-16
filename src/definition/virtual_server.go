@@ -60,5 +60,8 @@ type LtmVirtualStatsNestedStats struct {
 		StatusReason struct {
 			Description string `metric_name:"virtualserver.statusReason" source_type:"attribute"`
 		} `json:"status.statusReason"`
+		TmName struct {
+			Description string
+		} `json:"tmName"`
 	}
 }
