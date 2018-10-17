@@ -21,10 +21,10 @@ func Test_CreateClient(t *testing.T) {
 
 	client, err := NewClient(&args)
 	assert.NoError(t, err)
-	assert.Equal(t, "https://testHost:1945", client.baseURL)
-	assert.Equal(t, "testUser", client.username)
-	assert.Equal(t, "testPass", client.password)
-	assert.Equal(t, "", client.authToken)
+	assert.Equal(t, "https://testHost:1945", client.BaseURL)
+	assert.Equal(t, "testUser", client.Username)
+	assert.Equal(t, "testPass", client.Password)
+	assert.Equal(t, "", client.AuthToken)
 }
 
 func Test_LogIn(t *testing.T) {
@@ -49,10 +49,10 @@ func Test_LogIn(t *testing.T) {
 	defer func() { testServer.Close() }()
 
 	client := F5Client{
-		baseURL:    testServer.URL,
-		username:   "testUser",
-		password:   "testPass",
-		httpClient: http.DefaultClient,
+		BaseURL:    testServer.URL,
+		Username:   "testUser",
+		Password:   "testPass",
+		HTTPClient: http.DefaultClient,
 	}
 
 	err := client.Request("/some-endpoint", nil)
@@ -61,7 +61,7 @@ func Test_LogIn(t *testing.T) {
 	err = client.LogIn()
 	assert.NoError(t, err)
 
-	assert.Equal(t, "this-is-a-token", client.authToken)
+	assert.Equal(t, "this-is-a-token", client.AuthToken)
 
 	var okResp struct {
 		OK *bool `json:"ok"`
