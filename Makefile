@@ -54,6 +54,9 @@ test: deps
 	@echo "=== $(INTEGRATION) === [ test ]: Running unit tests..."
 	@gocov test $(GO_PKGS) | gocov-xml > coverage.xml
 
+# Include thematic Makefiles
+include Makefile-*.mk
+
 check-version:
 ifdef GOOS
 ifneq "$(GOOS)" "$(NATIVEOS)"
