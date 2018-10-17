@@ -59,25 +59,25 @@ type LtmPoolStatsEntryValueNestedStats struct {
 			Value int `metric_name:"pool.connections" source_type:"gauge"`
 		} `json:"serverside.curConns"`
 		DataIn struct {
-			ProcessedValue *int `metric_name:"pool.inDataInBytes" source_type:"rate"`
+			ProcessedValue *int `metric_name:"pool.inDataInBytesPerSecond" source_type:"rate"`
 			Value          int
 		} `json:"serverside.bitsIn"`
 		DataOut struct {
-			ProcessedValue *int `metric_name:"pool.outDataInBytes" source_type:"rate"`
+			ProcessedValue *int `metric_name:"pool.outDataInBytesPerSecond" source_type:"rate"`
 			Value          int
 		} `json:"serverside.bitsOut"`
 		EnabledState struct {
-			ProcessedDescription *int `metric_name:"pool.enabled" source_type:"rate"`
+			ProcessedDescription *int `metric_name:"pool.enabled" source_type:"gauge"`
 			Description          string
 		} `json:"status.enabledState"`
 		PacketsIn struct {
-			Value int `metric_name:"pool.packetsReceived" source_type:"rate"`
+			Value int `metric_name:"pool.packetsReceivedPerSecond" source_type:"rate"`
 		} `json:"serverside.pktsIn"`
 		PacketsOut struct {
-			Value int `metric_name:"pool.packetsSent" source_type:"rate"`
+			Value int `metric_name:"pool.packetsSentPerSecond" source_type:"rate"`
 		} `json:"serverside.pktsOut"`
 		Requests struct {
-			Value int `metric_name:"pool.requests" source_type:"rate"`
+			Value int `metric_name:"pool.requestsPerSecond" source_type:"rate"`
 		} `json:"totRequests"`
 		StatusReason struct {
 			Description string `metric_name:"pool.statusReason" source_type:"attribute"`

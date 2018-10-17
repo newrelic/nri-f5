@@ -40,11 +40,11 @@ type LtmPoolMemberStatsEntryValueNestedStats struct {
 			Value int `metric_name:"member.sessions" source_type:"gauge"`
 		} `json:"curSessions"`
 		DataIn struct {
-			ProcessedValue *int `metric_name:"member.inDataInBytes" source_type:"rate"`
+			ProcessedValue *int `metric_name:"member.inDataInBytesPerSecond" source_type:"rate"`
 			Value          int
 		} `json:"serverside.bitsIn"`
 		DataOut struct {
-			ProcessedValue *int `metric_name:"member.outDataInBytes" source_type:"rate"`
+			ProcessedValue *int `metric_name:"member.outDataInBytesPerSecond" source_type:"rate"`
 		} `json:"serverside.bitsOut"`
 		EnabledState struct {
 			ProcessedDescription *int `metric_name:"member.enabled" source_type:"gauge"`
@@ -55,13 +55,13 @@ type LtmPoolMemberStatsEntryValueNestedStats struct {
 			Description          string
 		} `json:"monitorStatus"`
 		PacketsIn struct {
-			Value int `metric_name:"member.packetsReceived" source_type:"rate"`
+			Value int `metric_name:"member.packetsReceivedPerSecond" source_type:"rate"`
 		} `json:"serverside.pktsIn"`
 		PacketsOut struct {
-			Value int `metric_name:"member.packetsSent" source_type:"rate"`
+			Value int `metric_name:"member.packetsSentPerSecond" source_type:"rate"`
 		} `json:"serverside.pktsOut"`
 		Requests struct {
-			Value int `metric_name:"member.requests" source_type:"rate"`
+			Value int `metric_name:"member.requestsPerSecond" source_type:"rate"`
 		} `json:"totRequests"`
 		SessionStatus struct {
 			ProcessedDescription *int `metric_name:"member.sessionStatus" source_type:"gauge"`

@@ -14,6 +14,7 @@ type SysApplicationServiceItem struct {
 	Template         string                              `json:"template"`
 	TemplateModified string                              `json:"templateModified"`
 	TrafficGroup     string                              `json:"trafficGroup"`
+	FullPath         string                              `json:"fullPath"`
 	Variables        []SysApplicationServiceItemVariable `json:"variables"`
 }
 
