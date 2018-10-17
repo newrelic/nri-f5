@@ -6,12 +6,14 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/newrelic/nri-f5/src/arguments"
 	"github.com/newrelic/nri-f5/src/client"
 	"github.com/newrelic/nri-f5/src/definition"
 )
 
 // CollectVirtualServers collects virtual server entities from F5 and adds them to the integration
-func CollectVirtualServers(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup) {
+func CollectVirtualServers(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher) {
+	// TODO use pathMatcher
 	defer wg.Done()
 
 	var ltmVirtual definition.LtmVirtual
@@ -52,6 +54,10 @@ func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats de
 		if err != nil {
 			log.Error("Failed to get entity object for virtual server %s: %s", virtualName, err.Error())
 		}
+
+		entries.AvailabilityState.ProcessedDescription = convertAvailabilityState(entries.AvailabilityState.Description)
+		entries.EnabledState.ProcessedDescription = convertEnabledState(entries.EnabledState.Description)
+		// TODO convert bits to bytes
 
 		ms := virtualEntity.NewMetricSet("F5BigIpVirtualServerSample",
 			metric.Attribute{Key: "displayName", Value: virtualName},

@@ -83,6 +83,9 @@ func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.Lt
 			log.Error("Failed to get entity object for pool %s: %s", poolName, err.Error())
 		}
 
+		entries.AvailabilityState.ProcessedDescription = convertAvailabilityState(entries.AvailabilityState.Description)
+		entries.EnabledState.ProcessedDescription = convertEnabledState(entries.EnabledState.Description)
+
 		ms := poolEntity.NewMetricSet("F5BigIpPoolSample",
 			metric.Attribute{Key: "displayName", Value: poolName},
 			metric.Attribute{Key: "entityType", Value: "pool"},

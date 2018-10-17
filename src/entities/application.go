@@ -5,12 +5,13 @@ import (
 
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/newrelic/nri-f5/src/arguments"
 	"github.com/newrelic/nri-f5/src/client"
 	"github.com/newrelic/nri-f5/src/definition"
 )
 
 // CollectApplications collects application entities from F5 and adds them to the integration
-func CollectApplications(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup) {
+func CollectApplications(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher) {
 	defer wg.Done()
 
 	var appResponse definition.SysApplicationService
@@ -20,7 +21,11 @@ func CollectApplications(i *integration.Integration, client *client.F5Client, wg
 	}
 
 	for _, applicationItem := range appResponse.Items {
-		appEntity, err := i.Entity(applicationItem.Name, "application")
+		if !pathFilter.Matches(applicationItem.FullPath) {
+			continue
+		}
+
+		appEntity, err := i.Entity(applicationItem.FullPath, "application")
 		if err != nil {
 			log.Error("Couldn't create entity for application object: %v", err)
 		}

@@ -16,7 +16,7 @@ func CollectPoolMembers(fullPath string, i *integration.Integration, client *cli
 
 	var memberStats definition.LtmPoolMemberStats
 	if err := client.Request("/mgmt/tm/ltm/pool/"+tildePath+"/members/stats", &memberStats); err != nil {
-		log.Error("Failed to collect inventory")
+		log.Error("Failed to collect inventory: %s", err)
 	}
 
 	populatePoolMembersInventory(memberStats, i)
@@ -51,6 +51,10 @@ func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *in
 			log.Error("Failed to get entity for pool %s: %s", memberName, err.Error())
 			continue
 		}
+
+		entries.AvailabilityState.ProcessedDescription = convertAvailabilityState(entries.AvailabilityState.Description)
+		entries.EnabledState.ProcessedDescription = convertEnabledState(entries.EnabledState.Description)
+		entries.SessionStatus.ProcessedDescription = convertSessionStatus(entries.SessionStatus.Description)
 
 		ms := entity.NewMetricSet("F5BigIpPoolMemberSample",
 			metric.Attribute{Key: "displayName", Value: memberName},
