@@ -64,6 +64,10 @@ func populateNodesMetrics(i *integration.Integration, ltmNodeStats definition.Lt
 		entries.MonitorStatus.ProcessedDescription = convertMonitorStatus(entries.MonitorStatus.Description)
 		entries.EnabledState.ProcessedDescription = convertEnabledState(entries.EnabledState.Description)
 		entries.SessionStatus.ProcessedDescription = convertSessionStatus(entries.SessionStatus.Description)
+		dataIn := entries.DataIn.Value / 8
+		dataOut := entries.DataIn.Value / 8
+		entries.DataIn.ProcessedValue = &dataIn
+		entries.DataOut.ProcessedValue = &dataOut
 
 		ms := nodeEntity.NewMetricSet("F5BigIpNodeSample",
 			metric.Attribute{Key: "displayName", Value: nodeName},

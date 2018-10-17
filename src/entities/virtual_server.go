@@ -57,6 +57,10 @@ func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats de
 
 		entries.AvailabilityState.ProcessedDescription = convertAvailabilityState(entries.AvailabilityState.Description)
 		entries.EnabledState.ProcessedDescription = convertEnabledState(entries.EnabledState.Description)
+		dataIn := entries.DataIn.Value / 8
+		dataOut := entries.DataIn.Value / 8
+		entries.DataIn.ProcessedValue = &dataIn
+		entries.DataOut.ProcessedValue = &dataOut
 		// TODO convert bits to bytes
 
 		ms := virtualEntity.NewMetricSet("F5BigIpVirtualServerSample",

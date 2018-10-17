@@ -85,6 +85,10 @@ func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.Lt
 
 		entries.AvailabilityState.ProcessedDescription = convertAvailabilityState(entries.AvailabilityState.Description)
 		entries.EnabledState.ProcessedDescription = convertEnabledState(entries.EnabledState.Description)
+		dataIn := entries.DataIn.Value / 8
+		dataOut := entries.DataIn.Value / 8
+		entries.DataIn.ProcessedValue = &dataIn
+		entries.DataOut.ProcessedValue = &dataOut
 
 		ms := poolEntity.NewMetricSet("F5BigIpPoolSample",
 			metric.Attribute{Key: "displayName", Value: poolName},

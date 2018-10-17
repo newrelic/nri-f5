@@ -55,6 +55,10 @@ func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *in
 		entries.AvailabilityState.ProcessedDescription = convertAvailabilityState(entries.AvailabilityState.Description)
 		entries.EnabledState.ProcessedDescription = convertEnabledState(entries.EnabledState.Description)
 		entries.SessionStatus.ProcessedDescription = convertSessionStatus(entries.SessionStatus.Description)
+		dataIn := entries.DataIn.Value / 8
+		dataOut := entries.DataIn.Value / 8
+		entries.DataIn.ProcessedValue = &dataIn
+		entries.DataOut.ProcessedValue = &dataOut
 
 		ms := entity.NewMetricSet("F5BigIpPoolMemberSample",
 			metric.Attribute{Key: "displayName", Value: memberName},
