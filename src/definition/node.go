@@ -53,11 +53,11 @@ type LtmNodeStatsEntryValueNestedStats struct {
 			Value int `metric_name:"node.sessions" source_type:"gauge"`
 		} `json:"curSessions"`
 		DataIn struct {
-			ProcessedValue int `metric_name:"node.inDataInBytesPerSecond" source_type:"rate"`
+			ProcessedValue *int `metric_name:"node.inDataInBytesPerSecond" source_type:"rate"`
 			Value          int
 		} `json:"serverside.bitsIn"`
 		DataOut struct {
-			ProcessedValue int `metric_name:"node.outDataInBytesPerSecond" source_type:"rate"`
+			ProcessedValue *int `metric_name:"node.outDataInBytesPerSecond" source_type:"rate"`
 			Value          int
 		} `json:"serverside.bitsOut"`
 		EnabledState struct {
