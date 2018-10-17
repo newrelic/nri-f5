@@ -19,7 +19,7 @@ type ArgumentList struct {
 	UseSSL          bool   `default:"true" help:"Whether or not to use SSL to connect to the API. The F5 API only allows connections using SSL."`
 	CABundleFile    string `default:"" help:"Alternative Certificate Authority bundle file"`
 	CABundleDir     string `default:"" help:"Alternative Certificate Authority bundle directory"`
-	PartitionFilter string `default:"['Common']" help:"JSON array of partitions to collect"`
+	PartitionFilter string `default:"[\"Common\"]" help:"JSON array of partitions to collect"`
 }
 
 // Parse validates and parses out regex patterns from the input arguments
