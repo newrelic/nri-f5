@@ -7,13 +7,12 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
-	"github.com/newrelic/nri-f5/src/arguments"
 	"github.com/newrelic/nri-f5/src/client"
 	"github.com/newrelic/nri-f5/src/definition"
 )
 
 // CollectSystem collects the system entity from F5 and adds it to the integration
-func CollectSystem(integration *integration.Integration, client *client.F5Client, hostPort string, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher) {
+func CollectSystem(integration *integration.Integration, client *client.F5Client, hostPort string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	systemEntity, err := integration.Entity(hostPort, "system")
@@ -28,14 +27,13 @@ func CollectSystem(integration *integration.Integration, client *client.F5Client
 
 	var systemWg sync.WaitGroup
 	systemWg.Add(3)
-	go marshalSystemInfo(systemEntity, client, &systemWg, pathFilter)
-	go marshalHostInfo(systemMetrics, client, &systemWg, pathFilter)
-	go marshalCPUStats(systemMetrics, client, &systemWg, pathFilter)
+	go marshalSystemInfo(systemEntity, client, &systemWg)
+	go marshalHostInfo(systemMetrics, client, &systemWg)
+	go marshalCPUStats(systemMetrics, client, &systemWg)
 	systemWg.Wait()
 }
 
-func marshalSystemInfo(systemEntity *integration.Entity, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher) {
-	// TODO use pathFilter
+func marshalSystemInfo(systemEntity *integration.Entity, client *client.F5Client, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	var sysInfo definition.CloudNetSystemInformation
@@ -63,7 +61,7 @@ func marshalSystemInfo(systemEntity *integration.Entity, client *client.F5Client
 	}
 }
 
-func marshalHostInfo(systemMetrics *metric.Set, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher) {
+func marshalHostInfo(systemMetrics *metric.Set, client *client.F5Client, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	var hostInfo definition.CloudSysHostInfoStat
@@ -83,7 +81,7 @@ func marshalHostInfo(systemMetrics *metric.Set, client *client.F5Client, wg *syn
 	}
 }
 
-func marshalCPUStats(systemMetrics *metric.Set, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher) {
+func marshalCPUStats(systemMetrics *metric.Set, client *client.F5Client, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	var cpuInfo definition.SysCPU

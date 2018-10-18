@@ -26,12 +26,16 @@ func CollectVirtualServers(i *integration.Integration, client *client.F5Client, 
 		log.Error("Failed to collect metrics for virtual server: %s", err.Error())
 	}
 
-	populateVirtualServerInventory(i, ltmVirtual)
-	populateVirtualServerMetrics(i, ltmVirtualStats)
+	populateVirtualServerInventory(i, ltmVirtual, pathFilter)
+	populateVirtualServerMetrics(i, ltmVirtualStats, pathFilter)
 }
 
-func populateVirtualServerInventory(i *integration.Integration, ltmVirtual definition.LtmVirtual) {
+func populateVirtualServerInventory(i *integration.Integration, ltmVirtual definition.LtmVirtual, pathFilter *arguments.PathMatcher) {
 	for _, virtual := range ltmVirtual.Items {
+		if !pathFilter.Matches(virtual.FullPath) {
+			continue
+		}
+
 		virtualEntity, err := i.Entity(virtual.FullPath, "virtualServer") // TODO ensure everywhere is using FullPath as node name
 		if err != nil {
 			log.Error("Failed to get entity object for virtual server %s: %s", virtual.Name, err.Error())
@@ -46,10 +50,15 @@ func populateVirtualServerInventory(i *integration.Integration, ltmVirtual defin
 	}
 }
 
-func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats definition.LtmVirtualStats) {
+func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats definition.LtmVirtualStats, pathFilter *arguments.PathMatcher) {
 	for _, virtual := range ltmVirtualStats.Entries {
+
 		entries := virtual.NestedStats.Entries
 		virtualName := entries.TmName.Description
+		if !pathFilter.Matches(virtualName) {
+			continue
+		}
+
 		virtualEntity, err := i.Entity(virtualName, "virtualServer")
 		if err != nil {
 			log.Error("Failed to get entity object for virtual server %s: %s", virtualName, err.Error())
