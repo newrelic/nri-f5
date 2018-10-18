@@ -1,6 +1,8 @@
 package entities
 
 import (
+	"errors"
+	"regexp"
 	"strings"
 
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
@@ -73,4 +75,19 @@ func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *in
 		}
 	}
 
+}
+
+func buildPoolMemberPath(url string) (string, error) {
+	re := regexp.MustCompile("members/([^/]*)/stats")
+	match := re.FindStringSubmatch(url)
+	if len(match) != 2 {
+		err := errors.New("failed to find a match for pool member path in the url string")
+		return "", err
+	}
+	poolMemberPath := match[1]
+	return replaceTildes(poolMemberPath), nil
+}
+
+func replaceTildes(match string) string {
+	return strings.Replace(match, "~", "/", -1)
 }

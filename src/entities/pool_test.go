@@ -200,3 +200,45 @@ func TestCollectPools(t *testing.T) {
 	assert.Equal(t, "/Common/Pool123", memberMetrics["displayName"])
 	assert.Equal(t, float64(2), memberMetrics["member.connections"])
 }
+
+func TestBuildPoolMemberPathValidUrl(t *testing.T) {
+	actual, _ := buildPoolMemberPath("https://localhost/mgmt/tm/ltm/pool/~Common-members/~Common~Pool123:80/stats?ver=12.1.1")
+	expected := "/Common/Pool123:80"
+	assert.Equal(t, expected, actual)
+}
+
+func TestBuildPoolMemberPathMultipleMembers(t *testing.T) {
+	actual, _ := buildPoolMemberPath("https://localhost/mgmt/tm/ltm/pool/~Common-members/members/~Common~Pool123:80/stats?ver=12.1.1")
+	expected := "/Common/Pool123:80"
+	assert.Equal(t, expected, actual)
+}
+
+func TestBuildPoolMemberPathNoMatches(t *testing.T) {
+	_, err := buildPoolMemberPath("https://localhost/mgmt/tm/ltm/pool/~Common-members?ver=12.1.1")
+	assert.Error(t, err)
+}
+func TestBuildPoolMemberPathEmptyUrl(t *testing.T) {
+	_, err := buildPoolMemberPath("")
+	assert.Error(t, err)
+}
+
+func TestReplaceTildes(t *testing.T) {
+	test := "~Common~Pool123:80"
+	actual := replaceTildes(test)
+	expected := "/Common/Pool123:80"
+	assert.Equal(t, expected, actual)
+}
+
+func TestReplaceTildesNoTildes(t *testing.T) {
+	test := "CommonPool123:80"
+	actual := replaceTildes(test)
+	expected := "CommonPool123:80"
+	assert.Equal(t, expected, actual)
+}
+
+func TestReplaceTildesEmptyString(t *testing.T) {
+	test := ""
+	actual := replaceTildes(test)
+	expected := ""
+	assert.Equal(t, expected, actual)
+}
