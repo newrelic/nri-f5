@@ -26,10 +26,14 @@ func CollectPoolMembers(fullPath string, i *integration.Integration, client *cli
 }
 
 func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *integration.Integration) {
-	for _, poolMember := range memberStats.Entries {
+	for poolURL, poolMember := range memberStats.Entries {
 		entries := poolMember.NestedStats.Entries
-		memberName := entries.NodeName.Description
-		entity, err := i.Entity(memberName, "poolmember") // TODO verify that this is the correct name (and htat it's unique)
+		memberName, err := buildPoolMemberPath(poolURL)
+		if err != nil {
+			log.Error("Failed to parse pool name from url %s: %s", err)
+			continue
+		}
+		entity, err := i.Entity(memberName, "poolmember")
 		if err != nil {
 			log.Error("Failed to get entity for pool %s: %s", memberName, err.Error())
 			continue
@@ -37,18 +41,22 @@ func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *
 
 		logOnError("maxConnections", memberName, entity.SetInventoryItem("maxConnections", "value", entries.MaximumConnections.Value))
 		logOnError("monitorRule", memberName, entity.SetInventoryItem("monitorRule", "value", entries.MonitorRule.Description))
-		logOnError("monitorRule", memberName, entity.SetInventoryItem("nodeName", "value", memberName))
-		logOnError("monitorRule", memberName, entity.SetInventoryItem("poolName", "value", entries.PoolName.Description))
-		logOnError("monitorRule", memberName, entity.SetInventoryItem("port", "value", entries.Port.Value))
-		logOnError("monitorRule", memberName, entity.SetInventoryItem("kind", "value", poolMember.NestedStats.Kind))
+		logOnError("nodeName", memberName, entity.SetInventoryItem("nodeName", "value", memberName))
+		logOnError("poolName", memberName, entity.SetInventoryItem("poolName", "value", entries.PoolName.Description))
+		logOnError("port", memberName, entity.SetInventoryItem("port", "value", entries.Port.Value))
+		logOnError("kind", memberName, entity.SetInventoryItem("kind", "value", poolMember.NestedStats.Kind))
 	}
 }
 
 func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *integration.Integration) {
-	for _, poolMember := range memberStats.Entries {
+	for poolURL, poolMember := range memberStats.Entries {
 		entries := poolMember.NestedStats.Entries
-		memberName := entries.TmName.Description
-		entity, err := i.Entity(memberName, "poolmember") // TODO verify that this is the correct name (and that it's unique)
+		memberName, err := buildPoolMemberPath(poolURL)
+		if err != nil {
+			log.Error("Failed to parse pool name from url %s: %s", err)
+			continue
+		}
+		entity, err := i.Entity(memberName, "poolmember")
 		if err != nil {
 			log.Error("Failed to get entity for pool %s: %s", memberName, err.Error())
 			continue
@@ -57,6 +65,7 @@ func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *in
 		entries.AvailabilityState.ProcessedDescription = convertAvailabilityState(entries.AvailabilityState.Description)
 		entries.EnabledState.ProcessedDescription = convertEnabledState(entries.EnabledState.Description)
 		entries.SessionStatus.ProcessedDescription = convertSessionStatus(entries.SessionStatus.Description)
+		entries.MonitorStatus.ProcessedDescription = convertMonitorStatus(entries.MonitorStatus.Description)
 		dataIn := entries.DataIn.Value / 8
 		dataOut := entries.DataIn.Value / 8
 		entries.DataIn.ProcessedValue = &dataIn

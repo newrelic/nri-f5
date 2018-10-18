@@ -32,7 +32,7 @@ func TestCollectVirtualServers(t *testing.T) {
 					"addressStatus": "yes",
 					"autoLasthop": "default",
 					"cmpEnabled": "yes",
-					"connectionLimit": 0,
+					"connectionLimit": 7,
 					"destination": "/Common/0.0.0.3:53",
 					"enabled": true,
 					"gtmScore": 0,
@@ -156,5 +156,5 @@ func TestCollectVirtualServers(t *testing.T) {
 	assert.Equal(t, float64(1), metrics["virtualserver.enabled"])
 
 	inventory := virtualServerEntity.Inventory.Items()
-	assert.Equal(t, int(7), inventory["maxConnections"]["value"])
+	assert.Equal(t, 7, inventory["maxConnections"]["value"])
 }

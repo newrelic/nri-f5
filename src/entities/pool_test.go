@@ -195,10 +195,11 @@ func TestCollectPools(t *testing.T) {
 	assert.Equal(t, float64(1), poolMetrics["pool.enabled"])
 
 	memberEntity, _ := i.Entity("/Common/Pool123:80", "poolmember")
-	assert.Equal(t, 1, len(memberEntity.Metrics))
+	assert.Equal(t, 2, len(memberEntity.Metrics))
 	memberMetrics := memberEntity.Metrics[0].Metrics
-	assert.Equal(t, "/Common/Pool123", memberMetrics["displayName"])
+	assert.Equal(t, "/Common/Pool123:80", memberMetrics["displayName"])
 	assert.Equal(t, float64(2), memberMetrics["member.connections"])
+	assert.Equal(t, float64(1), memberMetrics["member.enabled"])
 }
 
 func TestBuildPoolMemberPathValidUrl(t *testing.T) {

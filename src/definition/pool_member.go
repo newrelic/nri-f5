@@ -16,8 +16,8 @@ package definition
 
 // LtmPoolMemberStats is an unmarshalling struct
 type LtmPoolMemberStats struct {
-	Kind    string                                  `json:"kind"`
-	Entries map[string]LtmPoolMemberStatsEntryValue `json:"entries"`
+	Kind    string `json:"kind"`
+	Entries map[string]LtmPoolMemberStatsEntryValue
 }
 
 // LtmPoolMemberStatsEntryValue is an unmarshalling struct
@@ -51,7 +51,7 @@ type LtmPoolMemberStatsEntryValueNestedStats struct {
 			Description          string
 		} `json:"status.enabledState"`
 		MonitorStatus struct {
-			ProcessedDescription *string `metric_name:"member.monitorStatus" source_type:"gauge"`
+			ProcessedDescription *int `metric_name:"member.monitorStatus" source_type:"gauge"`
 			Description          string
 		} `json:"monitorStatus"`
 		PacketsIn struct {
@@ -89,5 +89,5 @@ type LtmPoolMemberStatsEntryValueNestedStats struct {
 		TmName struct {
 			Description string
 		} `json:"tmName"`
-	}
+	} `json:"entries"`
 }

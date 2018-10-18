@@ -30,10 +30,10 @@ func CollectPools(i *integration.Integration, client *client.F5Client, wg *sync.
 
 	for _, pool := range ltmPool.Items {
 		wg.Add(1)
-		go func() {
+		go func(poolName string) {
 			defer wg.Done()
-			CollectPoolMembers(pool.FullPath, i, client)
-		}()
+			CollectPoolMembers(poolName, i, client)
+		}(pool.FullPath)
 	}
 }
 
