@@ -30,7 +30,7 @@ func TestCollectNodes(t *testing.T) {
 					"generation": 1,
 					"selfLink": "https://localhost/mgmt/tm/ltm/node/~Common~0.0.0.1?ver=12.1.1",
 					"address": "0.0.0.1",
-					"connectionLimit": 0,
+					"connectionLimit": 7,
 					"dynamicRatio": 1,
 					"ephemeral": "false",
 					"fqdn": {
@@ -60,8 +60,7 @@ func TestCollectNodes(t *testing.T) {
 								"addr": { "description": "0.0.0.1" },
 								"curSessions": { "value": 0 },
 								"monitorRule": { "description": "none" },
-								"monitorStatus": { "description": "unchecked" },
-								"tmName": { "description": "/Common/0.0.0.1" },
+								"monitorStatus": { "description": "unchecked" }, "tmName": { "description": "/Common/0.0.0.1" },
 								"serverside.bitsIn": { "value": 0 },
 								"serverside.bitsOut": { "value": 0 },
 								"serverside.curConns": { "value": 3 },
@@ -108,5 +107,5 @@ func TestCollectNodes(t *testing.T) {
 	assert.Equal(t, float64(1), metrics["node.sessionStatus"])
 
 	inventory := nodeEntity.Inventory.Items()
-	assert.Equal(t, float64(4), inventory["maxConnections"]["value"])
+	assert.Equal(t, int(7), inventory["maxConnections"]["value"])
 }

@@ -194,7 +194,8 @@ func TestCollectPools(t *testing.T) {
 	assert.Equal(t, float64(0), poolMetrics["pool.availabilityState"])
 	assert.Equal(t, float64(1), poolMetrics["pool.enabled"])
 
-	memberEntity, _ := i.Entity("/Common/Pool123", "poolmember")
+	memberEntity, _ := i.Entity("/Common/Pool123:80", "poolmember")
+	assert.Equal(t, 1, len(memberEntity.Metrics))
 	memberMetrics := memberEntity.Metrics[0].Metrics
 	assert.Equal(t, "/Common/Pool123", memberMetrics["displayName"])
 	assert.Equal(t, float64(2), memberMetrics["member.connections"])

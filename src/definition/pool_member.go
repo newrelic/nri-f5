@@ -86,5 +86,8 @@ type LtmPoolMemberStatsEntryValueNestedStats struct {
 		Port struct {
 			Value int
 		} `json:"port"`
+		TmName struct {
+			Description string
+		} `json:"tmName"`
 	}
 }

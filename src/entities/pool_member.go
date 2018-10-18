@@ -27,7 +27,7 @@ func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *
 	for _, poolMember := range memberStats.Entries {
 		entries := poolMember.NestedStats.Entries
 		memberName := entries.NodeName.Description
-		entity, err := i.Entity(memberName, "poolmember")
+		entity, err := i.Entity(memberName, "poolmember") // TODO verify that this is the correct name (and htat it's unique)
 		if err != nil {
 			log.Error("Failed to get entity for pool %s: %s", memberName, err.Error())
 			continue
@@ -45,8 +45,8 @@ func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *
 func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *integration.Integration) {
 	for _, poolMember := range memberStats.Entries {
 		entries := poolMember.NestedStats.Entries
-		memberName := entries.NodeName.Description
-		entity, err := i.Entity(memberName, "poolmember")
+		memberName := entries.TmName.Description
+		entity, err := i.Entity(memberName, "poolmember") // TODO verify that this is the correct name (and that it's unique)
 		if err != nil {
 			log.Error("Failed to get entity for pool %s: %s", memberName, err.Error())
 			continue

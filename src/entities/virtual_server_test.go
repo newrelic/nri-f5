@@ -155,5 +155,6 @@ func TestCollectVirtualServers(t *testing.T) {
 	assert.Equal(t, float64(0), metrics["virtualserver.availabilityState"])
 	assert.Equal(t, float64(1), metrics["virtualserver.enabled"])
 
-	// TODO look at inventory
+	inventory := virtualServerEntity.Inventory.Items()
+	assert.Equal(t, int(7), inventory["maxConnections"]["value"])
 }
