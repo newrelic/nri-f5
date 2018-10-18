@@ -43,7 +43,7 @@ func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPo
 			continue
 		}
 
-		poolEntity, err := i.Entity(pool.FullPath, "pool") // TODO ensure everywhere is using FullPath as pool name
+		poolEntity, err := i.Entity(pool.FullPath, "pool")
 		if err != nil {
 			log.Error("Failed to get entity object for pool %s: %s", pool.Name, err.Error())
 		}

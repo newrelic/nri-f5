@@ -13,7 +13,6 @@ import (
 
 // CollectVirtualServers collects virtual server entities from F5 and adds them to the integration
 func CollectVirtualServers(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher) {
-	// TODO use pathMatcher
 	defer wg.Done()
 
 	var ltmVirtual definition.LtmVirtual
@@ -36,7 +35,7 @@ func populateVirtualServerInventory(i *integration.Integration, ltmVirtual defin
 			continue
 		}
 
-		virtualEntity, err := i.Entity(virtual.FullPath, "virtualServer") // TODO ensure everywhere is using FullPath as node name
+		virtualEntity, err := i.Entity(virtual.FullPath, "virtualServer")
 		if err != nil {
 			log.Error("Failed to get entity object for virtual server %s: %s", virtual.Name, err.Error())
 		}
@@ -70,7 +69,6 @@ func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats de
 		dataOut := entries.DataIn.Value / 8
 		entries.DataIn.ProcessedValue = &dataIn
 		entries.DataOut.ProcessedValue = &dataOut
-		// TODO convert bits to bytes
 
 		ms := virtualEntity.NewMetricSet("F5BigIpVirtualServerSample",
 			metric.Attribute{Key: "displayName", Value: virtualName},

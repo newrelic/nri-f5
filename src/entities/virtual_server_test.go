@@ -148,9 +148,6 @@ func TestCollectVirtualServers(t *testing.T) {
 	CollectVirtualServers(i, client, &wg, partitionFilter)
 	wg.Wait()
 
-	b, _ := i.MarshalJSON()
-	println(string(b))
-
 	assert.Equal(t, 1, len(i.Entities))
 	virtualServerEntity, _ := i.Entity("/Common/StevesListener", "virtualServer")
 	metrics := virtualServerEntity.Metrics[0].Metrics

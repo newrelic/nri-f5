@@ -65,7 +65,7 @@ func TestCollectNodes(t *testing.T) {
 								"serverside.bitsIn": { "value": 0 },
 								"serverside.bitsOut": { "value": 0 },
 								"serverside.curConns": { "value": 3 },
-								"serverside.maxConns": { "value": 0 },
+								"serverside.maxConns": { "value": 4 },
 								"serverside.pktsIn": { "value": 0 },
 								"serverside.pktsOut": { "value": 0 },
 								"serverside.totConns": { "value": 0 },
@@ -99,9 +99,6 @@ func TestCollectNodes(t *testing.T) {
 	CollectNodes(i, client, &wg, partitionFilter)
 	wg.Wait()
 
-	b, _ := i.MarshalJSON()
-	println(string(b))
-
 	assert.Equal(t, 1, len(i.Entities))
 	nodeEntity, _ := i.Entity("/Common/0.0.0.1", "node")
 	metrics := nodeEntity.Metrics[0].Metrics
@@ -110,5 +107,6 @@ func TestCollectNodes(t *testing.T) {
 	assert.Equal(t, float64(1), metrics["node.enabled"])
 	assert.Equal(t, float64(1), metrics["node.sessionStatus"])
 
-	// TODO look at inventory
+	inventory := nodeEntity.Inventory.Items()
+	assert.Equal(t, float64(4), inventory["maxConnections"]["value"])
 }

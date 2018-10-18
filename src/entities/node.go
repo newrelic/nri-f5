@@ -35,7 +35,7 @@ func populateNodesInventory(i *integration.Integration, ltmNode definition.LtmNo
 			continue
 		}
 
-		nodeEntity, err := i.Entity(node.FullPath, "node") // TODO ensure everywhere is using FullPath as node name
+		nodeEntity, err := i.Entity(node.FullPath, "node")
 		if err != nil {
 			log.Error("Failed to get entity object for node %s: %s", node.Name, err.Error())
 		}

@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/newrelic/infra-integrations-sdk/integration"
-	"github.com/newrelic/nri-f5/src/arguments"
 	"github.com/newrelic/nri-f5/src/client"
 	"github.com/stretchr/testify/assert"
 )
@@ -474,20 +473,16 @@ func TestCollectSystem(t *testing.T) {
 	}
 
 	var wg sync.WaitGroup
-	partitionFilter := &arguments.PathMatcher{[]string{"Common"}}
 
 	wg.Add(1)
-	CollectSystem(i, client, "testhost", &wg, partitionFilter)
+	CollectSystem(i, client, "testhost", &wg)
 	wg.Wait()
-
-	b, _ := i.MarshalJSON()
-	println(string(b))
 
 	assert.Equal(t, 1, len(i.Entities))
 	systemEntity, _ := i.Entity("testhost", "system")
 	metrics := systemEntity.Metrics[0].Metrics
-	println(metrics)
 	assert.Equal(t, float64(2487071784), metrics["system.memoryUsedInBytes"])
 
-	// TODO look at inventory
+	inventory := systemEntity.Inventory.Items()
+	assert.Equal(t, "f5-njcu-trbd", inventory["chassisSerialNumber"]["value"])
 }
