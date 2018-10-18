@@ -40,11 +40,11 @@ func populateNodesInventory(i *integration.Integration, ltmNode definition.LtmNo
 			log.Error("Failed to get entity object for node %s: %s", node.Name, err.Error())
 		}
 
-		logOnError("FQDN", node.Name, nodeEntity.SetInventoryItem("FQDN", "value", node.FQDN.TMName))
-		logOnError("Kind", node.Name, nodeEntity.SetInventoryItem("Kind", "value", node.Kind))
-		logOnError("IP Address", node.Name, nodeEntity.SetInventoryItem("IP Address", "value", node.Address))
-		logOnError("Maximum Connections", node.Name, nodeEntity.SetInventoryItem("Maximum Connections", "value", node.MaxConnections))
-		logOnError("Monitor Rule", node.Name, nodeEntity.SetInventoryItem("Monitor Rule", "value", node.MonitorRule))
+		logOnError("fqdn", node.Name, nodeEntity.SetInventoryItem("fqdn", "value", node.FQDN.TMName))
+		logOnError("kind", node.Name, nodeEntity.SetInventoryItem("kind", "value", node.Kind))
+		logOnError("address", node.Name, nodeEntity.SetInventoryItem("address", "value", node.Address))
+		logOnError("maxConnections", node.Name, nodeEntity.SetInventoryItem("maxConnections", "value", node.MaxConnections))
+		logOnError("monitorRule", node.Name, nodeEntity.SetInventoryItem("monitorRule", "value", node.MonitorRule))
 	}
 }
 
@@ -64,6 +64,7 @@ func populateNodesMetrics(i *integration.Integration, ltmNodeStats definition.Lt
 		entries.MonitorStatus.ProcessedDescription = convertMonitorStatus(entries.MonitorStatus.Description)
 		entries.EnabledState.ProcessedDescription = convertEnabledState(entries.EnabledState.Description)
 		entries.SessionStatus.ProcessedDescription = convertSessionStatus(entries.SessionStatus.Description)
+		entries.AvailabilityState.ProcessedDescription = convertAvailabilityState(entries.AvailabilityState.Description)
 		dataIn := entries.DataIn.Value / 8
 		dataOut := entries.DataIn.Value / 8
 		entries.DataIn.ProcessedValue = &dataIn

@@ -33,12 +33,12 @@ func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *
 			continue
 		}
 
-		err = entity.SetInventoryItem("Maximum Connections", "value", entries.MaximumConnections.Value)
-		err = entity.SetInventoryItem("Monitor Rule", "value", entries.MonitorRule.Description)
-		err = entity.SetInventoryItem("Node Name", "value", memberName)
-		err = entity.SetInventoryItem("Pool Name", "value", entries.PoolName.Description)
-		err = entity.SetInventoryItem("Port", "value", entries.Port.Value)
-		err = entity.SetInventoryItem("Kind", "value", poolMember.NestedStats.Kind)
+		logOnError("maxConnections", memberName, entity.SetInventoryItem("maxConnections", "value", entries.MaximumConnections.Value))
+		logOnError("monitorRule", memberName, entity.SetInventoryItem("monitorRule", "value", entries.MonitorRule.Description))
+		logOnError("monitorRule", memberName, entity.SetInventoryItem("nodeName", "value", memberName))
+		logOnError("monitorRule", memberName, entity.SetInventoryItem("poolName", "value", entries.PoolName.Description))
+		logOnError("monitorRule", memberName, entity.SetInventoryItem("port", "value", entries.Port.Value))
+		logOnError("monitorRule", memberName, entity.SetInventoryItem("kind", "value", poolMember.NestedStats.Kind))
 	}
 }
 

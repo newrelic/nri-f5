@@ -37,12 +37,12 @@ func populateVirtualServerInventory(i *integration.Integration, ltmVirtual defin
 			log.Error("Failed to get entity object for virtual server %s: %s", virtual.Name, err.Error())
 		}
 
-		logOnError("Application Service", virtual.Name, virtualEntity.SetInventoryItem("Application Service", "value", virtual.AppService))
-		logOnError("Destination", virtual.Name, virtualEntity.SetInventoryItem("Destination", "value", virtual.Destination))
-		logOnError("Kind", virtual.Name, virtualEntity.SetInventoryItem("Kind", "value", virtual.Kind))
-		logOnError("Maximum Connections", virtual.Name, virtualEntity.SetInventoryItem("Maximum Connections", "value", virtual.MaxConnections))
-		logOnError("Name", virtual.Name, virtualEntity.SetInventoryItem("Name", "value", virtual.Name))
-		logOnError("Pool", virtual.Name, virtualEntity.SetInventoryItem("Pool", "value", virtual.Pool))
+		logOnError("applicationService", virtual.Name, virtualEntity.SetInventoryItem("applicationService", "value", virtual.AppService))
+		logOnError("destination", virtual.Name, virtualEntity.SetInventoryItem("destination", "value", virtual.Destination))
+		logOnError("kind", virtual.Name, virtualEntity.SetInventoryItem("kind", "value", virtual.Kind))
+		logOnError("maxConnections", virtual.Name, virtualEntity.SetInventoryItem("maxConnections", "value", virtual.MaxConnections))
+		logOnError("name", virtual.Name, virtualEntity.SetInventoryItem("name", "value", virtual.Name))
+		logOnError("pool", virtual.Name, virtualEntity.SetInventoryItem("pool", "value", virtual.Pool))
 	}
 }
 
