@@ -1,73 +1,61 @@
 package main
 
 import (
-	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
-	"github.com/newrelic/infra-integrations-sdk/data/event"
-	"github.com/newrelic/infra-integrations-sdk/data/metric"
+	"os"
+	"regexp"
+	"strconv"
+	"sync"
+
 	"github.com/newrelic/infra-integrations-sdk/integration"
+	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/newrelic/nri-f5/src/arguments"
+	"github.com/newrelic/nri-f5/src/client"
+	"github.com/newrelic/nri-f5/src/entities"
 )
 
-type argumentList struct {
-	sdkArgs.DefaultArgumentList
-}
-
 const (
-	integrationName    = "com.newrelic.nri-f5"
+	integrationName    = "com.newrelic.f5"
 	integrationVersion = "0.1.0"
 )
 
 var (
-	args argumentList
+	args arguments.ArgumentList
 )
 
 func main() {
 	// Create Integration
 	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
-	panicOnErr(err)
+	exitOnErr(err)
 
-	// Create Entity, entities name must be unique
-	e1, err := i.Entity("instance-1", "custom")
-	panicOnErr(err)
+	poolFilter, nodeFilter, err := args.Parse()
+	exitOnErr(err)
 
-	// Add Event
-	if args.All() || args.Events {
-		err = e1.AddEvent(event.New("restart", "status"))
-		panicOnErr(err)
-	}
+	client, err := client.NewClient(&args)
+	exitOnErr(err)
+	err = client.LogIn()
+	exitOnErr(err)
 
-	// Add Inventory item
-	if args.All() || args.Inventory {
-		err = e1.SetInventoryItem("instance", "version", "3.0.1")
-		panicOnErr(err)
-	}
+	collectEntities(i, client, poolFilter, nodeFilter)
 
-	// Add Metric
-	if args.All() || args.Metrics {
-		m1 := e1.NewMetricSet("CustomSample")
-		err = m1.SetMetric("some-data", 1000, metric.GAUGE)
-		panicOnErr(err)
-	}
-
-	// Create another Entity
-	e2, err := i.Entity("instance-2", "custom")
-	panicOnErr(err)
-
-	if args.All() || args.Inventory {
-		err = e2.SetInventoryItem("instance", "version", "3.0.4")
-		panicOnErr(err)
-	}
-
-	if args.All() || args.Metrics {
-		m2 := e2.NewMetricSet("CustomSample")
-		err = m2.SetMetric("some-data", 2000, metric.GAUGE)
-		panicOnErr(err)
-	}
-
-	panicOnErr(i.Publish())
+	exitOnErr(i.Publish())
 }
 
-func panicOnErr(err error) {
+func collectEntities(i *integration.Integration, client *client.F5Client, poolFilter, nodeFilter []*regexp.Regexp) {
+	hostPort := args.Hostname + ":" + strconv.Itoa(args.Port)
+	// set up and run goroutines for each entity
+	var wg sync.WaitGroup
+	wg.Add(5)
+	go entities.CollectSystem(i, client, hostPort, &wg)
+	go entities.CollectApplications(i, client, &wg)
+	go entities.CollectVirtualServers(i, client, &wg)
+	go entities.CollectPools(i, client, &wg, poolFilter)
+	go entities.CollectNodes(i, client, &wg, nodeFilter)
+	wg.Wait()
+}
+
+func exitOnErr(err error) {
 	if err != nil {
-		panic(err)
+		log.Error("Encountered fatal error: %v", err)
+		os.Exit(1)
 	}
 }
