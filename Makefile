@@ -1,9 +1,12 @@
+WORKDIR      := $(shell pwd)
+TARGET       := target
+TARGET_DIR    = $(WORKDIR)/$(TARGET)
 NATIVEOS	 := $(shell go version | awk -F '[ /]' '{print $$4}')
 NATIVEARCH	 := $(shell go version | awk -F '[ /]' '{print $$5}')
-INTEGRATION  := $(shell basename $(shell pwd))
+INTEGRATION  := f5
 BINARY_NAME   = nr-$(INTEGRATION)
 GO_PKGS      := $(shell go list ./... | grep -v "/vendor/")
-GO_FILES     := $(shell find src -type f -name "*.go")
+GO_FILES     := ./src/
 GOTOOLS       = github.com/kardianos/govendor \
 		gopkg.in/alecthomas/gometalinter.v2 \
 		github.com/axw/gocov/gocov \
@@ -53,6 +56,9 @@ compile-only: deps-only
 test: deps
 	@echo "=== $(INTEGRATION) === [ test ]: Running unit tests..."
 	@gocov test $(GO_PKGS) | gocov-xml > coverage.xml
+
+# Include thematic Makefiles
+include Makefile-*.mk
 
 check-version:
 ifdef GOOS
