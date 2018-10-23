@@ -1,10 +1,12 @@
 package definition
 
+// LtmNode is an unmarshalling struct
 type LtmNode struct {
 	Kind  string        `json:"kind"`
 	Items []LtmNodeItem `json:"items"`
 }
 
+// LtmNodeItem is an unmarshalling struct
 type LtmNodeItem struct {
 	Name           string          `json:"name"`
 	Partition      string          `json:"partition"`
@@ -18,22 +20,25 @@ type LtmNodeItem struct {
 	FQDN           LtmNodeItemFQDN `json:"fqdn"`
 }
 
+// LtmNodeItemFQDN is an unmarshalling struct
 type LtmNodeItemFQDN struct {
 	TMName string `json:"tmName"`
 }
 
 // ===============
 
+// LtmNodeStats is an unmarshalling struct
 type LtmNodeStats struct {
 	Kind    string                            `json:"kind"`
 	Entries map[string]LtmNodeStatsEntryValue `json:"entries"`
 }
 
+// LtmNodeStatsEntryValue is an unmarshalling struct
 type LtmNodeStatsEntryValue struct {
 	NestedStats LtmNodeStatsEntryValueNestedStats `json:"nestedStats"`
 }
 
-// TODO add metric names and types when those are determined
+// LtmNodeStatsEntryValueNestedStats is an unmarshalling struct
 type LtmNodeStatsEntryValueNestedStats struct {
 	Kind    string `json:"kind"`
 	Entries struct {
@@ -48,11 +53,11 @@ type LtmNodeStatsEntryValueNestedStats struct {
 			Value int `metric_name:"node.sessions" source_type:"gauge"`
 		} `json:"curSessions"`
 		DataIn struct {
-			ProcessedValue int `metric_name:"node.inDataInBytes" source_type:"rate"`
+			ProcessedValue *int `metric_name:"node.inDataInBytesPerSecond" source_type:"rate"`
 			Value          int
 		} `json:"serverside.bitsIn"`
 		DataOut struct {
-			ProcessedValue int `metric_name:"node.outDataInBytes" source_type:"rate"`
+			ProcessedValue *int `metric_name:"node.outDataInBytesPerSecond" source_type:"rate"`
 			Value          int
 		} `json:"serverside.bitsOut"`
 		EnabledState struct {
@@ -64,19 +69,23 @@ type LtmNodeStatsEntryValueNestedStats struct {
 			Description          string
 		} `json:"monitorStatus"`
 		PacketsIn struct {
-			Value int `metric_name:"node.packetsReceived" source_type:"rate"`
+			Value int `metric_name:"node.packetsReceivedPerSecond" source_type:"rate"`
 		} `json:"serverside.pktsIn"`
 		PacketsOut struct {
-			Value int `metric_name:"node.packetsSent" source_type:"rate"`
+			Value int `metric_name:"node.packetsSentPerSecond" source_type:"rate"`
 		} `json:"serverside.pktsOut"`
 		Requests struct {
-			Value int `metric_name:"node.requests" source_type:"rate"`
+			Value int `metric_name:"node.requestsPerSecond" source_type:"rate"`
 		} `json:"totRequests"`
 		SessionStatus struct {
 			ProcessedDescription *int `metric_name:"node.sessionStatus" source_type:"gauge"`
+			Description          string
 		} `json:"sessionStatus"`
 		StatusReason struct {
 			Description string `metric_name:"node.statusReason" source_type:"attribute"`
 		} `json:"status.statusReason"`
+		TmName struct {
+			Description string `json:"description"`
+		} `json:"tmName"`
 	}
 }

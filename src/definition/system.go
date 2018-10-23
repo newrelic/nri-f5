@@ -1,10 +1,12 @@
 package definition
 
+// CloudNetSystemInformation is an unmarshalling struct
 type CloudNetSystemInformation struct {
 	Kind  string                          `json:"kind"`
 	Items []CloudNetSystemInformationItem `json:"items"`
 }
 
+// CloudNetSystemInformationItem is an unmarshalling struct
 type CloudNetSystemInformationItem struct {
 	ChassisSerialNumber string `json:"chassisSerialNumber"`
 	Platform            string `json:"platform"`
@@ -13,11 +15,13 @@ type CloudNetSystemInformationItem struct {
 
 // =====================
 
+// CloudSysHostInfoStat is an unmarshalling struct
 type CloudSysHostInfoStat struct {
 	Kind  string `json:"kind"`
 	Items []CloudSysHostInfoStatItem
 }
 
+// CloudSysHostInfoStatItem is an unmarshalling struct
 type CloudSysHostInfoStatItem struct {
 	HostID      string `json:"hostId"`
 	MemoryTotal int    `json:"memoryTotal" metric_name:"system.memoryTotalInBytes" source_type:"gauge"`
@@ -26,11 +30,13 @@ type CloudSysHostInfoStatItem struct {
 
 // ======================
 
+// SysCPU is an unmarshalling struct
 type SysCPU struct {
 	// CPUs
 	Entries map[string]SysCPUEntryValue
 }
 
+// SysCPUEntryValue is an unmarshalling struct
 type SysCPUEntryValue struct {
 	NestedStats struct {
 		// CPU Infos
@@ -38,6 +44,7 @@ type SysCPUEntryValue struct {
 	}
 }
 
+// SysCPUNestedStatsEntryValue is an unmarshalling struct
 type SysCPUNestedStatsEntryValue struct {
 	NestedStats struct {
 		// CPU Cores
@@ -45,12 +52,13 @@ type SysCPUNestedStatsEntryValue struct {
 	}
 }
 
+// SysCPUSecondNestedStatsEntryValue is an unmarshalling struct
 type SysCPUSecondNestedStatsEntryValue struct {
 	NestedStats struct {
 		Entries struct {
-			CpuID struct {
+			CPUID struct {
 				Value int
-			} `json:"cpuId"`
+			} `json:"cpuId" metric_name:"system.cpuID" source_type:"attribute"`
 			AverageCPUIdle struct {
 				Value int `json:"value"`
 			} `json:"oneMinAvgIdle"`
@@ -88,6 +96,7 @@ type SysCPUSecondNestedStatsEntryValue struct {
 	}
 }
 
+// ProcessedCPUMetrics is an unmarshalling struct
 type ProcessedCPUMetrics struct {
 	AverageCPUIdle             *float64 `metric_name:"system.cpuIdleUtilization" source_type:"gauge"`
 	AverageCPUInterruptRequest *float64 `metric_name:"system.cpuInterruptRequestUtilization" source_type:"gauge"`

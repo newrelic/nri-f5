@@ -14,11 +14,11 @@ import (
 
 // F5Client represents a client that is able to make requests to the F5 iControl API.
 type F5Client struct {
-	httpClient *http.Client
-	username   string
-	password   string
-	authToken  string
-	baseURL    string
+	HTTPClient *http.Client
+	Username   string
+	Password   string
+	AuthToken  string
+	BaseURL    string
 }
 
 const loginEndpoint = "/mgmt/shared/authn/login"
@@ -31,11 +31,11 @@ func NewClient(args *arguments.ArgumentList) (*F5Client, error) {
 	}
 
 	return &F5Client{
-		httpClient: httpClient,
-		username:   args.Username,
-		password:   args.Password,
-		authToken:  "",
-		baseURL:    "https://" + args.Hostname + ":" + strconv.Itoa(args.Port),
+		HTTPClient: httpClient,
+		Username:   args.Username,
+		Password:   args.Password,
+		AuthToken:  "",
+		BaseURL:    "https://" + args.Hostname + ":" + strconv.Itoa(args.Port),
 	}, nil
 }
 
@@ -47,20 +47,20 @@ func (c *F5Client) Request(endpoint string, model interface{}) error {
 // DoRequest makes a request to the given endpoint using the given request body, storing the result in the model if possible.
 // An error is returned if either step cannot be completed.
 func (c *F5Client) DoRequest(method, endpoint, body string, model interface{}) error {
-	req, err := http.NewRequest(method, c.baseURL+endpoint, strings.NewReader(body))
+	req, err := http.NewRequest(method, c.BaseURL+endpoint, strings.NewReader(body))
 	if err != nil {
 		return err
 	}
 
-	if c.authToken == "" {
+	if c.AuthToken == "" {
 		if endpoint != loginEndpoint {
 			return fmt.Errorf("client is not logged in")
 		}
 	} else {
-		req.Header.Add("X-F5-Auth-Token", c.authToken)
+		req.Header.Add("X-F5-Auth-Token", c.AuthToken)
 	}
 
-	res, err := c.httpClient.Do(req)
+	res, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return err
 	}
@@ -82,8 +82,8 @@ func (c *F5Client) DoRequest(method, endpoint, body string, model interface{}) e
 func (c *F5Client) LogIn() error {
 	loginArgs := map[string]string{
 		"loginProviderName": "tmos",
-		"username":          c.username,
-		"password":          c.password,
+		"username":          c.Username,
+		"password":          c.Password,
 	}
 	loginBody, err := json.Marshal(loginArgs)
 	if err != nil {
@@ -101,7 +101,7 @@ func (c *F5Client) LogIn() error {
 	}
 
 	// successful request, extract token
-	c.authToken = *loginResponse.Token.Token
+	c.AuthToken = *loginResponse.Token.Token
 	return nil
 }
 

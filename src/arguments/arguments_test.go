@@ -13,85 +13,60 @@ func TestParseError(t *testing.T) {
 	}{
 		{
 			ArgumentList{
-				Username:         "",
-				Password:         "",
-				PoolMemberFilter: "[]",
-				NodeFilter:       "[]",
+				Username:        "",
+				Password:        "",
+				PartitionFilter: "[]",
 			},
 			true,
 		},
 		{
 			ArgumentList{
-				Username:         "test",
-				Password:         "",
-				PoolMemberFilter: "[]",
-				NodeFilter:       "[]",
+				Username:        "test",
+				Password:        "",
+				PartitionFilter: "[]",
 			},
 			true,
 		},
 		{
 			ArgumentList{
-				Username:         "test",
-				Password:         "test",
-				PoolMemberFilter: "[]",
-				NodeFilter:       "[]",
+				Username:        "test",
+				Password:        "test",
+				PartitionFilter: "[]",
 			},
 			false,
 		},
 		{
 			ArgumentList{
-				Username:         "test",
-				Password:         "test",
-				PoolMemberFilter: `["test1"]`,
-				NodeFilter:       `["test2"]`,
+				Username:        "test",
+				Password:        "test",
+				PartitionFilter: `["test2"]`,
 			},
 			false,
 		},
 		{
 			ArgumentList{
-				Username:         "test",
-				Password:         "test",
-				PoolMemberFilter: `["test1"]`,
-				NodeFilter:       `["test2("]`,
+				Username:        "test",
+				Password:        "test",
+				PartitionFilter: `["test2]`,
 			},
 			true,
 		},
 		{
 			ArgumentList{
-				Username:         "test",
-				Password:         "test",
-				PoolMemberFilter: `["test1)"]`,
-				NodeFilter:       `["test2"]`,
-			},
-			true,
-		},
-		{
-			ArgumentList{
-				Username:         "test",
-				Password:         "test",
-				PoolMemberFilter: `["test1"`,
-				NodeFilter:       `["test2"]`,
-			},
-			true,
-		},
-		{
-			ArgumentList{
-				Username:         "test",
-				Password:         "test",
-				PoolMemberFilter: `["test1"]`,
-				NodeFilter:       `["test2"`,
+				Username:        "test",
+				Password:        "test",
+				PartitionFilter: `["test2"`,
 			},
 			true,
 		},
 	}
 
 	for _, tc := range testCases {
-		_, _, err := tc.argumentList.Parse()
+		_, err := tc.argumentList.Parse()
 		if tc.expectError {
 			assert.Error(t, err)
 		} else {
 			assert.Nil(t, err)
 		}
 	}
-
 }

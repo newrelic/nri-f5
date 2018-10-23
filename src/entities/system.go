@@ -20,7 +20,7 @@ func CollectSystem(integration *integration.Integration, client *client.F5Client
 		log.Error("Couldn't create system entity: %v", err)
 		return
 	}
-	systemMetrics := systemEntity.NewMetricSet("F5SystemSample",
+	systemMetrics := systemEntity.NewMetricSet("F5BigIpSystemSample",
 		metric.Attribute{Key: "displayName", Value: systemEntity.Metadata.Name},
 		metric.Attribute{Key: "entityName", Value: systemEntity.Metadata.Namespace + ":" + systemEntity.Metadata.Name},
 	)

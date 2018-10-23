@@ -12,7 +12,7 @@ f5,system.cpuSystemTicksPerSecond,rate,true,Amount of CPU ticks used by the kern
 f5,system.cpuUserTicksPerSecond,rate,true,Amount of CPU ticks used by user processes
 f5,system.memoryTotalInBytes,gauge,true,Total amount of Memory available on the current device
 f5,system.memoryUsedInBytes,gauge,true,Current Memory being used on the current device
-f5,virtualserver.avaibilityState,gauge,true,"BIG-IP defined availability 0 = Offline, 1 = Unknown, 2 = Online"
+f5,virtualserver.availabilityState,gauge,true,"BIG-IP defined availability 0 = Offline, 1 = Unknown, 2 = Online"
 f5,virtualserver.connections,gauge,true,Current number of connections from BIG-IP
 f5,virtualserver.inDataInBytesPerSecond,rate,true,The amount of data received from the BIG-IP Virtual Server
 f5,virtualserver.outDataInBytesPerSecond,rate,true,The amount of data sent to the BIG-IP Virtual Server
@@ -42,8 +42,8 @@ f5,member.packetsReceivedPerSecond,rate,true,The number of packets received from
 f5,member.packetsSentPerSecond,rate,true,The number of packets sent to the BIG-IP Pool Member
 f5,member.requestsPerSecond,rate,true,Current number of requests over the last collection interval
 f5,member.sessionStatus,gauge,true,"Current session health status 0 = Disabled, 1 = Enabled"
-f5,member.state,gauge,true,"Current state 0 = Down, 1 = Up"
-f5,member.statusReasion,attribute,true,Explanation of the current status
+f5,member.availabilityState,gauge,true,"Current state 0 = Down, 1 = Up"
+f5,member.statusReason,attribute,true,Explanation of the current status
 f5,node.availabilityState,gauge,true,"Current BIG-IP availability state to the Node 0 = Offline, 1 = Unknown, 2 = Online"
 f5,node.connections,gauge,true,Current number of network connections from BIG-IP
 f5,node.sessions,gauge,true,Current number of sessions
