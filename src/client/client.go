@@ -60,6 +60,8 @@ func (c *F5Client) DoRequest(method, endpoint, body string, model interface{}) e
 		req.Header.Add("X-F5-Auth-Token", c.AuthToken)
 	}
 
+	req.SetBasicAuth(c.Username, c.Password)
+
 	res, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return err
