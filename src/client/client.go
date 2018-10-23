@@ -1,7 +1,6 @@
 package client
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -67,10 +66,7 @@ func (c *F5Client) DoRequest(method, endpoint, body string, model interface{}) e
 	}
 
 	if err = checkStatusCode(res); err != nil {
-		buf := new(bytes.Buffer)
-		buf.ReadFrom(res.Body)
-
-		return fmt.Errorf("request failed for endpoint %s: %s, body = %s", endpoint, err.Error(), buf.String())
+		return fmt.Errorf("request failed for endpoint %s: %s", endpoint, err.Error())
 	}
 
 	err = json.NewDecoder(res.Body).Decode(model)
