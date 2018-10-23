@@ -1,4 +1,4 @@
-package main
+package client
 
 import (
 	"encoding/json"
@@ -7,11 +7,12 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/newrelic/nri-f5/src/arguments"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_CreateClient(t *testing.T) {
-	args := argumentList{
+	args := arguments.ArgumentList{
 		Username: "testUser",
 		Password: "testPass",
 		Hostname: "testHost",
@@ -20,13 +21,13 @@ func Test_CreateClient(t *testing.T) {
 
 	client, err := NewClient(&args)
 	assert.NoError(t, err)
-	assert.Equal(t, "https://testHost:1945", client.baseURL)
-	assert.Equal(t, "testUser", client.username)
-	assert.Equal(t, "testPass", client.password)
-	assert.Equal(t, "", client.authToken)
+	assert.Equal(t, "https://testHost:1945", client.BaseURL)
+	assert.Equal(t, "testUser", client.Username)
+	assert.Equal(t, "testPass", client.Password)
+	assert.Equal(t, "", client.AuthToken)
 }
 
-func Test_Login(t *testing.T) {
+func Test_LogIn(t *testing.T) {
 	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		t.Logf("Received request for %s", req.URL)
 		res.WriteHeader(200)
@@ -48,19 +49,19 @@ func Test_Login(t *testing.T) {
 	defer func() { testServer.Close() }()
 
 	client := F5Client{
-		baseURL:    testServer.URL,
-		username:   "testUser",
-		password:   "testPass",
-		httpClient: http.DefaultClient,
+		BaseURL:    testServer.URL,
+		Username:   "testUser",
+		Password:   "testPass",
+		HTTPClient: http.DefaultClient,
 	}
 
 	err := client.Request("/some-endpoint", nil)
 	assert.Error(t, err)
 
-	err = client.Login()
+	err = client.LogIn()
 	assert.NoError(t, err)
 
-	assert.Equal(t, "this-is-a-token", client.authToken)
+	assert.Equal(t, "this-is-a-token", client.AuthToken)
 
 	var okResp struct {
 		OK *bool `json:"ok"`
