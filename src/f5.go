@@ -33,6 +33,7 @@ func main() {
 
 	client, err := client.NewClient(&args)
 	exitOnErr(err)
+
 	err = client.LogIn()
 	exitOnErr(err)
 

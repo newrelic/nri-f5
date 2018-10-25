@@ -88,5 +88,47 @@ type LtmPoolStatsEntryValueNestedStats struct {
 		MaxConnections struct {
 			Value int
 		} `json:"serverside.maxConns"`
+		ConnqAgeEdm struct {
+			Value int `metric_name:"pool.connqAgeEdm" source_type:"gauge"`
+		} `json:"connq.ageEdm"`
+		ConnqAgeEma struct {
+			Value int `metric_name:"pool.connqAgeEma" source_type:"gauge"`
+		} `json:"connq.ageEma"`
+		ConnqAgeHead struct {
+			Value int `metric_name:"pool.connqAgeHead" source_type:"gauge"`
+		} `json:"connq.ageHead"`
+		ConnqAgeMax struct {
+			Value int `metric_name:"pool.connqAgeMax" source_type:"gauge"`
+		} `json:"connq.ageMax"`
+		ConnqDepth struct {
+			Value int `metric_name:"pool.connqDepth" source_type:"gauge"`
+		} `json:"connq.depth"`
+		ConnqServiced struct {
+			Value int `metric_name:"pool.connqServiced" source_type:"gauge"`
+		} `json:"connq.serviced"`
+		ConnqAllAgeEdm struct {
+			Value int `metric_name:"pool.connqAllAgeEdm" source_type:"gauge"`
+		} `json:"connqAll.ageEdm"`
+		ConnqAllAgeEma struct {
+			Value int `metric_name:"pool.connqAllAgeEma" source_type:"gauge"`
+		} `json:"connqAll.ageEma"`
+		ConnqAllAgeHead struct {
+			Value int `metric_name:"pool.connqAllAgeHead" source_type:"gauge"`
+		} `json:"connqAll.ageHead"`
+		ConnqAllAgeMax struct {
+			Value int `metric_name:"pool.connqAllAgeMax" source_type:"gauge"`
+		} `json:"connqAll.ageMax"`
+		ConnqAllDepth struct {
+			Value int `metric_name:"pool.connqAllDepth" source_type:"gauge"`
+		} `json:"connqAll.depth"`
+		ConnqAllServiced struct {
+			Value int `metric_name:"pool.connqAllServiced" source_type:"gauge"`
+		} `json:"connqAll.serviced"`
+		CurSessions struct {
+			Value int `metric_name:"pool.currentConnections" source_type:"gauge"`
+		} `json:"curSessions"`
+		MinActiveMembers struct {
+			Value int `metric_name:"pool.minActiveMembers" source_type:"gauge"`
+		} `json:"minActiveMembers"`
 	}
 }

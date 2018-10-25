@@ -28,7 +28,7 @@ func CollectSystem(integration *integration.Integration, client *client.F5Client
 	var systemWg sync.WaitGroup
 	systemWg.Add(3)
 	go marshalSystemInfo(systemEntity, client, &systemWg)
-	go marshalHostInfo(systemMetrics, client, &systemWg)
+	go marshalMemoryStats(systemMetrics, client, &systemWg)
 	go marshalCPUStats(systemMetrics, client, &systemWg)
 	systemWg.Wait()
 }
@@ -61,23 +61,25 @@ func marshalSystemInfo(systemEntity *integration.Entity, client *client.F5Client
 	}
 }
 
-func marshalHostInfo(systemMetrics *metric.Set, client *client.F5Client, wg *sync.WaitGroup) {
+func marshalMemoryStats(systemMetrics *metric.Set, client *client.F5Client, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	var hostInfo definition.CloudSysHostInfoStat
-	endpoint := "/mgmt/tm/cloud/sys/host-info-stat"
-	if err := client.Request(endpoint, &hostInfo); err != nil {
+	var memoryStats definition.MemoryStatsList
+	endpoint := "/mgmt/tm/sys/memory"
+	if err := client.Request(endpoint, &memoryStats); err != nil {
 		log.Error("Couldn't get response from API for endpoint '%s': %v", endpoint, err)
 		return
 	}
 
-	if len(hostInfo.Items) == 0 {
-		log.Error("Couldn't get host info stats: no items returned from host info stat endpoint")
-		return
-	}
-
-	if err := systemMetrics.MarshalMetrics(&hostInfo.Items[0]); err != nil {
-		log.Error("Couldn't marshal system metrics from host info stat: %v", err)
+	for name, entry := range memoryStats.Entries {
+		if !strings.HasSuffix(name, "memory-host") {
+			continue
+		}
+		for _, host := range entry.NestedStats.Entries {
+			if err := systemMetrics.MarshalMetrics(&host); err != nil {
+				log.Error("Couldn't marshal system metrics from host info stat: %v", err)
+			}
+		}
 	}
 }
 

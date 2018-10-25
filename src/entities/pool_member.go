@@ -39,12 +39,19 @@ func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *
 			continue
 		}
 
-		logOnError("maxConnections", memberName, entity.SetInventoryItem("maxConnections", "value", entries.MaximumConnections.Value))
-		logOnError("monitorRule", memberName, entity.SetInventoryItem("monitorRule", "value", entries.MonitorRule.Description))
-		logOnError("nodeName", memberName, entity.SetInventoryItem("nodeName", "value", memberName))
-		logOnError("poolName", memberName, entity.SetInventoryItem("poolName", "value", entries.PoolName.Description))
-		logOnError("port", memberName, entity.SetInventoryItem("port", "value", entries.Port.Value))
-		logOnError("kind", memberName, entity.SetInventoryItem("kind", "value", poolMember.NestedStats.Kind))
+		for k, v := range map[string]interface{}{
+			"maxConnections": entries.MaximumConnections.Value,
+			"monitorRule":    entries.MonitorRule.Description,
+			"nodeName":       memberName,
+			"poolName":       entries.PoolName.Description,
+			"port":           entries.Port.Value,
+			"kind":           poolMember.NestedStats.Kind,
+		} {
+			err := entity.SetInventoryItem(k, "value", v)
+			if err != nil {
+				log.Error("Failed to set inventory item %s: %s", k, err.Error())
+			}
+		}
 	}
 }
 
@@ -73,7 +80,7 @@ func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *in
 
 		ms := entity.NewMetricSet("F5BigIpPoolMemberSample",
 			metric.Attribute{Key: "displayName", Value: memberName},
-			metric.Attribute{Key: "entityType", Value: "poolmember"},
+			metric.Attribute{Key: "entityName", Value: "poolmember:" + memberName},
 			metric.Attribute{Key: "poolName", Value: entries.PoolName.Description},
 		)
 

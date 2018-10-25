@@ -15,21 +15,6 @@ type CloudNetSystemInformationItem struct {
 
 // =====================
 
-// CloudSysHostInfoStat is an unmarshalling struct
-type CloudSysHostInfoStat struct {
-	Kind  string `json:"kind"`
-	Items []CloudSysHostInfoStatItem
-}
-
-// CloudSysHostInfoStatItem is an unmarshalling struct
-type CloudSysHostInfoStatItem struct {
-	HostID      string `json:"hostId"`
-	MemoryTotal int    `json:"memoryTotal" metric_name:"system.memoryTotalInBytes" source_type:"gauge"`
-	MemoryUsed  int    `json:"memoryUsed" metric_name:"system.memoryUsedInBytes" source_type:"gauge"`
-}
-
-// ======================
-
 // SysCPU is an unmarshalling struct
 type SysCPU struct {
 	// CPUs
@@ -109,4 +94,73 @@ type ProcessedCPUMetrics struct {
 	CPUIdleTicks               *float64 `metric_name:"system.cpuIdleTicksPerSecond" source_type:"rate"`
 	CPUSystemTicks             *float64 `metric_name:"system.cpuSystemTicksPerSecond" source_type:"rate"`
 	CPUUserTicks               *float64 `metric_name:"system.cpuUserTicksPerSecond" source_type:"rate"`
+}
+
+// ======================
+
+// MemoryStatsList is an unmarshalling struct
+type MemoryStatsList struct {
+	Entries  map[string]MemoryTopLevelEntries `json:"entries,omitempty"`
+	Kind     string                           `json:"kind,omitempty" pretty:"expanded"`
+	SelfLink string                           `json:"selfLink,omitempty" pretty:"expanded"`
+}
+
+// MemoryTopLevelEntries is an unmarshalling struct
+type MemoryTopLevelEntries struct {
+	NestedStats MemoryInnerStatsList `json:"nestedStats,omitempty"`
+}
+
+// MemoryInnerStatsList is an unmarshalling struct
+type MemoryInnerStatsList struct {
+	Entries map[string]MemoryStatsEntries `json:"entries,omitempty"`
+}
+
+// MemoryStatsEntries is an unmarshalling struct
+type MemoryStatsEntries struct {
+	NestedStats MemoryStats `json:"nestedStats,omitempty"`
+}
+
+// MemoryStats is an unmarshalling struct
+type MemoryStats struct {
+	Entries struct {
+		HostID struct {
+			Description string `metric_name:"system.hostId" source_type:"attribute"`
+		} `json:"hostId"`
+		MemoryFree struct {
+			Value int `json:"value" metric_name:"system.memoryFreeInBytes" source_type:"gauge"`
+		} `json:"memoryFree,omitempty"`
+		MemoryTotal struct {
+			Value int `json:"value" metric_name:"system.memoryTotalInBytes" source_type:"gauge"`
+		} `json:"memoryTotal,omitempty"`
+		MemoryUsed struct {
+			Value int `json:"value" metric_name:"system.memoryUsedInBytes" source_type:"gauge"`
+		} `json:"memoryUsed,omitempty"`
+		OtherMemoryFree struct {
+			Value int `json:"value" metric_name:"system.otherMemoryFreeInBytes" source_type:"gauge"`
+		} `json:"otherMemoryFree,omitempty"`
+		OtherMemoryTotal struct {
+			Value int `json:"value" metric_name:"system.otherMemoryTotalInBytes" source_type:"gauge"`
+		} `json:"otherMemoryTotal,omitempty"`
+		OtherMemoryUsed struct {
+			Value int `json:"value" metric_name:"system.otherMemoryUsedInBytes" source_type:"gauge"`
+		} `json:"otherMemoryUsed,omitempty"`
+		SwapFree struct {
+			Value int `json:"value" metric_name:"system.swapFreeInBytes" source_type:"gauge"`
+		} `json:"swapFree,omitempty"`
+		SwapTotal struct {
+			Value int `json:"value" metric_name:"system.swapTotalInBytes" source_type:"gauge"`
+		} `json:"swapTotal,omitempty"`
+		SwapUsed struct {
+			Value int `json:"value" metric_name:"system.swapUsedInBytes" source_type:"gauge"`
+		} `json:"swapUsed,omitempty"`
+		TmmMemoryFree struct {
+			Value int `json:"value" metric_name:"system.tmmMemoryFreeInBytes" source_type:"gauge"`
+		} `json:"tmmMemoryFree,omitempty"`
+		TmmMemoryTotal struct {
+			Value int `json:"value" metric_name:"system.tmmMemoryTotalInBytes" source_type:"gauge"`
+		} `json:"tmmMemoryTotal,omitempty"`
+		TmmMemoryUsed struct {
+			Value int `json:"value" metric_name:"system.tmmMemoryUsedInBytes" source_type:"gauge"`
+		} `json:"tmmMemoryUsed,omitempty"`
+	} `json:"entries,omitempty"`
 }

@@ -49,6 +49,9 @@ type LtmNodeStatsEntryValueNestedStats struct {
 		CurrentConnections struct {
 			Value int `metric_name:"node.connections" source_type:"gauge"`
 		} `json:"serverside.curConns"`
+		TotalConnections struct {
+			Value int `metric_name:"node.connectionsPerSecond" source_type:"rate"`
+		} `json:"serverside.totConns"`
 		CurrentSessions struct {
 			Value int `metric_name:"node.sessions" source_type:"gauge"`
 		} `json:"curSessions"`

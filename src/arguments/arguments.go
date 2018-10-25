@@ -16,7 +16,6 @@ type ArgumentList struct {
 	Username        string `default:"" help:"The username to connect to the F5 API with."`
 	Password        string `default:"" help:"The password to connect to the F5 API with."`
 	Timeout         int    `default:"30" help:"The number of seconds to wait before a request times out."`
-	UseSSL          bool   `default:"true" help:"Whether or not to use SSL to connect to the API. The F5 API only allows connections using SSL."`
 	CABundleFile    string `default:"" help:"Alternative Certificate Authority bundle file"`
 	CABundleDir     string `default:"" help:"Alternative Certificate Authority bundle directory"`
 	PartitionFilter string `default:"[\"Common\"]" help:"JSON array of partitions to collect"`
@@ -32,6 +31,10 @@ func (al *ArgumentList) Parse() (*PathMatcher, error) {
 	err := json.Unmarshal([]byte(al.PartitionFilter), &partitions)
 	if err != nil {
 		return nil, err
+	}
+
+	if al.CABundleFile == "" && al.CABundleDir == "" {
+		return nil, errors.New("CABundleFile or CABundleDir must be specified")
 	}
 
 	return &PathMatcher{partitions}, nil

@@ -40,11 +40,18 @@ func populateNodesInventory(i *integration.Integration, ltmNode definition.LtmNo
 			log.Error("Failed to get entity object for node %s: %s", node.Name, err.Error())
 		}
 
-		logOnError("fqdn", node.Name, nodeEntity.SetInventoryItem("fqdn", "value", node.FQDN.TMName))
-		logOnError("kind", node.Name, nodeEntity.SetInventoryItem("kind", "value", node.Kind))
-		logOnError("address", node.Name, nodeEntity.SetInventoryItem("address", "value", node.Address))
-		logOnError("maxConnections", node.Name, nodeEntity.SetInventoryItem("maxConnections", "value", node.MaxConnections))
-		logOnError("monitorRule", node.Name, nodeEntity.SetInventoryItem("monitorRule", "value", node.MonitorRule))
+		for k, v := range map[string]interface{}{
+			"fqdn":           node.FQDN.TMName,
+			"kind":           node.Kind,
+			"address":        node.Address,
+			"maxConnections": node.MaxConnections,
+			"monitorRule":    node.MonitorRule,
+		} {
+			err := nodeEntity.SetInventoryItem(k, "value", v)
+			if err != nil {
+				log.Error("Failed to set inventory item %s: %s", k, err.Error())
+			}
+		}
 	}
 }
 
@@ -72,7 +79,7 @@ func populateNodesMetrics(i *integration.Integration, ltmNodeStats definition.Lt
 
 		ms := nodeEntity.NewMetricSet("F5BigIpNodeSample",
 			metric.Attribute{Key: "displayName", Value: nodeName},
-			metric.Attribute{Key: "entityType", Value: "node"},
+			metric.Attribute{Key: "entityName", Value: "node:" + nodeName},
 		)
 
 		err = ms.MarshalMetrics(entries)

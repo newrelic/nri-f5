@@ -126,6 +126,4 @@ func TestCollectApplications(t *testing.T) {
 	applicationEntity, _ := i.Entity("/Common/apache-0.app/apache-0", "application")
 	inventory := applicationEntity.Inventory.Items()
 	assert.Equal(t, "/Common/QaTest", inventory["poolToUse"]["value"])
-
-	// TODO look at CPU
 }

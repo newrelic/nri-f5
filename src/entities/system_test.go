@@ -481,7 +481,7 @@ func TestCollectSystem(t *testing.T) {
 	assert.Equal(t, 1, len(i.Entities))
 	systemEntity, _ := i.Entity("testhost", "system")
 	metrics := systemEntity.Metrics[0].Metrics
-	assert.Equal(t, float64(2487071784), metrics["system.memoryUsedInBytes"])
+	assert.Equal(t, float64(0.0), metrics["system.cpuUserUtilization"])
 
 	inventory := systemEntity.Inventory.Items()
 	assert.Equal(t, "f5-njcu-trbd", inventory["chassisSerialNumber"]["value"])

@@ -48,9 +48,16 @@ func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPo
 			log.Error("Failed to get entity object for pool %s: %s", pool.Name, err.Error())
 		}
 
-		logOnError("description", pool.Name, poolEntity.SetInventoryItem("description", "value", pool.Description))
-		logOnError("kind", pool.Name, poolEntity.SetInventoryItem("kind", "value", pool.Kind))
-		logOnError("currentLoadMode", pool.Name, poolEntity.SetInventoryItem("currentLoadMode", "value", pool.LoadBalancingMode))
+		for k, v := range map[string]interface{}{
+			"description":     pool.Description,
+			"kind":            pool.Kind,
+			"currentLoadMode": pool.LoadBalancingMode,
+		} {
+			err := poolEntity.SetInventoryItem(k, "value", v)
+			if err != nil {
+				log.Error("Failed to set inventory item %s: %s", k, err.Error())
+			}
+		}
 	}
 
 	for _, pool := range ltmPoolStats.Entries {
@@ -65,8 +72,15 @@ func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPo
 			log.Error("Failed to get entity object for pool %s: %s", poolName, err.Error())
 		}
 
-		logOnError("maxConnections", poolName, poolEntity.SetInventoryItem("maxConnections", "value", entries.MaxConnections.Value))
-		logOnError("monitorRule", poolName, poolEntity.SetInventoryItem("monitorRule", "value", entries.MonitorRule.Description))
+		for k, v := range map[string]interface{}{
+			"maxConnections": entries.MaxConnections.Value,
+			"monitorRule":    entries.MonitorRule.Description,
+		} {
+			err := poolEntity.SetInventoryItem(k, "value", v)
+			if err != nil {
+				log.Error("Failed to set inventory item %s: %s", k, err.Error())
+			}
+		}
 	}
 }
 
@@ -92,7 +106,7 @@ func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.Lt
 
 		ms := poolEntity.NewMetricSet("F5BigIpPoolSample",
 			metric.Attribute{Key: "displayName", Value: poolName},
-			metric.Attribute{Key: "entityType", Value: "pool"},
+			metric.Attribute{Key: "entityName", Value: "pool:" + poolName},
 		)
 
 		err = ms.MarshalMetrics(entries)

@@ -15,6 +15,7 @@ func TestParseError(t *testing.T) {
 			ArgumentList{
 				Username:        "",
 				Password:        "",
+				CABundleFile:    "test",
 				PartitionFilter: "[]",
 			},
 			true,
@@ -23,6 +24,7 @@ func TestParseError(t *testing.T) {
 			ArgumentList{
 				Username:        "test",
 				Password:        "",
+				CABundleFile:    "test",
 				PartitionFilter: "[]",
 			},
 			true,
@@ -31,6 +33,7 @@ func TestParseError(t *testing.T) {
 			ArgumentList{
 				Username:        "test",
 				Password:        "test",
+				CABundleFile:    "test",
 				PartitionFilter: "[]",
 			},
 			false,
@@ -39,6 +42,7 @@ func TestParseError(t *testing.T) {
 			ArgumentList{
 				Username:        "test",
 				Password:        "test",
+				CABundleFile:    "test",
 				PartitionFilter: `["test2"]`,
 			},
 			false,
@@ -47,6 +51,7 @@ func TestParseError(t *testing.T) {
 			ArgumentList{
 				Username:        "test",
 				Password:        "test",
+				CABundleFile:    "test",
 				PartitionFilter: `["test2]`,
 			},
 			true,
@@ -55,7 +60,16 @@ func TestParseError(t *testing.T) {
 			ArgumentList{
 				Username:        "test",
 				Password:        "test",
+				CABundleFile:    "test",
 				PartitionFilter: `["test2"`,
+			},
+			true,
+		},
+		{
+			ArgumentList{
+				Username:        "test",
+				Password:        "test",
+				PartitionFilter: `["test2"]`,
 			},
 			true,
 		},

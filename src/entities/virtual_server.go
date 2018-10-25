@@ -40,12 +40,20 @@ func populateVirtualServerInventory(i *integration.Integration, ltmVirtual defin
 			log.Error("Failed to get entity object for virtual server %s: %s", virtual.Name, err.Error())
 		}
 
-		logOnError("applicationService", virtual.Name, virtualEntity.SetInventoryItem("applicationService", "value", virtual.AppService))
-		logOnError("destination", virtual.Name, virtualEntity.SetInventoryItem("destination", "value", virtual.Destination))
-		logOnError("kind", virtual.Name, virtualEntity.SetInventoryItem("kind", "value", virtual.Kind))
-		logOnError("maxConnections", virtual.Name, virtualEntity.SetInventoryItem("maxConnections", "value", virtual.MaxConnections))
-		logOnError("name", virtual.Name, virtualEntity.SetInventoryItem("name", "value", virtual.Name))
-		logOnError("pool", virtual.Name, virtualEntity.SetInventoryItem("pool", "value", virtual.Pool))
+		for k, v := range map[string]interface{}{
+			"applicationService": virtual.AppService,
+			"destination":        virtual.Destination,
+			"kind":               virtual.Kind,
+			"maxConnections":     virtual.MaxConnections,
+			"name":               virtual.Name,
+			"pool":               virtual.Pool,
+		} {
+			err := virtualEntity.SetInventoryItem(k, "value", v)
+			if err != nil {
+				log.Error("Failed to set inventory item for %s: %s", k, err.Error())
+			}
+
+		}
 	}
 }
 
@@ -67,12 +75,16 @@ func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats de
 		entries.EnabledState.ProcessedDescription = convertEnabledState(entries.EnabledState.Description)
 		dataIn := entries.DataIn.Value / 8
 		dataOut := entries.DataIn.Value / 8
+		ephemeralBytesIn := entries.EphemeralBytesIn.Value / 8
+		ephemeralBytesOut := entries.EphemeralBytesOut.Value / 8
 		entries.DataIn.ProcessedValue = &dataIn
 		entries.DataOut.ProcessedValue = &dataOut
+		entries.EphemeralBytesIn.ProcessedValue = &ephemeralBytesIn
+		entries.EphemeralBytesOut.ProcessedValue = &ephemeralBytesOut
 
 		ms := virtualEntity.NewMetricSet("F5BigIpVirtualServerSample",
 			metric.Attribute{Key: "displayName", Value: virtualName},
-			metric.Attribute{Key: "entityType", Value: "virtualServer"},
+			metric.Attribute{Key: "entityName", Value: "virtualServer:" + virtualName},
 		)
 
 		err = ms.MarshalMetrics(entries)
