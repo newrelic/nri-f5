@@ -125,26 +125,5 @@ type LtmVirtualStatsNestedStats struct {
 		UsageRatio struct {
 			Value int `metric_name:"virtualserver.usageRatio" source_type:"rate"`
 		} `json:"oneMinAvgUsageRatio"`
-		SyncookieAccepts struct {
-			Value int `metric_name:"virtualserver.syncookieAcceptsPerSecond" source_type:"rate"`
-		} `json:"syncookie.accepts"`
-		SyncookieHwAccepts struct {
-			Value int `metric_name:"virtualserver.syncookieHwAcceptsPerSecond" source_type:"rate"`
-		} `json:"syncookie.hwAccepts"`
-		SyncookieHwInstance struct {
-			Value int `metric_name:"virtualserver.hwSyncookieInstance" source_type:"gauge"`
-		} `json:"syncookie.hwsyncookieInstance"`
-		SyncookieRejects struct {
-			Value int `metric_name:"virtualserver.syncookieRejectsPerSecond" source_type:"rate"`
-		} `json:"syncookie.rejects"`
-		SyncookieSwInstance struct {
-			Value int `metric_name:"virtualserver.swSyncookieInstance" source_type:"gauge"`
-		} `json:"syncookie.swsyncookieInstance"`
-		SyncookieSyncacheCurr struct {
-			Value int `metric_name:"virtualserver.syncookieSyncacheCurr" source_type:"gauge"`
-		} `json:"syncookie.syncacheCurr"`
-		Syncookies struct {
-			Value int `metric_name:"virtualserver.syncookies" source_type:"gauge"`
-		} `json:"syncookie.syncookies"`
 	}
 }

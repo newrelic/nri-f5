@@ -103,9 +103,6 @@ type LtmPoolStatsEntryValueNestedStats struct {
 		ConnqDepth struct {
 			Value int `metric_name:"pool.connqDepth" source_type:"gauge"`
 		} `json:"connq.depth"`
-		ConnqServiced struct {
-			Value int `metric_name:"pool.connqServiced" source_type:"gauge"`
-		} `json:"connq.serviced"`
 		ConnqAllAgeEdm struct {
 			Value int `metric_name:"pool.connqAllAgeEdm" source_type:"gauge"`
 		} `json:"connqAll.ageEdm"`
@@ -121,9 +118,6 @@ type LtmPoolStatsEntryValueNestedStats struct {
 		ConnqAllDepth struct {
 			Value int `metric_name:"pool.connqAllDepth" source_type:"gauge"`
 		} `json:"connqAll.depth"`
-		ConnqAllServiced struct {
-			Value int `metric_name:"pool.connqAllServiced" source_type:"gauge"`
-		} `json:"connqAll.serviced"`
 		CurSessions struct {
 			Value int `metric_name:"pool.currentConnections" source_type:"gauge"`
 		} `json:"curSessions"`
