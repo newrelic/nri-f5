@@ -53,10 +53,8 @@ func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPo
 			"kind":            pool.Kind,
 			"currentLoadMode": pool.LoadBalancingMode,
 		} {
-			err := poolEntity.SetInventoryItem(k, "value", v)
-			if err != nil {
-				log.Error("Failed to set inventory item %s: %s", k, err.Error())
-			}
+			// No error check needed since key names are pre-defined
+			_ = poolEntity.SetInventoryItem(k, "value", v)
 		}
 	}
 
@@ -76,10 +74,8 @@ func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPo
 			"maxConnections": entries.MaxConnections.Value,
 			"monitorRule":    entries.MonitorRule.Description,
 		} {
-			err := poolEntity.SetInventoryItem(k, "value", v)
-			if err != nil {
-				log.Error("Failed to set inventory item %s: %s", k, err.Error())
-			}
+			// No error check needed since key names are pre-defined
+			_ = poolEntity.SetInventoryItem(k, "value", v)
 		}
 	}
 }
