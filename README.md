@@ -1,31 +1,44 @@
-# New Relic Infrastructure Integration for nri-f5
+# New Relic Infrastructure Integration for F5 BIG-IP 
 
-Reports status and metrics for nri-f5 service
+Reports status and metrics for F5 BIG-IP
 
 ## Requirements
 
-Document if the Integration has some special requirement. Ex: Installing an
-extra module, permissions to execute a binary, etc.
-
-## Configuration
-
-Document if the Integration needs some configuration for running. Ex: Set
-up permissions, add a special user, etc.
+None
 
 ## Installation
 
-Describe the installation process for the Integration.
+* Download an archive file for the `f5` Integration
+* Extract `f5-definition.yml` and the `bin` directory into `/var/db/newrelic-infra/newrelic-integrations`
+* Add execute permissions for the binary file `nr-f5` (if required)
+* Extract `f5-config.yml.sample` into `/etc/newrelic-infra/integrations.d`
 
 ## Usage
 
-Document mandatory and optional arguments for running the Integration, and how to execute it.
+To run the F5 BIG-IP integration, you must have the agent installed (see [agent installation](https://docs.newrelic.com/docs/infrastructure/new-relic-infrastructure/installation/install-infrastructure-linux)).
+
+To use the integration, first rename `f5-config.yml.sample` to `f5-config.yml`, then configure the integration
+by editing the fields in the file. 
+
+You can view your data in Insights by creating your own NRQL queries. To do so, use the **F5BigIpNodeSample**, **F5BigIpPoolMemberSample**, **F5BigIpPoolSample**, **F5BigIpSystemSample**, **F5BigIpVirtualServerSample** events in Insights.
 
 ## Compatibility
 
-* Supported OS:
-* nri-f5 versions:
-* Edition:
+* Supported OS: No limitations
+* F5 BIG-IP 11.6+
 
 ## Integration Development usage
 
-Describe the development workflow for this Integration.
+Assuming you have the source code, you can build and run the integration locally
+
+* Go to the directory of the F5 Integration and build it
+```
+$ make
+```
+
+* The command above will execute tests for the F5 BIG-IP integration and build an executable file called `nr-f5` in the `bin` directory
+```
+$ ./bin/nr-f5 --help
+```
+
+For managing external dependencies, the [govendor tool](https://github.com/kardianos/govendor) is used. It is required to lock all external dependencies to a specific version (if possible) in the vendor directory.

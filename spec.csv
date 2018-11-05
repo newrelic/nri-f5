@@ -1,0 +1,98 @@
+integration,metric_name,metric_type,metric_enabled,metric_description
+f5,system.cpuIdleUtilization,Gauge,true,Average percentage of time the CPU is idle
+f5,system.cpuInterruptRequestUtilization,Gauge,true,Average percentage of time the CPU is handling interrupt requests
+f5,system.cpuIOWaitUtilization,Gauge,true,Average percentage of time the CPU is waiting on IO
+f5,system.cpuNiceLevelUtilization,Gauge,true,Average percentage of time the CPU is handling nice level processes
+f5,system.cpuSoftInterruptRequestUtilization,Gauge,true,Average percentage of time the CPU is handling soft interrupt requests
+f5,system.cpuStolenUtilization,Gauge,true,Average percentage of time the CPU is handling reclaimed cycles by the hypervisor
+f5,system.cpuSystemUtilization,Gauge,true,Average percentage of time the CPU is used by the kernel
+f5,system.cpuUserUtilization,Gauge,true,Average percentage of time the CPU is used by user processes
+f5,system.cpuIdleTicksPerSecond,Rate,true,Amount of CPU ticks that the CPU was idle
+f5,system.cpuSystemTicksPerSecond,Rate,true,Amount of CPU ticks used by the kernel processes
+f5,system.cpuUserTicksPerSecond,Rate,true,Amount of CPU ticks used by user processes
+f5,system.memoryFreeInBytes,Gauge,true,Total amount of memory free
+f5,system.memoryTotalInBytes,Gauge,true,Total amount of memory
+f5,system.memoryUsedInBytes,Gauge,true,Total amount of memory used 
+f5,system.otherMemoryFreeInBytes,Gauge,true,Free memory reserved for control plane processes
+f5,system.otherMemoryTotalInBytes,Gauge,true,Total memory reserved for control plane processes
+f5,system.otherMemoryUsedInBytes,Gauge,true,Used memory reserved for control plan processes
+f5,system.swapFreeInBytes,Gauge,true,Swap space free 
+f5,system.swapTotalInBytes,Gauge,true,Swap space total
+f5,system.swapUsedInBytes,Gauge,true,Swap space used
+f5,system.tmmMemoryFreeInBytes,Gauge,true,Free memory reserved for TMM
+f5,system.tmmMemoryTotalInBytes,Gauge,true,Total memory reserved for TMM
+f5,system.tmmMemoryUsedInBytes,Gauge,true,Used memory reserved for TMM
+f5,virtualserver.avaibilityState,Gauge,true,"BIG-IP defined availability 0 = Offline, 1 = Unknown, 2 = Online"
+f5,virtualserver.connections,Gauge,true,Current number of connections from BIG-IP
+f5,virtualserver.inDataInBytes,Rate,true,The amount of data received from the BIG-IP Virtual Server
+f5,virtualserver.outDataInBytes,Rate,true,The amount of data sent to the BIG-IP Virtual Server
+f5,virtualserver.enabled,Gauge,true,"Current enabled state 0 = Disabled, 1 = Enabled"
+f5,virtualserver.packetsReceived,Rate,true,The number of packets received from the BIG-IP Virtual Server
+f5,virtualserver.packetsSent,Rate,true,The number of packets sent to the BIG-IP Virtual Server
+f5,virtualserver.requests,Rate,true,Number of requests in the last collection interval to BIG-IP
+f5,virtualserver.statusReason,Attribute,true,Explanation of the current status
+f5,virtualserver.evictedConnsPerSecond,Rate,true,Rate of connections evicted
+f5,virtualserver.slowKilledPerSecond,Rate,true,Number of slow connections killed through the client side of the object
+f5,virtualserver.clientsideConnectionsPerSecond,Rate,true,Rate of connections created through the client side of the object
+f5,virtualserver.cmpEnableMode,Attribute,true,CMP mode
+f5,virtualserver.cmpEnabled,Attribute,true,Whether or not CMP is enabled
+f5,virtualserver.csMaxConnDur,Gauge,true,Maximum connection duration from the client side of the object
+f5,virtualserver.csMinConnDur,Gauge,true,Minimum conneciton duration from the client side of the object
+f5,virtualserver.ephemeralBytesInPerSecond,Rate,true,Total number of bytes in through the ephemeral port
+f5,virtualserver.ephemeralBytesOutPerSecond,Rate,true,Total number of bytes out through the ephemeral port
+f5,virtualserver.ephemeralCurrentConnections,Gauge,true,Current number of connections through the ephemeral port
+f5,virtualserver.ephemeralEvictedConnectionsPerSecond,Rate,true,Connections that are evicted through the ephemeral port
+f5,virtualserver.ephemeralMaxConnections,Gauge,true,Maximum number of connections through the ephemeral port
+f5,virtualserver.ephemeralPacketsReceivedPerSecond,Rate,true,Number of packets in through the ephemeral port
+f5,virtualserver.ephemeralPacketsSentPerSecond,Rate,true,Number of packets out through the ephemeral port
+f5,virtualserver.ephemeralSlowKilledPerSecond,Rate,true,Number of slow connections that are killed through the ephemeral port
+f5,virtualserver.ephemeralConnectionsPerSecond,Rate,true,Rate of connection creation through the ephemeral port
+f5,virtualserver.usageRatio,Gauge,true,Usage ratio for the virtual server
+f5,pool.activeMembers,Gauge,true,Number of active pool members
+f5,pool.availabilityState,Gauge,true,"Current availability state 0 = Offline, 1 = Unknown, 2 = Online"
+f5,pool.connections,Gauge,true,Current number of connections
+f5,pool.inDataInBytes,Rate,true,The amount of data received from the BIG-IP Pool
+f5,pool.outDataInBytes,Rate,true,The amount of data sent to the BIG-IP Pool
+f5,pool.enabled,Gauge,true,"Current enabled state, can be user defined 0 = Disabled, 1 = Enabled"
+f5,pool.packetsReceived,Rate,true,The number of packets received from the BIG-IP Pool
+f5,pool.packetsSent,Rate,true,The number of packets sent to the BIG-IP Pool
+f5,pool.requests,Rate,true,The total number of requests to the Pool
+f5,pool.statusReason,Attribute,true,Textual Property explaining the overall health reason
+f5,pool.connqAgeEdm,Gauge,true,Queue age exponential decaying max
+f5,pool.connqAgeEma,Gauge,true,Queue age exponential moving average
+f5,pool.connqAgeHead,Gauge,true,Queue age head
+f5,pool.connqAgeMax,Gauge,true,Queue age all-time max
+f5,pool.connqDepth,Gauge,true,Queue depth
+f5,pool.connqAllAgeEdm,Gauge,true,Sum of pool member queue age exponential decaying max
+f5,pool.connqAllAgeEma,Gauge,true,Sum of pool member queue age exponential moving average
+f5,pool.connqAllAgeHead,Gauge,true,Sum of pool member queue age head
+f5,pool.connqAllAgeMax,Gauge,true,Sum of pool member queue age all-time max
+f5,pool.connqAllDepth,Gauge,true,Sum of pool member depth
+f5,pool.currentConnections,Gauge,true,Current connections
+f5,pool.minActiveMembers,Gauge,true,Pool minimum active members
+f5,member.availabilityState,Gauge,true,"Current availability from the BIG-IP System 0 = Offline, 1 = Unknown, 2 = Online"
+f5,member.connections,Gauge,true,Current Connections
+f5,member.sessions,Gauge,true,Current session count
+f5,member.inDataInBytes,Rate,true,The amount of data received from the BIG-IP Pool Member
+f5,member.outDataInBytes,Rate,true,The amount of data sent to the BIG-IP Pool Member
+f5,member.enabled,Gauge,true,"Enabled state of the Pool Member with regards to the parent pool 0 = Disabled, 1 = Enabled"
+f5,member.monitorStatus,Gauge,true,"Monitor Status 0 = Down, 1 = Unchecked, 2 = Any other status"
+f5,member.packetsReceived,Rate,true,The number of packets received from the BIG-IP Pool Member
+f5,member.packetsSent,Rate,true,The number of packets sent to the BIG-IP Pool Member
+f5,member.requests,Rate,true,Current number of requests over the last collection interval
+f5,member.sessionStatus,Gauge,true,"Current session health status 0 = Disabled, 1 = Enabled"
+f5,member.state,Gauge,true,"Current state 0 = Down, 1 = Up"
+f5,member.statusReasion,Attribute,true,Explanation of the current status
+f5,node.availabilityState,Gauge,true,"Current BIG-IP availability state to the Node 0 = Offline, 1 = Unknown, 2 = Online"
+f5,node.connections,Gauge,true,Current number of network connections from BIG-IP
+f5,node.connectionsPerSecond,Rate,true,Number of connections made per second
+f5,node.sessions,Gauge,true,Current number of sessions
+f5,node.inDataInBytes,Rate,true,The amount of data received from the BIG-IP Node
+f5,node.outDataInBytes,Rate,true,The amount of data sent to the BIG-IP Node
+f5,node.enabled,Gauge,true,"Current BIG-IP enabled state 0 = Disabled, 1 = Enabled"
+f5,node.monitorStatus,Gauge,true,"Current Health Monitor rule status 0 = Down, 1 = Unchecked, 2 = Any other status"
+f5,node.packetsReceived,Rate,true,The number of packets received from the BIG-IP Node
+f5,node.packetsSent,Rate,true,The number of packets sent to the BIG-IP Node
+f5,node.requests,Rate,true,Current number of requests over the last collection from BIG-IP
+f5,node.sessionStatus,Gauge,true,"Current status of the session 0 = Disabled, 1 = Enabled"
+f5,node.statusReason,Attribute,true,BIG-IP reason for the current status
