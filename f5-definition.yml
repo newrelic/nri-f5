@@ -1,4 +1,4 @@
-name: com.newrelic.nri-f5
+name: com.newrelic.f5
 description: Reports status and metrics for nri-f5 service
 protocol_version: 1
 os: linux

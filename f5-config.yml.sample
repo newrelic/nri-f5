@@ -1,4 +1,4 @@
-integration_name: com.newrelic.nri-f5
+integration_name: com.newrelic.f5
 
 instances:
   - name: nri-f5
