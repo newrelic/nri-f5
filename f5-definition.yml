@@ -17,5 +17,5 @@ commands:
     command:
       - ./bin/nr-f5
       - --inventory
-    prefix: config/nri-f5
+    prefix: config/f5
     interval: 15
