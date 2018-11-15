@@ -22,7 +22,7 @@ func CollectPoolMembers(fullPath string, i *integration.Integration, client *cli
 	}
 
 	populatePoolMembersInventory(memberStats, i)
-	populatePoolMembersMetrics(memberStats, i)
+	populatePoolMembersMetrics(memberStats, i, client.BaseURL)
 }
 
 func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *integration.Integration) {
@@ -55,7 +55,7 @@ func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *
 	}
 }
 
-func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *integration.Integration) {
+func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *integration.Integration, url string) {
 	for poolURL, poolMember := range memberStats.Entries {
 		entries := poolMember.NestedStats.Entries
 		memberName, err := buildPoolMemberPath(poolURL)
@@ -82,6 +82,7 @@ func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *in
 			metric.Attribute{Key: "displayName", Value: memberName},
 			metric.Attribute{Key: "entityName", Value: "poolmember:" + memberName},
 			metric.Attribute{Key: "poolName", Value: entries.PoolName.Description},
+			metric.Attribute{Key: "url", Value: url},
 		)
 
 		err = ms.MarshalMetrics(entries)

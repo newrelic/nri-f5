@@ -26,7 +26,7 @@ func CollectVirtualServers(i *integration.Integration, client *client.F5Client, 
 	}
 
 	populateVirtualServerInventory(i, ltmVirtual, pathFilter)
-	populateVirtualServerMetrics(i, ltmVirtualStats, pathFilter)
+	populateVirtualServerMetrics(i, ltmVirtualStats, pathFilter, client.BaseURL)
 }
 
 func populateVirtualServerInventory(i *integration.Integration, ltmVirtual definition.LtmVirtual, pathFilter *arguments.PathMatcher) {
@@ -57,7 +57,7 @@ func populateVirtualServerInventory(i *integration.Integration, ltmVirtual defin
 	}
 }
 
-func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats definition.LtmVirtualStats, pathFilter *arguments.PathMatcher) {
+func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats definition.LtmVirtualStats, pathFilter *arguments.PathMatcher, url string) {
 	for _, virtual := range ltmVirtualStats.Entries {
 
 		entries := virtual.NestedStats.Entries
@@ -85,6 +85,7 @@ func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats de
 		ms := virtualEntity.NewMetricSet("F5BigIpVirtualServerSample",
 			metric.Attribute{Key: "displayName", Value: virtualName},
 			metric.Attribute{Key: "entityName", Value: "virtualServer:" + virtualName},
+			metric.Attribute{Key: "url", Value: url},
 		)
 
 		err = ms.MarshalMetrics(entries)

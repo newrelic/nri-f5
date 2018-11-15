@@ -26,7 +26,7 @@ func CollectPools(i *integration.Integration, client *client.F5Client, wg *sync.
 	}
 
 	populatePoolsInventory(i, ltmPool, ltmPoolStats, partitionFilter)
-	populatePoolsMetrics(i, ltmPoolStats, partitionFilter)
+	populatePoolsMetrics(i, ltmPoolStats, partitionFilter, client.BaseURL)
 
 	for _, pool := range ltmPool.Items {
 		wg.Add(1)
@@ -80,7 +80,7 @@ func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPo
 	}
 }
 
-func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.LtmPoolStats, partitionFilter *arguments.PathMatcher) {
+func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.LtmPoolStats, partitionFilter *arguments.PathMatcher, url string) {
 	for _, pool := range ltmPoolStats.Entries {
 		entries := pool.NestedStats.Entries
 		poolName := entries.FullPath.Description
@@ -103,6 +103,7 @@ func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.Lt
 		ms := poolEntity.NewMetricSet("F5BigIpPoolSample",
 			metric.Attribute{Key: "displayName", Value: poolName},
 			metric.Attribute{Key: "entityName", Value: "pool:" + poolName},
+			metric.Attribute{Key: "url", Value: url},
 		)
 
 		err = ms.MarshalMetrics(entries)
