@@ -26,7 +26,7 @@ func CollectNodes(i *integration.Integration, client *client.F5Client, wg *sync.
 	}
 
 	populateNodesInventory(i, ltmNode, pathFilter)
-	populateNodesMetrics(i, ltmNodeStats, pathFilter)
+	populateNodesMetrics(i, ltmNodeStats, pathFilter, client.BaseURL)
 }
 
 func populateNodesInventory(i *integration.Integration, ltmNode definition.LtmNode, pathFilter *arguments.PathMatcher) {
@@ -55,7 +55,7 @@ func populateNodesInventory(i *integration.Integration, ltmNode definition.LtmNo
 	}
 }
 
-func populateNodesMetrics(i *integration.Integration, ltmNodeStats definition.LtmNodeStats, pathFilter *arguments.PathMatcher) {
+func populateNodesMetrics(i *integration.Integration, ltmNodeStats definition.LtmNodeStats, pathFilter *arguments.PathMatcher, url string) {
 	for _, node := range ltmNodeStats.Entries {
 		if !pathFilter.Matches(node.NestedStats.Entries.TmName.Description) {
 			continue
@@ -80,6 +80,7 @@ func populateNodesMetrics(i *integration.Integration, ltmNodeStats definition.Lt
 		ms := nodeEntity.NewMetricSet("F5BigIpNodeSample",
 			metric.Attribute{Key: "displayName", Value: nodeName},
 			metric.Attribute{Key: "entityName", Value: "node:" + nodeName},
+			metric.Attribute{Key: "url", Value: url},
 		)
 
 		err = ms.MarshalMetrics(entries)

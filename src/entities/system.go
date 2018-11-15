@@ -23,6 +23,7 @@ func CollectSystem(integration *integration.Integration, client *client.F5Client
 	systemMetrics := systemEntity.NewMetricSet("F5BigIpSystemSample",
 		metric.Attribute{Key: "displayName", Value: systemEntity.Metadata.Name},
 		metric.Attribute{Key: "entityName", Value: systemEntity.Metadata.Namespace + ":" + systemEntity.Metadata.Name},
+		metric.Attribute{Key: "url", Value: client.BaseURL},
 	)
 
 	var systemWg sync.WaitGroup
