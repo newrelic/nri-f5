@@ -1,6 +1,6 @@
 name: com.newrelic.f5
 description: Reports status and metrics for nri-f5 service
-protocol_version: 1
+protocol_version: 2
 os: linux
 
 commands:
