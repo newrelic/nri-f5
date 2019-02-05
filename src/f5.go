@@ -14,7 +14,7 @@ import (
 
 const (
 	integrationName    = "com.newrelic.f5"
-	integrationVersion = "1.0.0"
+	integrationVersion = "1.0.1"
 )
 
 var (
