@@ -7,6 +7,7 @@ commands:
   all_data:
     command:
       - ./bin/nr-f5
+    prefix: config/f5
     interval: 15
   metrics:
     command:
