@@ -68,7 +68,7 @@ f5,pool.connqAllAgeEma,Gauge,true,Sum of pool member queue age exponential movin
 f5,pool.connqAllAgeHead,Gauge,true,Sum of pool member queue age head
 f5,pool.connqAllAgeMax,Gauge,true,Sum of pool member queue age all-time max
 f5,pool.connqAllDepth,Gauge,true,Sum of pool member depth
-f5,pool.currentConnections,Gauge,true,Current connections
+f5,pool.sessions,Gauge,true,Current connections
 f5,pool.minActiveMembers,Gauge,true,Pool minimum active members
 f5,member.availabilityState,Gauge,true,"Current availability from the BIG-IP System 0 = Offline, 1 = Unknown, 2 = Online"
 f5,member.connections,Gauge,true,Current Connections

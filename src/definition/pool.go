@@ -119,7 +119,7 @@ type LtmPoolStatsEntryValueNestedStats struct {
 			Value int `metric_name:"pool.connqAllDepth" source_type:"gauge"`
 		} `json:"connqAll.depth"`
 		CurSessions struct {
-			Value int `metric_name:"pool.currentConnections" source_type:"gauge"`
+			Value int `metric_name:"pool.sessions" source_type:"gauge"`
 		} `json:"curSessions"`
 		MinActiveMembers struct {
 			Value int `metric_name:"pool.minActiveMembers" source_type:"gauge"`
