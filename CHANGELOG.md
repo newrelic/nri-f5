@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.0.3 - 2019-03-19
+### Fixed
+- Rename metric pool.currentConnections to pool.sessions
+
 ## 1.0.2 - 2019-02-26
 ### Fixed
 - Fix definition file to correct inventory prefix
