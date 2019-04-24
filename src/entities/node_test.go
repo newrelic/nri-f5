@@ -95,11 +95,13 @@ func TestCollectNodes(t *testing.T) {
 	partitionFilter := &arguments.PathMatcher{[]string{"Common"}}
 
 	wg.Add(1)
-	CollectNodes(i, client, &wg, partitionFilter)
+	CollectNodes(i, client, &wg, partitionFilter, testServer.URL)
 	wg.Wait()
 
 	assert.Equal(t, 1, len(i.Entities))
-	nodeEntity, _ := i.Entity("/Common/0.0.0.1", "node")
+
+  idattr := integration.NewIDAttribute("node","/Common/0.0.0.1")
+	nodeEntity, _ := i.EntityReportedVia(testServer.URL, testServer.URL, "f5-node", idattr)
 	metrics := nodeEntity.Metrics[0].Metrics
 	assert.Equal(t, float64(3), metrics["node.connections"])
 	assert.Equal(t, float64(1), metrics["node.monitorStatus"])

@@ -145,11 +145,11 @@ func TestCollectVirtualServers(t *testing.T) {
 	partitionFilter := &arguments.PathMatcher{[]string{"Common"}}
 
 	wg.Add(1)
-	CollectVirtualServers(i, client, &wg, partitionFilter)
+	CollectVirtualServers(i, client, &wg, partitionFilter, testServer.URL)
 	wg.Wait()
 
 	assert.Equal(t, 1, len(i.Entities))
-	virtualServerEntity, _ := i.Entity("/Common/StevesListener", "virtualServer")
+	virtualServerEntity, _ := i.Entity(testServer.URL, "f5-virtualServer")
 	metrics := virtualServerEntity.Metrics[0].Metrics
 	assert.Equal(t, float64(4), metrics["virtualserver.connections"])
 	assert.Equal(t, float64(0), metrics["virtualserver.availabilityState"])
