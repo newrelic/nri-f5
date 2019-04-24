@@ -32,7 +32,7 @@ func CollectPools(i *integration.Integration, client *client.F5Client, wg *sync.
 		wg.Add(1)
 		go func(poolName string) {
 			defer wg.Done()
-			CollectPoolMembers(poolName, i, client)
+			CollectPoolMembers(poolName, i, client, hostPort)
 		}(pool.FullPath)
 	}
 }

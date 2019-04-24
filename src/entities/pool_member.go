@@ -13,7 +13,7 @@ import (
 )
 
 // CollectPoolMembers collects metrics and inventory for every member of a pool given its path
-func CollectPoolMembers(fullPath string, i *integration.Integration, client *client.F5Client) {
+func CollectPoolMembers(fullPath string, i *integration.Integration, client *client.F5Client, hostPort string) {
 	tildePath := strings.Replace(fullPath, "/", "~", -1) // f5 uses tildes in requests rather than slashes
 
 	var memberStats definition.LtmPoolMemberStats
@@ -21,11 +21,11 @@ func CollectPoolMembers(fullPath string, i *integration.Integration, client *cli
 		log.Error("Failed to collect inventory: %s", err)
 	}
 
-	populatePoolMembersInventory(memberStats, i)
-	populatePoolMembersMetrics(memberStats, i, client.BaseURL)
+	populatePoolMembersInventory(memberStats, i, hostPort)
+	populatePoolMembersMetrics(memberStats, i, client.BaseURL, hostPort)
 }
 
-func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *integration.Integration) {
+func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *integration.Integration, hostPort string) {
 	for poolURL, poolMember := range memberStats.Entries {
 		entries := poolMember.NestedStats.Entries
 		memberName, err := buildPoolMemberPath(poolURL)
@@ -33,7 +33,8 @@ func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *
 			log.Error("Failed to parse pool name from url %s: %s", err)
 			continue
 		}
-		entity, err := i.Entity(memberName, "poolmember")
+    poolmemberIDAttr := integration.NewIDAttribute("poolmember", memberName)
+		entity, err := i.EntityReportedVia(hostPort, hostPort, "f5-poolmember", poolmemberIDAttr)
 		if err != nil {
 			log.Error("Failed to get entity for pool %s: %s", memberName, err.Error())
 			continue
@@ -55,7 +56,7 @@ func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *
 	}
 }
 
-func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *integration.Integration, url string) {
+func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *integration.Integration, url string, hostPort string) {
 	for poolURL, poolMember := range memberStats.Entries {
 		entries := poolMember.NestedStats.Entries
 		memberName, err := buildPoolMemberPath(poolURL)
@@ -63,7 +64,8 @@ func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *in
 			log.Error("Failed to parse pool name from url %s: %s", err)
 			continue
 		}
-		entity, err := i.Entity(memberName, "poolmember")
+    poolmemberIDAttr := integration.NewIDAttribute("poolmember", memberName)
+		entity, err := i.EntityReportedVia(hostPort, hostPort, "f5-poolmember", poolmemberIDAttr)
 		if err != nil {
 			log.Error("Failed to get entity for pool %s: %s", memberName, err.Error())
 			continue
