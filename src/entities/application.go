@@ -11,7 +11,7 @@ import (
 )
 
 // CollectApplications collects application entities from F5 and adds them to the integration
-func CollectApplications(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher) {
+func CollectApplications(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher, hostPort string) {
 	defer wg.Done()
 
 	var appResponse definition.SysApplicationService
@@ -25,7 +25,8 @@ func CollectApplications(i *integration.Integration, client *client.F5Client, wg
 			continue
 		}
 
-		appEntity, err := i.Entity(applicationItem.FullPath, "application")
+    applicationPathIDAttr := integration.NewIDAttribute("application", applicationItem.FullPath)
+		appEntity, err := i.EntityReportedVia(hostPort, hostPort, "f5-application", applicationPathIDAttr)
 		if err != nil {
 			log.Error("Couldn't create entity for application object: %v", err)
 		}

@@ -12,10 +12,10 @@ import (
 )
 
 // CollectSystem collects the system entity from F5 and adds it to the integration
-func CollectSystem(integration *integration.Integration, client *client.F5Client, hostPort string, wg *sync.WaitGroup) {
+func CollectSystem(integration *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, hostPort string) {
 	defer wg.Done()
 
-	systemEntity, err := integration.Entity(hostPort, "system")
+	systemEntity, err := integration.EntityReportedVia(hostPort, hostPort, "f5-system")
 	if err != nil {
 		log.Error("Couldn't create system entity: %v", err)
 		return

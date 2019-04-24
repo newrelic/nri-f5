@@ -12,7 +12,7 @@ import (
 )
 
 // CollectVirtualServers collects virtual server entities from F5 and adds them to the integration
-func CollectVirtualServers(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher) {
+func CollectVirtualServers(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher, hostPort string) {
 	defer wg.Done()
 
 	var ltmVirtual definition.LtmVirtual
@@ -25,17 +25,18 @@ func CollectVirtualServers(i *integration.Integration, client *client.F5Client, 
 		log.Error("Failed to collect metrics for virtual server: %s", err.Error())
 	}
 
-	populateVirtualServerInventory(i, ltmVirtual, pathFilter)
-	populateVirtualServerMetrics(i, ltmVirtualStats, pathFilter, client.BaseURL)
+	populateVirtualServerInventory(i, ltmVirtual, pathFilter, hostPort)
+	populateVirtualServerMetrics(i, ltmVirtualStats, pathFilter, hostPort)
 }
 
-func populateVirtualServerInventory(i *integration.Integration, ltmVirtual definition.LtmVirtual, pathFilter *arguments.PathMatcher) {
+func populateVirtualServerInventory(i *integration.Integration, ltmVirtual definition.LtmVirtual, pathFilter *arguments.PathMatcher, hostPort string) {
 	for _, virtual := range ltmVirtual.Items {
 		if !pathFilter.Matches(virtual.FullPath) {
 			continue
 		}
 
-		virtualEntity, err := i.Entity(virtual.FullPath, "virtualServer")
+    virtualServerIDAttr := integration.NewIDAttribute("virtualServer", virtual.FullPath)
+		virtualEntity, err := i.EntityReportedVia(hostPort, hostPort, "f5-virtualServer", virtualServerIDAttr)
 		if err != nil {
 			log.Error("Failed to get entity object for virtual server %s: %s", virtual.Name, err.Error())
 		}
@@ -57,7 +58,7 @@ func populateVirtualServerInventory(i *integration.Integration, ltmVirtual defin
 	}
 }
 
-func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats definition.LtmVirtualStats, pathFilter *arguments.PathMatcher, url string) {
+func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats definition.LtmVirtualStats, pathFilter *arguments.PathMatcher, hostPort string) {
 	for _, virtual := range ltmVirtualStats.Entries {
 
 		entries := virtual.NestedStats.Entries
@@ -66,7 +67,8 @@ func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats de
 			continue
 		}
 
-		virtualEntity, err := i.Entity(virtualName, "virtualServer")
+    virtualServerIDAttr := integration.NewIDAttribute("virtualServer", virtualName)
+		virtualEntity, err := i.EntityReportedVia(hostPort, hostPort, "f5-virtualServer", virtualServerIDAttr)
 		if err != nil {
 			log.Error("Failed to get entity object for virtual server %s: %s", virtualName, err.Error())
 		}
@@ -85,7 +87,6 @@ func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats de
 		ms := virtualEntity.NewMetricSet("F5BigIpVirtualServerSample",
 			metric.Attribute{Key: "displayName", Value: virtualName},
 			metric.Attribute{Key: "entityName", Value: "virtualServer:" + virtualName},
-			metric.Attribute{Key: "url", Value: url},
 		)
 
 		err = ms.MarshalMetrics(entries)
