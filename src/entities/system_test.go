@@ -475,11 +475,11 @@ func TestCollectSystem(t *testing.T) {
 	var wg sync.WaitGroup
 
 	wg.Add(1)
-	CollectSystem(i, client, "testhost", &wg)
+	CollectSystem(i, client, &wg, testServer.URL)
 	wg.Wait()
 
 	assert.Equal(t, 1, len(i.Entities))
-	systemEntity, _ := i.Entity("testhost", "system")
+	systemEntity, _ := i.EntityReportedVia(testServer.URL, testServer.URL, "f5-system")
 	metrics := systemEntity.Metrics[0].Metrics
 	assert.Equal(t, float64(0.0), metrics["system.cpuUserUtilization"])
 

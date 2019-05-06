@@ -12,7 +12,7 @@ import (
 )
 
 // CollectPools collects pool and pool member entities from F5 and adds them to the integration, using the filter as a whitelist
-func CollectPools(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, partitionFilter *arguments.PathMatcher) {
+func CollectPools(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, partitionFilter *arguments.PathMatcher, hostPort string) {
 	defer wg.Done()
 
 	var ltmPool definition.LtmPool
@@ -25,25 +25,26 @@ func CollectPools(i *integration.Integration, client *client.F5Client, wg *sync.
 		log.Error("Failed to collect metrics for pools: %s", err.Error())
 	}
 
-	populatePoolsInventory(i, ltmPool, ltmPoolStats, partitionFilter)
-	populatePoolsMetrics(i, ltmPoolStats, partitionFilter, client.BaseURL)
+	populatePoolsInventory(i, ltmPool, ltmPoolStats, partitionFilter, hostPort)
+	populatePoolsMetrics(i, ltmPoolStats, partitionFilter, hostPort)
 
 	for _, pool := range ltmPool.Items {
 		wg.Add(1)
 		go func(poolName string) {
 			defer wg.Done()
-			CollectPoolMembers(poolName, i, client)
+			CollectPoolMembers(poolName, i, client, hostPort)
 		}(pool.FullPath)
 	}
 }
 
-func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPool, ltmPoolStats definition.LtmPoolStats, partitionFilter *arguments.PathMatcher) {
+func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPool, ltmPoolStats definition.LtmPoolStats, partitionFilter *arguments.PathMatcher, hostPort string) {
 	for _, pool := range ltmPool.Items {
 		if !partitionFilter.Matches(pool.FullPath) {
 			continue
 		}
 
-		poolEntity, err := i.Entity(pool.FullPath, "pool")
+		poolIDAttr := integration.NewIDAttribute("pool", pool.FullPath)
+		poolEntity, err := i.EntityReportedVia(hostPort, hostPort, "f5-pool", poolIDAttr)
 		if err != nil {
 			log.Error("Failed to get entity object for pool %s: %s", pool.Name, err.Error())
 		}
@@ -80,7 +81,7 @@ func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPo
 	}
 }
 
-func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.LtmPoolStats, partitionFilter *arguments.PathMatcher, url string) {
+func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.LtmPoolStats, partitionFilter *arguments.PathMatcher, hostPort string) {
 	for _, pool := range ltmPoolStats.Entries {
 		entries := pool.NestedStats.Entries
 		poolName := entries.FullPath.Description
@@ -88,7 +89,8 @@ func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.Lt
 			continue
 		}
 
-		poolEntity, err := i.Entity(poolName, "pool")
+		poolIDAttr := integration.NewIDAttribute("pool", poolName)
+		poolEntity, err := i.EntityReportedVia(hostPort, hostPort, "f5-pool", poolIDAttr)
 		if err != nil {
 			log.Error("Failed to get entity object for pool %s: %s", poolName, err.Error())
 		}
@@ -103,7 +105,6 @@ func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.Lt
 		ms := poolEntity.NewMetricSet("F5BigIpPoolSample",
 			metric.Attribute{Key: "displayName", Value: poolName},
 			metric.Attribute{Key: "entityName", Value: "pool:" + poolName},
-			metric.Attribute{Key: "url", Value: url},
 		)
 
 		err = ms.MarshalMetrics(entries)

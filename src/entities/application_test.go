@@ -119,11 +119,12 @@ func TestCollectApplications(t *testing.T) {
 	partitionFilter := &arguments.PathMatcher{[]string{"Common"}}
 
 	wg.Add(1)
-	CollectApplications(i, client, &wg, partitionFilter)
+	CollectApplications(i, client, &wg, partitionFilter, testServer.URL)
 	wg.Wait()
 
 	assert.Equal(t, 1, len(i.Entities))
-	applicationEntity, _ := i.Entity("/Common/apache-0.app/apache-0", "application")
+	idattr := integration.NewIDAttribute("application", "/Common/apache-0.app/apache-0")
+	applicationEntity, _ := i.EntityReportedVia(testServer.URL, testServer.URL, "f5-application", idattr)
 	inventory := applicationEntity.Inventory.Items()
 	assert.Equal(t, "/Common/QaTest", inventory["poolToUse"]["value"])
 }

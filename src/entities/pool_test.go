@@ -183,18 +183,20 @@ func TestCollectPools(t *testing.T) {
 	partitionFilter := &arguments.PathMatcher{[]string{"Common"}}
 
 	wg.Add(1)
-	CollectPools(i, client, &wg, partitionFilter)
+	CollectPools(i, client, &wg, partitionFilter, testServer.URL)
 	wg.Wait()
 
-	assert.Equal(t, 2, len(i.Entities))
-	poolEntity, _ := i.Entity("/Common/CitrixPool", "pool")
+	assert.Equal(t, 3, len(i.Entities))
+	idattr := integration.NewIDAttribute("pool", "/Common/CitrixPool")
+	poolEntity, _ := i.EntityReportedVia(testServer.URL, testServer.URL, "f5-pool", idattr)
 	poolMetrics := poolEntity.Metrics[0].Metrics
 	assert.Equal(t, "/Common/CitrixPool", poolMetrics["displayName"])
 	assert.Equal(t, float64(3), poolMetrics["pool.activeMembers"])
 	assert.Equal(t, float64(0), poolMetrics["pool.availabilityState"])
 	assert.Equal(t, float64(1), poolMetrics["pool.enabled"])
 
-	memberEntity, _ := i.Entity("/Common/Pool123:80", "poolmember")
+	idattr = integration.NewIDAttribute("poolmember", "/Common/Pool123:80")
+	memberEntity, _ := i.Entity(testServer.URL, "f5-poolmember", idattr)
 	assert.Equal(t, 2, len(memberEntity.Metrics))
 	memberMetrics := memberEntity.Metrics[0].Metrics
 	assert.Equal(t, "/Common/Pool123:80", memberMetrics["displayName"])
