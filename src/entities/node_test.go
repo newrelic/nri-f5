@@ -100,7 +100,7 @@ func TestCollectNodes(t *testing.T) {
 
 	assert.Equal(t, 1, len(i.Entities))
 
-  idattr := integration.NewIDAttribute("node","/Common/0.0.0.1")
+	idattr := integration.NewIDAttribute("node", "/Common/0.0.0.1")
 	nodeEntity, _ := i.EntityReportedVia(testServer.URL, testServer.URL, "f5-node", idattr)
 	metrics := nodeEntity.Metrics[0].Metrics
 	assert.Equal(t, float64(3), metrics["node.connections"])

@@ -33,8 +33,8 @@ func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *
 			log.Error("Failed to parse pool name from url %s: %s", err)
 			continue
 		}
-    poolmemberIDAttr := integration.NewIDAttribute("poolmember", memberName)
-		entity, err := i.EntityReportedVia(hostPort, hostPort, "f5-poolmember", poolmemberIDAttr)
+		poolmemberIDAttr := integration.NewIDAttribute("poolmember", memberName)
+		entity, err := i.Entity(hostPort, "f5-poolmember", poolmemberIDAttr)
 		if err != nil {
 			log.Error("Failed to get entity for pool %s: %s", memberName, err.Error())
 			continue
@@ -64,8 +64,8 @@ func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *in
 			log.Error("Failed to parse pool name from url %s: %s", err)
 			continue
 		}
-    poolmemberIDAttr := integration.NewIDAttribute("poolmember", memberName)
-		entity, err := i.EntityReportedVia(hostPort, hostPort, "f5-poolmember", poolmemberIDAttr)
+		poolmemberIDAttr := integration.NewIDAttribute("poolmember", memberName)
+		entity, err := i.Entity(hostPort, "f5-poolmember", poolmemberIDAttr)
 		if err != nil {
 			log.Error("Failed to get entity for pool %s: %s", memberName, err.Error())
 			continue

@@ -149,7 +149,9 @@ func TestCollectVirtualServers(t *testing.T) {
 	wg.Wait()
 
 	assert.Equal(t, 1, len(i.Entities))
-	virtualServerEntity, _ := i.Entity(testServer.URL, "f5-virtualServer")
+
+	virtualServerIDAttr := integration.NewIDAttribute("virtualServer", "/Common/StevesListener")
+	virtualServerEntity, _ := i.Entity(testServer.URL, "f5-virtualServer", virtualServerIDAttr)
 	metrics := virtualServerEntity.Metrics[0].Metrics
 	assert.Equal(t, float64(4), metrics["virtualserver.connections"])
 	assert.Equal(t, float64(0), metrics["virtualserver.availabilityState"])

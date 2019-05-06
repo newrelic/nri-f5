@@ -187,7 +187,7 @@ func TestCollectPools(t *testing.T) {
 	wg.Wait()
 
 	assert.Equal(t, 3, len(i.Entities))
-  idattr := integration.NewIDAttribute("pool","/Common/CitrixPool")
+	idattr := integration.NewIDAttribute("pool", "/Common/CitrixPool")
 	poolEntity, _ := i.EntityReportedVia(testServer.URL, testServer.URL, "f5-pool", idattr)
 	poolMetrics := poolEntity.Metrics[0].Metrics
 	assert.Equal(t, "/Common/CitrixPool", poolMetrics["displayName"])
@@ -195,7 +195,8 @@ func TestCollectPools(t *testing.T) {
 	assert.Equal(t, float64(0), poolMetrics["pool.availabilityState"])
 	assert.Equal(t, float64(1), poolMetrics["pool.enabled"])
 
-	memberEntity, _ := i.Entity("/Common/Pool123:80", "poolmember")
+	idattr = integration.NewIDAttribute("poolmember", "/Common/Pool123:80")
+	memberEntity, _ := i.Entity(testServer.URL, "f5-poolmember", idattr)
 	assert.Equal(t, 2, len(memberEntity.Metrics))
 	memberMetrics := memberEntity.Metrics[0].Metrics
 	assert.Equal(t, "/Common/Pool123:80", memberMetrics["displayName"])

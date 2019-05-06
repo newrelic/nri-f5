@@ -25,7 +25,7 @@ func CollectApplications(i *integration.Integration, client *client.F5Client, wg
 			continue
 		}
 
-    applicationPathIDAttr := integration.NewIDAttribute("application", applicationItem.FullPath)
+		applicationPathIDAttr := integration.NewIDAttribute("application", applicationItem.FullPath)
 		appEntity, err := i.EntityReportedVia(hostPort, hostPort, "f5-application", applicationPathIDAttr)
 		if err != nil {
 			log.Error("Couldn't create entity for application object: %v", err)

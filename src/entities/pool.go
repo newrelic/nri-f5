@@ -43,7 +43,7 @@ func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPo
 			continue
 		}
 
-    poolIDAttr := integration.NewIDAttribute("pool", pool.FullPath)
+		poolIDAttr := integration.NewIDAttribute("pool", pool.FullPath)
 		poolEntity, err := i.EntityReportedVia(hostPort, hostPort, "f5-pool", poolIDAttr)
 		if err != nil {
 			log.Error("Failed to get entity object for pool %s: %s", pool.Name, err.Error())
@@ -89,8 +89,7 @@ func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.Lt
 			continue
 		}
 
-
-    poolIDAttr := integration.NewIDAttribute("pool", poolName)
+		poolIDAttr := integration.NewIDAttribute("pool", poolName)
 		poolEntity, err := i.EntityReportedVia(hostPort, hostPort, "f5-pool", poolIDAttr)
 		if err != nil {
 			log.Error("Failed to get entity object for pool %s: %s", poolName, err.Error())

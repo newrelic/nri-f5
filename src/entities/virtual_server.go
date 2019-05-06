@@ -35,7 +35,7 @@ func populateVirtualServerInventory(i *integration.Integration, ltmVirtual defin
 			continue
 		}
 
-    virtualServerIDAttr := integration.NewIDAttribute("virtualServer", virtual.FullPath)
+		virtualServerIDAttr := integration.NewIDAttribute("virtualServer", virtual.FullPath)
 		virtualEntity, err := i.EntityReportedVia(hostPort, hostPort, "f5-virtualServer", virtualServerIDAttr)
 		if err != nil {
 			log.Error("Failed to get entity object for virtual server %s: %s", virtual.Name, err.Error())
@@ -67,7 +67,7 @@ func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats de
 			continue
 		}
 
-    virtualServerIDAttr := integration.NewIDAttribute("virtualServer", virtualName)
+		virtualServerIDAttr := integration.NewIDAttribute("virtualServer", virtualName)
 		virtualEntity, err := i.EntityReportedVia(hostPort, hostPort, "f5-virtualServer", virtualServerIDAttr)
 		if err != nil {
 			log.Error("Failed to get entity object for virtual server %s: %s", virtualName, err.Error())

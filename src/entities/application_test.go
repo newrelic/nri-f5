@@ -123,7 +123,7 @@ func TestCollectApplications(t *testing.T) {
 	wg.Wait()
 
 	assert.Equal(t, 1, len(i.Entities))
-  idattr := integration.NewIDAttribute("application","/Common/apache-0.app/apache-0")
+	idattr := integration.NewIDAttribute("application", "/Common/apache-0.app/apache-0")
 	applicationEntity, _ := i.EntityReportedVia(testServer.URL, testServer.URL, "f5-application", idattr)
 	inventory := applicationEntity.Inventory.Items()
 	assert.Equal(t, "/Common/QaTest", inventory["poolToUse"]["value"])

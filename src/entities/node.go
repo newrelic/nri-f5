@@ -35,7 +35,7 @@ func populateNodesInventory(i *integration.Integration, ltmNode definition.LtmNo
 			continue
 		}
 
-    nodeIDAttr := integration.NewIDAttribute("node", node.FullPath)
+		nodeIDAttr := integration.NewIDAttribute("node", node.FullPath)
 		nodeEntity, err := i.EntityReportedVia(hostPort, hostPort, "f5-node", nodeIDAttr)
 		if err != nil {
 			log.Error("Failed to get entity object for node %s: %s", node.Name, err.Error())
@@ -64,7 +64,7 @@ func populateNodesMetrics(i *integration.Integration, ltmNodeStats definition.Lt
 
 		entries := node.NestedStats.Entries
 		nodeName := entries.TmName.Description
-    nodeIDAttr := integration.NewIDAttribute("node", nodeName)
+		nodeIDAttr := integration.NewIDAttribute("node", nodeName)
 		nodeEntity, err := i.EntityReportedVia(hostPort, hostPort, "f5-node", nodeIDAttr)
 		if err != nil {
 			log.Error("Failed to get entity object for node %s: %s", nodeName, err.Error())
