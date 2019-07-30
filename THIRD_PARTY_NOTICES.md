@@ -12,8 +12,8 @@ can be found at github.com/newrelic/nri-f5.
 
 ## Contents
  
-* [pkg/errors](#pkg/errors)
-* [newrelic/infra-integrations-sdk](#newrelic/infra-integrations-sdk)
+* [newrelic/infra-integrations-sdk](#newrelicinfra-integrations-sdk)
+* [pkg/errors](#pkgerrors)
 
 ## newrelic/infra-integrations-sdk
 
