@@ -2,6 +2,8 @@
 
 Reports status and metrics for F5 BIG-IP
 
+See our [documentation web site](https://docs.newrelic.com/docs/integrations/host-integrations/host-integrations-list/f5-monitoring-integration) for more details.
+
 ## Requirements
 
 None
