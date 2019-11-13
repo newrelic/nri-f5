@@ -1,3 +1,4 @@
+//go:generate goversioninfo
 package main
 
 import (
@@ -14,7 +15,7 @@ import (
 
 const (
 	integrationName    = "com.newrelic.f5"
-	integrationVersion = "2.0.0"
+	integrationVersion = "2.0.2"
 )
 
 var (
