@@ -12,7 +12,7 @@ None
 
 * Download an archive file for the `f5` Integration
 * Extract `f5-definition.yml` and the `bin` directory into `/var/db/newrelic-infra/newrelic-integrations`
-* Add execute permissions for the binary file `nr-f5` (if required)
+* Add execute permissions for the binary file `nri-f5` (if required)
 * Extract `f5-config.yml.sample` into `/etc/newrelic-infra/integrations.d`
 
 ## Usage
@@ -38,9 +38,9 @@ Assuming you have the source code, you can build and run the integration locally
 $ make
 ```
 
-* The command above will execute tests for the F5 BIG-IP integration and build an executable file called `nr-f5` in the `bin` directory
+* The command above will execute tests for the F5 BIG-IP integration and build an executable file called `nri-f5` in the `bin` directory
 ```
-$ ./bin/nr-f5 --help
+$ ./bin/nri-f5 --help
 ```
 
 For managing external dependencies, the [govendor tool](https://github.com/kardianos/govendor) is used. It is required to lock all external dependencies to a specific version (if possible) in the vendor directory.

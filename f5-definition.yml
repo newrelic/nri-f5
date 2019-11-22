@@ -6,17 +6,17 @@ os: linux
 commands:
   all_data:
     command:
-      - ./bin/nr-f5
+      - ./bin/nri-f5
     prefix: config/f5
     interval: 15
   metrics:
     command:
-      - ./bin/nr-f5
+      - ./bin/nri-f5
       - --metrics
     interval: 15
   inventory:
     command:
-      - ./bin/nr-f5
+      - ./bin/nri-f5
       - --inventory
     prefix: config/f5
     interval: 15
