@@ -1,0 +1,32 @@
+  f5-config.yml: |
+    ---
+    # Run auto discovery to find pods with label "app=f5"
+    # https://docs.newrelic.com/docs/integrations/host-integrations/installation/container-auto-discovery
+    discovery:
+      command:
+        # Run NRI Discovery for Kubernetes
+        # https://github.com/newrelic/nri-discovery-kubernetes
+        exec: /var/db/newrelic-infra/nri-discovery-kubernetes
+        match:
+          label.app: f5
+    integrations:
+      - name: nri-f5
+        env:
+          # Username of the F5 instance
+          USERNAME: admin
+          # Password of the F5 instance
+          PASSWORD: admin
+          # Hostname of the F5 instance. Use the discovered IP as the host address
+          HOSTNAME: ${discovery.ip}
+          # Port of the F5 instance
+          PORT: 443
+          # CA certificate file
+          CA_BUNDLE_FILE: /etc/ssl/certs/ca-certificates.crt
+          # A JSON array of BIG-IP partitions to collect from.
+          # The partition name should have no leading slash.
+          # Defaults to '["Common"]'
+          PARTITION_FILTER: '["Common","MyOtherPartition"]'
+          # The number of seconds to wait before a request times out
+          # Defaults to 30
+          TIMEOUT: 10
+          METRICS: 1

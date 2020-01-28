@@ -22,4 +22,3 @@ instances:
       # The number of seconds to wait before a request times out
       # Defaults to 30
       timeout: 10
-
