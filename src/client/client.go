@@ -14,11 +14,12 @@ import (
 
 // F5Client represents a client that is able to make requests to the F5 iControl API.
 type F5Client struct {
-	HTTPClient *http.Client
-	Username   string
-	Password   string
-	AuthToken  string
-	BaseURL    string
+	HTTPClient        *http.Client
+	Username          string
+	Password          string
+	AuthToken         string
+	BaseURL           string
+	LoginProviderName string
 }
 
 const loginEndpoint = "/mgmt/shared/authn/login"
@@ -31,11 +32,12 @@ func NewClient(args *arguments.ArgumentList) (*F5Client, error) {
 	}
 
 	return &F5Client{
-		HTTPClient: httpClient,
-		Username:   args.Username,
-		Password:   args.Password,
-		AuthToken:  "",
-		BaseURL:    "https://" + args.Hostname + ":" + strconv.Itoa(args.Port),
+		HTTPClient:        httpClient,
+		Username:          args.Username,
+		Password:          args.Password,
+		AuthToken:         "",
+		BaseURL:           "https://" + args.Hostname + ":" + strconv.Itoa(args.Port),
+		LoginProviderName: args.LoginProviderName,
 	}, nil
 }
 
@@ -83,7 +85,7 @@ func (c *F5Client) DoRequest(method, endpoint, body string, model interface{}) e
 // If login is unsuccessful an error is returned
 func (c *F5Client) LogIn() error {
 	loginArgs := map[string]string{
-		"loginProviderName": "tmos",
+		"loginProviderName": c.LoginProviderName,
 		"username":          c.Username,
 		"password":          c.Password,
 	}

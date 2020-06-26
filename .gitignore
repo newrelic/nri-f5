@@ -43,5 +43,8 @@ Session.vim
 .vscode
 debug
 
+# GoLand
+.idea
+
 connections.yml
 test-runner-output/*
