@@ -21,7 +21,7 @@ type ArgumentList struct {
 	PartitionFilter   string `default:"[\"Common\"]" help:"JSON array of partitions to collect"`
 	AuthHost          string `default:"" help:"Hostname or IP address of the Big IQ auth token provider."`
 	AuthPort          int    `default:"443" help:"Port of the Big IQ auth token provider."`
-	LoginProviderName string `default:"tmos" help:"Big IQ LoginProviderName. Default is tmos"`
+	LoginProviderName string `default:"tmos" help:"Big IQ LoginProviderName."`
 }
 
 // Parse validates and parses out regex patterns from the input arguments
