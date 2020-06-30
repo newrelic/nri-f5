@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/newrelic/nri-f5/src/arguments"
@@ -13,10 +14,13 @@ import (
 
 func Test_CreateClient(t *testing.T) {
 	args := arguments.ArgumentList{
-		Username: "testUser",
-		Password: "testPass",
-		Hostname: "testHost",
-		Port:     1945,
+		Username:          "testUser",
+		Password:          "testPass",
+		Hostname:          "testHost",
+		Port:              1945,
+		AuthHost:          "testHost",
+		AuthPort:          1945,
+		LoginProviderName: "tmos",
 	}
 
 	client, err := NewClient(&args)
@@ -25,6 +29,8 @@ func Test_CreateClient(t *testing.T) {
 	assert.Equal(t, "testUser", client.Username)
 	assert.Equal(t, "testPass", client.Password)
 	assert.Equal(t, "", client.AuthToken)
+	assert.Equal(t, "https://testHost:1945", client.AuthURL)
+	assert.Equal(t, "tmos", client.LoginProviderName)
 }
 
 func Test_LogIn(t *testing.T) {
@@ -32,7 +38,7 @@ func Test_LogIn(t *testing.T) {
 		t.Logf("Received request for %s", req.URL)
 		res.WriteHeader(200)
 
-		if req.URL.String() == "/mgmt/shared/authn/login" {
+		if strings.HasSuffix(req.URL.String(), "/mgmt/shared/authn/login") {
 			requestBody, _ := ioutil.ReadAll(req.Body)
 			bodyJSON := map[string]string{}
 			_ = json.Unmarshal(requestBody, &bodyJSON)
@@ -49,10 +55,12 @@ func Test_LogIn(t *testing.T) {
 	defer func() { testServer.Close() }()
 
 	client := F5Client{
-		BaseURL:    testServer.URL,
-		Username:   "testUser",
-		Password:   "testPass",
-		HTTPClient: http.DefaultClient,
+		BaseURL:           testServer.URL,
+		Username:          "testUser",
+		Password:          "testPass",
+		HTTPClient:        http.DefaultClient,
+		AuthURL:           testServer.URL,
+		LoginProviderName: "tmos",
 	}
 
 	err := client.Request("/some-endpoint", nil)

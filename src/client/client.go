@@ -20,6 +20,7 @@ type F5Client struct {
 	AuthToken         string
 	BaseURL           string
 	LoginProviderName string
+	AuthURL           string
 }
 
 const loginEndpoint = "/mgmt/shared/authn/login"
@@ -37,6 +38,7 @@ func NewClient(args *arguments.ArgumentList) (*F5Client, error) {
 		Password:          args.Password,
 		AuthToken:         "",
 		BaseURL:           "https://" + args.Hostname + ":" + strconv.Itoa(args.Port),
+		AuthURL:           "https://" + args.AuthHost + ":" + strconv.Itoa(args.AuthPort),
 		LoginProviderName: args.LoginProviderName,
 	}, nil
 }
@@ -49,17 +51,21 @@ func (c *F5Client) Request(endpoint string, model interface{}) error {
 // DoRequest makes a request to the given endpoint using the given request body, storing the result in the model if possible.
 // An error is returned if either step cannot be completed.
 func (c *F5Client) DoRequest(method, endpoint, body string, model interface{}) error {
-	req, err := http.NewRequest(method, c.BaseURL+endpoint, strings.NewReader(body))
-	if err != nil {
-		return err
-	}
+	var req *http.Request
+	var err error
 
-	if c.AuthToken == "" {
-		if endpoint != loginEndpoint {
+	if endpoint == loginEndpoint {
+		req, err = http.NewRequest(method, c.AuthURL+endpoint, strings.NewReader(body))
+	} else {
+		if c.AuthToken == "" {
 			return fmt.Errorf("client is not logged in")
 		}
-	} else {
+		req, err = http.NewRequest(method, c.BaseURL+endpoint, strings.NewReader(body))
 		req.Header.Add("X-F5-Auth-Token", c.AuthToken)
+	}
+
+	if err != nil {
+		return err
 	}
 
 	req.SetBasicAuth(c.Username, c.Password)

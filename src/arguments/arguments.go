@@ -19,7 +19,7 @@ type ArgumentList struct {
 	CABundleFile      string `default:"" help:"Alternative Certificate Authority bundle file"`
 	CABundleDir       string `default:"" help:"Alternative Certificate Authority bundle directory"`
 	PartitionFilter   string `default:"[\"Common\"]" help:"JSON array of partitions to collect"`
-	AuthHost          string `default:"" help:"Hostname or IP address of the Big IQ auth token provider."`
+	AuthHost          string `default:"localhost" help:"Hostname or IP address of the Big IQ auth token provider."`
 	AuthPort          int    `default:"443" help:"Port of the Big IQ auth token provider."`
 	LoginProviderName string `default:"tmos" help:"Big IQ LoginProviderName."`
 }
