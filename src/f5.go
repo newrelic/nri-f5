@@ -15,7 +15,7 @@ import (
 
 const (
 	integrationName    = "com.newrelic.f5"
-	integrationVersion = "2.1.0"
+	integrationVersion = "2.2.0"
 )
 
 var (
@@ -26,6 +26,14 @@ func main() {
 	// Create Integration
 	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
 	exitOnErr(err)
+
+	if args.AuthHost == "" {
+		args.AuthHost = args.Hostname
+	}
+
+	if args.AuthPort == -1 {
+		args.AuthPort = args.Port
+	}
 
 	log.SetupLogging(args.Verbose)
 
