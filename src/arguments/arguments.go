@@ -11,14 +11,19 @@ import (
 // ArgumentList contains all the arguments available for the F5 integration
 type ArgumentList struct {
 	sdkArgs.DefaultArgumentList
-	Hostname        string `default:"localhost" help:"The hostname or IP of the F5 BIG IP device to monitor."`
-	Port            int    `default:"443" help:"The port of the iControl API to connect to."`
-	Username        string `default:"" help:"The username to connect to the F5 API with."`
-	Password        string `default:"" help:"The password to connect to the F5 API with."`
-	Timeout         int    `default:"30" help:"The number of seconds to wait before a request times out."`
-	CABundleFile    string `default:"" help:"Alternative Certificate Authority bundle file"`
-	CABundleDir     string `default:"" help:"Alternative Certificate Authority bundle directory"`
-	PartitionFilter string `default:"[\"Common\"]" help:"JSON array of partitions to collect"`
+	Hostname           string `default:"localhost" help:"The hostname or IP of the F5 BIG IP device to monitor."`
+	Port               int    `default:"443" help:"The port of the iControl API to connect to."`
+	Username           string `default:"" help:"The username to connect to the F5 API with."`
+	Password           string `default:"" help:"The password to connect to the F5 API with."`
+	Timeout            int    `default:"30" help:"The number of seconds to wait before a request times out."`
+	CABundleFile       string `default:"" help:"Alternative Certificate Authority bundle file"`
+	CABundleDir        string `default:"" help:"Alternative Certificate Authority bundle directory"`
+	PartitionFilter    string `default:"[\"Common\"]" help:"JSON array of partitions to collect"`
+	AuthHost           string `default:"" help:"Hostname or IP address of the Big IQ auth token provider.  (default value of Hostname)"`
+	AuthPort           int    `default:"-1" help:"Port of the Big IQ auth token provider. (Actual default is value of Port) "`
+	AuthPath           string `default:"/mgmt/shared/authn/login" help:"Complete endpoint path for login."`
+	LoginProviderName  string `default:"tmos" help:"Big IQ LoginProviderName."`
+	LoginReferenceLink string `default:"" help:"Login Reference Link for Active Directory"`
 }
 
 // Parse validates and parses out regex patterns from the input arguments

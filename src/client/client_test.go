@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/newrelic/nri-f5/src/arguments"
@@ -13,10 +14,14 @@ import (
 
 func Test_CreateClient(t *testing.T) {
 	args := arguments.ArgumentList{
-		Username: "testUser",
-		Password: "testPass",
-		Hostname: "testHost",
-		Port:     1945,
+		Username:          "testUser",
+		Password:          "testPass",
+		Hostname:          "testHost",
+		Port:              1945,
+		AuthHost:          "testHost",
+		AuthPort:          1945,
+		LoginProviderName: "tmos",
+		AuthPath:          "/mgmt/shared/authn/login",
 	}
 
 	client, err := NewClient(&args)
@@ -25,6 +30,9 @@ func Test_CreateClient(t *testing.T) {
 	assert.Equal(t, "testUser", client.Username)
 	assert.Equal(t, "testPass", client.Password)
 	assert.Equal(t, "", client.AuthToken)
+	assert.Equal(t, "https://testHost:1945", client.AuthURL)
+	assert.Equal(t, "tmos", client.LoginProviderName)
+	assert.Equal(t, "/mgmt/shared/authn/login", client.AuthPath)
 }
 
 func Test_LogIn(t *testing.T) {
@@ -32,7 +40,8 @@ func Test_LogIn(t *testing.T) {
 		t.Logf("Received request for %s", req.URL)
 		res.WriteHeader(200)
 
-		if req.URL.String() == "/mgmt/shared/authn/login" {
+		if strings.HasPrefix(req.URL.String(), "/mgmt/shared/authn") {
+			assert.True(t, strings.HasPrefix(req.URL.String(), "/mgmt/shared/authn"))
 			requestBody, _ := ioutil.ReadAll(req.Body)
 			bodyJSON := map[string]string{}
 			_ = json.Unmarshal(requestBody, &bodyJSON)
@@ -49,10 +58,61 @@ func Test_LogIn(t *testing.T) {
 	defer func() { testServer.Close() }()
 
 	client := F5Client{
-		BaseURL:    testServer.URL,
-		Username:   "testUser",
-		Password:   "testPass",
-		HTTPClient: http.DefaultClient,
+		BaseURL:           testServer.URL,
+		Username:          "testUser",
+		Password:          "testPass",
+		HTTPClient:        http.DefaultClient,
+		AuthURL:           testServer.URL,
+		LoginProviderName: "tmos",
+		AuthPath:          "/mgmt/shared/authn/login",
+	}
+
+	err := client.Request("/some-endpoint", nil)
+	assert.Error(t, err)
+
+	err = client.LogIn()
+	assert.NoError(t, err)
+
+	assert.Equal(t, "this-is-a-token", client.AuthToken)
+
+	var okResp struct {
+		OK *bool `json:"ok"`
+	}
+	err = client.Request("/some-endpoint", &okResp)
+	assert.NoError(t, err)
+	assert.Equal(t, true, *okResp.OK)
+}
+
+func Test_ActiveDirectoryLogIn(t *testing.T) {
+	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		t.Logf("Received request for %s", req.URL)
+		res.WriteHeader(200)
+
+		if strings.HasPrefix(req.URL.String(), "/mgmt/shared/authn") {
+			assert.True(t, strings.HasPrefix(req.URL.String(), "/mgmt/shared/authn"))
+			requestBody, _ := ioutil.ReadAll(req.Body)
+			bodyJSON := map[string]string{}
+			_ = json.Unmarshal(requestBody, &bodyJSON)
+
+			assert.Equal(t, "testUser", bodyJSON["username"])
+			assert.Equal(t, "testPass", bodyJSON["password"])
+
+			res.Write([]byte("{\"token\":{\"token\":\"this-is-a-token\"}}"))
+		} else {
+			assert.Equal(t, "this-is-a-token", req.Header.Get("X-F5-Auth-Token"))
+			res.Write([]byte("{\"ok\":true}"))
+		}
+	}))
+	defer func() { testServer.Close() }()
+
+	client := F5Client{
+		BaseURL:           testServer.URL,
+		Username:          "testUser",
+		Password:          "testPass",
+		HTTPClient:        http.DefaultClient,
+		AuthURL:           testServer.URL,
+		LoginProviderName: "tmos",
+		AuthPath:          "/mgmt/shared/authn/providers/remote/some-big-key/login",
 	}
 
 	err := client.Request("/some-endpoint", nil)
