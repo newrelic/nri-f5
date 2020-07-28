@@ -11,8 +11,12 @@ import (
 )
 
 // CollectApplications collects application entities from F5 and adds them to the integration
-func CollectApplications(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher, hostPort string) {
+func CollectApplications(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher, hostPort string, args arguments.ArgumentList) {
 	defer wg.Done()
+
+	if !args.HasInventory() {
+		return
+	}
 
 	var appResponse definition.SysApplicationService
 	if err := client.Request("/mgmt/tm/sys/application/service", &appResponse); err != nil {

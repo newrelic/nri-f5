@@ -7,12 +7,13 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/newrelic/nri-f5/src/arguments"
 	"github.com/newrelic/nri-f5/src/client"
 	"github.com/newrelic/nri-f5/src/definition"
 )
 
 // CollectSystem collects the system entity from F5 and adds it to the integration
-func CollectSystem(integration *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, hostPort string) {
+func CollectSystem(integration *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, hostPort string, args arguments.ArgumentList) {
 	defer wg.Done()
 
 	systemEntity, err := integration.EntityReportedVia(hostPort, hostPort, "f5-system")
@@ -27,10 +28,16 @@ func CollectSystem(integration *integration.Integration, client *client.F5Client
 	)
 
 	var systemWg sync.WaitGroup
-	systemWg.Add(3)
-	go marshalSystemInfo(systemEntity, client, &systemWg)
-	go marshalMemoryStats(systemMetrics, client, &systemWg)
-	go marshalCPUStats(systemMetrics, client, &systemWg)
+	if args.HasInventory() {
+		systemWg.Add(1)
+		go marshalSystemInfo(systemEntity, client, &systemWg)
+	}
+
+	if args.HasMetrics() {
+		systemWg.Add(2)
+		go marshalMemoryStats(systemMetrics, client, &systemWg)
+		go marshalCPUStats(systemMetrics, client, &systemWg)
+	}
 	systemWg.Wait()
 }
 

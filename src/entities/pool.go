@@ -12,7 +12,7 @@ import (
 )
 
 // CollectPools collects pool and pool member entities from F5 and adds them to the integration, using the filter as a whitelist
-func CollectPools(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, partitionFilter *arguments.PathMatcher, hostPort string) {
+func CollectPools(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, partitionFilter *arguments.PathMatcher, hostPort string, args arguments.ArgumentList) {
 	defer wg.Done()
 
 	var ltmPool definition.LtmPool
@@ -25,14 +25,18 @@ func CollectPools(i *integration.Integration, client *client.F5Client, wg *sync.
 		log.Error("Failed to collect metrics for pools: %s", err.Error())
 	}
 
-	populatePoolsInventory(i, ltmPool, ltmPoolStats, partitionFilter, hostPort)
-	populatePoolsMetrics(i, ltmPoolStats, partitionFilter, hostPort)
+	if args.HasInventory() {
+		populatePoolsInventory(i, ltmPool, ltmPoolStats, partitionFilter, hostPort)
+	}
+	if args.HasMetrics() {
+		populatePoolsMetrics(i, ltmPoolStats, partitionFilter, hostPort)
+	}
 
 	for _, pool := range ltmPool.Items {
 		wg.Add(1)
 		go func(poolName string) {
 			defer wg.Done()
-			CollectPoolMembers(poolName, i, client, hostPort)
+			CollectPoolMembers(poolName, i, client, hostPort, args)
 		}(pool.FullPath)
 	}
 }

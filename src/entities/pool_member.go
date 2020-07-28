@@ -8,12 +8,13 @@ import (
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/newrelic/nri-f5/src/arguments"
 	"github.com/newrelic/nri-f5/src/client"
 	"github.com/newrelic/nri-f5/src/definition"
 )
 
 // CollectPoolMembers collects metrics and inventory for every member of a pool given its path
-func CollectPoolMembers(fullPath string, i *integration.Integration, client *client.F5Client, hostPort string) {
+func CollectPoolMembers(fullPath string, i *integration.Integration, client *client.F5Client, hostPort string, args arguments.ArgumentList) {
 	tildePath := strings.Replace(fullPath, "/", "~", -1) // f5 uses tildes in requests rather than slashes
 
 	var memberStats definition.LtmPoolMemberStats
@@ -21,8 +22,13 @@ func CollectPoolMembers(fullPath string, i *integration.Integration, client *cli
 		log.Error("Failed to collect inventory: %s", err)
 	}
 
-	populatePoolMembersInventory(memberStats, i, hostPort)
-	populatePoolMembersMetrics(memberStats, i, client.BaseURL, hostPort)
+	if args.HasInventory() {
+		populatePoolMembersInventory(memberStats, i, hostPort)
+	}
+
+	if args.HasMetrics() {
+		populatePoolMembersMetrics(memberStats, i, client.BaseURL, hostPort)
+	}
 }
 
 func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *integration.Integration, hostPort string) {

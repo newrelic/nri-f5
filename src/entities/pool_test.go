@@ -23,7 +23,7 @@ func TestCollectPools(t *testing.T) {
 			res.Write([]byte(`{
 				"kind": "tm:ltm:pool:poolcollectionstate",
 				"selfLink": "https://localhost/mgmt/tm/ltm/pool?ver=12.1.1",
-				"items": [{ 
+				"items": [{
 					"kind": "tm:ltm:pool:poolstate",
 					"name": "CitrixPool",
 					"partition": "Common",
@@ -52,7 +52,7 @@ func TestCollectPools(t *testing.T) {
 						"link": "https://localhost/mgmt/tm/ltm/pool/~Common~CitrixPool/members?ver=12.1.1",
 						"isSubcollection": true
 					}
-				},{ 
+				},{
 					"kind": "tm:ltm:pool:poolstate",
 					"name": "CitrixPosol",
 					"partition": "Test",
@@ -183,7 +183,7 @@ func TestCollectPools(t *testing.T) {
 	partitionFilter := &arguments.PathMatcher{[]string{"Common"}}
 
 	wg.Add(1)
-	CollectPools(i, client, &wg, partitionFilter, testServer.URL)
+	CollectPools(i, client, &wg, partitionFilter, testServer.URL, arguments.ArgumentList{})
 	wg.Wait()
 
 	assert.Equal(t, 3, len(i.Entities))

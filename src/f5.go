@@ -48,11 +48,11 @@ func collectEntities(i *integration.Integration, client *client.F5Client, pathFi
 	// set up and run goroutines for each entity
 	var wg sync.WaitGroup
 	wg.Add(5)
-	go entities.CollectSystem(i, client, &wg, hostPort)
-	go entities.CollectApplications(i, client, &wg, pathFilter, hostPort)
-	go entities.CollectVirtualServers(i, client, &wg, pathFilter, hostPort)
-	go entities.CollectPools(i, client, &wg, pathFilter, hostPort)
-	go entities.CollectNodes(i, client, &wg, pathFilter, hostPort)
+	go entities.CollectSystem(i, client, &wg, hostPort, args)
+	go entities.CollectApplications(i, client, &wg, pathFilter, hostPort, args)
+	go entities.CollectVirtualServers(i, client, &wg, pathFilter, hostPort, args)
+	go entities.CollectPools(i, client, &wg, pathFilter, hostPort, args)
+	go entities.CollectNodes(i, client, &wg, pathFilter, hostPort, args)
 	wg.Wait()
 }
 

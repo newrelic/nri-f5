@@ -119,7 +119,7 @@ func TestCollectApplications(t *testing.T) {
 	partitionFilter := &arguments.PathMatcher{[]string{"Common"}}
 
 	wg.Add(1)
-	CollectApplications(i, client, &wg, partitionFilter, testServer.URL)
+	CollectApplications(i, client, &wg, partitionFilter, testServer.URL, arguments.ArgumentList{})
 	wg.Wait()
 
 	assert.Equal(t, 1, len(i.Entities))

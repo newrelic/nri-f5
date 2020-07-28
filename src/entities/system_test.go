@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/newrelic/infra-integrations-sdk/integration"
+	"github.com/newrelic/nri-f5/src/arguments"
 	"github.com/newrelic/nri-f5/src/client"
 	"github.com/stretchr/testify/assert"
 )
@@ -475,7 +476,7 @@ func TestCollectSystem(t *testing.T) {
 	var wg sync.WaitGroup
 
 	wg.Add(1)
-	CollectSystem(i, client, &wg, testServer.URL)
+	CollectSystem(i, client, &wg, testServer.URL, arguments.ArgumentList{})
 	wg.Wait()
 
 	assert.Equal(t, 1, len(i.Entities))

@@ -95,7 +95,7 @@ func TestCollectNodes(t *testing.T) {
 	partitionFilter := &arguments.PathMatcher{[]string{"Common"}}
 
 	wg.Add(1)
-	CollectNodes(i, client, &wg, partitionFilter, testServer.URL)
+	CollectNodes(i, client, &wg, partitionFilter, testServer.URL, arguments.ArgumentList{})
 	wg.Wait()
 
 	assert.Equal(t, 1, len(i.Entities))

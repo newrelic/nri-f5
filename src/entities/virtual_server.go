@@ -12,21 +12,24 @@ import (
 )
 
 // CollectVirtualServers collects virtual server entities from F5 and adds them to the integration
-func CollectVirtualServers(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher, hostPort string) {
+func CollectVirtualServers(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher, hostPort string, args arguments.ArgumentList) {
 	defer wg.Done()
 
-	var ltmVirtual definition.LtmVirtual
-	if err := client.Request("/mgmt/tm/ltm/virtual", &ltmVirtual); err != nil {
-		log.Error("Failed to collect inventory for virtual server: %s", err.Error())
+	if args.HasInventory() {
+		var ltmVirtual definition.LtmVirtual
+		if err := client.Request("/mgmt/tm/ltm/virtual", &ltmVirtual); err != nil {
+			log.Error("Failed to collect inventory for virtual server: %s", err.Error())
+		}
+		populateVirtualServerInventory(i, ltmVirtual, pathFilter, hostPort)
 	}
 
-	var ltmVirtualStats definition.LtmVirtualStats
-	if err := client.Request("/mgmt/tm/ltm/virtual/stats", &ltmVirtualStats); err != nil {
-		log.Error("Failed to collect metrics for virtual server: %s", err.Error())
+	if args.HasMetrics() {
+		var ltmVirtualStats definition.LtmVirtualStats
+		if err := client.Request("/mgmt/tm/ltm/virtual/stats", &ltmVirtualStats); err != nil {
+			log.Error("Failed to collect metrics for virtual server: %s", err.Error())
+		}
+		populateVirtualServerMetrics(i, ltmVirtualStats, pathFilter, hostPort)
 	}
-
-	populateVirtualServerInventory(i, ltmVirtual, pathFilter, hostPort)
-	populateVirtualServerMetrics(i, ltmVirtualStats, pathFilter, hostPort)
 }
 
 func populateVirtualServerInventory(i *integration.Integration, ltmVirtual definition.LtmVirtual, pathFilter *arguments.PathMatcher, hostPort string) {

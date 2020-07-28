@@ -12,21 +12,24 @@ import (
 )
 
 // CollectNodes collects node entities from F5 and adds them to the integration
-func CollectNodes(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher, hostPort string) {
+func CollectNodes(i *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, pathFilter *arguments.PathMatcher, hostPort string, args arguments.ArgumentList) {
 	defer wg.Done()
 
-	var ltmNode definition.LtmNode
-	if err := client.Request("/mgmt/tm/ltm/node", &ltmNode); err != nil {
-		log.Error("Failed to collect inventory for nodes: %s", err.Error())
+	if args.HasInventory() {
+		var ltmNode definition.LtmNode
+		if err := client.Request("/mgmt/tm/ltm/node", &ltmNode); err != nil {
+			log.Error("Failed to collect inventory for nodes: %s", err.Error())
+		}
+		populateNodesInventory(i, ltmNode, pathFilter, hostPort)
 	}
 
-	var ltmNodeStats definition.LtmNodeStats
-	if err := client.Request("/mgmt/tm/ltm/node/stats", &ltmNodeStats); err != nil {
-		log.Error("Failed to collect metrics for nodes: %s", err.Error())
+	if args.HasMetrics() {
+		var ltmNodeStats definition.LtmNodeStats
+		if err := client.Request("/mgmt/tm/ltm/node/stats", &ltmNodeStats); err != nil {
+			log.Error("Failed to collect metrics for nodes: %s", err.Error())
+		}
+		populateNodesMetrics(i, ltmNodeStats, pathFilter, hostPort)
 	}
-
-	populateNodesInventory(i, ltmNode, pathFilter, hostPort)
-	populateNodesMetrics(i, ltmNodeStats, pathFilter, hostPort)
 }
 
 func populateNodesInventory(i *integration.Integration, ltmNode definition.LtmNode, pathFilter *arguments.PathMatcher, hostPort string) {
