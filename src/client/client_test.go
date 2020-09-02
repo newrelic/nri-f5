@@ -17,6 +17,7 @@ func Test_CreateClient(t *testing.T) {
 		Password: "testPass",
 		Hostname: "testHost",
 		Port:     1945,
+
 		MaxConcurrentRequests: 1,
 	}
 
