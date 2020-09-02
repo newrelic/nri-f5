@@ -17,6 +17,7 @@ func Test_CreateClient(t *testing.T) {
 		Password: "testPass",
 		Hostname: "testHost",
 		Port:     1945,
+		MaxConcurrentRequests: 1,
 	}
 
 	client, err := NewClient(&args)
@@ -49,10 +50,11 @@ func Test_LogIn(t *testing.T) {
 	defer func() { testServer.Close() }()
 
 	client := F5Client{
-		BaseURL:    testServer.URL,
-		Username:   "testUser",
-		Password:   "testPass",
-		HTTPClient: http.DefaultClient,
+		BaseURL:          testServer.URL,
+		Username:         "testUser",
+		Password:         "testPass",
+		HTTPClient:       http.DefaultClient,
+		RequestSemaphore: make(chan struct{}, 1),
 	}
 
 	err := client.Request("/some-endpoint", nil)

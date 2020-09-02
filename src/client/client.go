@@ -14,11 +14,12 @@ import (
 
 // F5Client represents a client that is able to make requests to the F5 iControl API.
 type F5Client struct {
-	HTTPClient *http.Client
-	Username   string
-	Password   string
-	AuthToken  string
-	BaseURL    string
+	HTTPClient       *http.Client
+	Username         string
+	Password         string
+	AuthToken        string
+	BaseURL          string
+	RequestSemaphore chan struct{}
 }
 
 const loginEndpoint = "/mgmt/shared/authn/login"
@@ -31,11 +32,12 @@ func NewClient(args *arguments.ArgumentList) (*F5Client, error) {
 	}
 
 	return &F5Client{
-		HTTPClient: httpClient,
-		Username:   args.Username,
-		Password:   args.Password,
-		AuthToken:  "",
-		BaseURL:    "https://" + args.Hostname + ":" + strconv.Itoa(args.Port),
+		HTTPClient:       httpClient,
+		Username:         args.Username,
+		Password:         args.Password,
+		AuthToken:        "",
+		BaseURL:          "https://" + args.Hostname + ":" + strconv.Itoa(args.Port),
+		RequestSemaphore: make(chan struct{}, args.MaxConcurrentRequests),
 	}, nil
 }
 
@@ -47,6 +49,9 @@ func (c *F5Client) Request(endpoint string, model interface{}) error {
 // DoRequest makes a request to the given endpoint using the given request body, storing the result in the model if possible.
 // An error is returned if either step cannot be completed.
 func (c *F5Client) DoRequest(method, endpoint, body string, model interface{}) error {
+	c.RequestSemaphore <- struct{}{}
+	defer func() { <-c.RequestSemaphore }()
+
 	req, err := http.NewRequest(method, c.BaseURL+endpoint, strings.NewReader(body))
 	if err != nil {
 		return err

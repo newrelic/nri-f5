@@ -108,11 +108,12 @@ func TestCollectApplications(t *testing.T) {
 	defer func() { testServer.Close() }()
 
 	client := &client.F5Client{
-		BaseURL:    testServer.URL,
-		Username:   "testUser",
-		Password:   "testPass",
-		HTTPClient: http.DefaultClient,
-		AuthToken:  "asdfd",
+		BaseURL:          testServer.URL,
+		Username:         "testUser",
+		Password:         "testPass",
+		HTTPClient:       http.DefaultClient,
+		AuthToken:        "asdfd",
+		RequestSemaphore: make(chan struct{}, 1),
 	}
 
 	var wg sync.WaitGroup
