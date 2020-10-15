@@ -79,8 +79,7 @@
             </Component>
         </ComponentGroup>
         <ComponentGroup Id="CustomPluginsComponent" Directory="CustomPluginsFolder">
-            <Component Id="CMP_NRI_$(var.IntegrationName)_DEFINITION_YML" Guid="aa9752b7-413b-4810-835b-dce790109c03
-" Win64="no">
+            <Component Id="CMP_NRI_$(var.IntegrationName)_DEFINITION_YML" Guid="aa9752b7-413b-4810-835b-dce790109c03" Win64="no">
                 <File Id="FILE_NRI_$(var.IntegrationName)_DEFINITION_YML"
                       Name="$(var.IntegrationName)-win-definition.yml"
                       Source="$(var.BinariesPath)New Relic\newrelic-infra\newrelic-integrations\$(var.IntegrationName)-win-definition.yml"
