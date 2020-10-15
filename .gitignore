@@ -45,3 +45,6 @@ debug
 
 connections.yml
 test-runner-output/*
+
+dist
+*.gpg
