@@ -1,6 +1,4 @@
 WORKDIR      := $(shell pwd)
-TARGET       := target
-TARGET_DIR    = $(WORKDIR)/$(TARGET)
 NATIVEOS	 := $(shell go version | awk -F '[ /]' '{print $$4}')
 NATIVEARCH	 := $(shell go version | awk -F '[ /]' '{print $$5}')
 INTEGRATION  := f5
@@ -57,7 +55,6 @@ test: deps
 	@gocov test -race $(GO_PKGS) | gocov-xml > coverage.xml
 
 # Include thematic Makefiles
-include Makefile-*.mk
 include $(CURDIR)/build/ci.mk
 include $(CURDIR)/build/release.mk
 

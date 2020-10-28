@@ -46,5 +46,14 @@ debug
 connections.yml
 test-runner-output/*
 
-dist
+bin/
+dist/
+
+# Local development tools/files
+.env
+.envrc
 *.gpg
+
+# build files
+src/versioninfo.json
+src/resource.syso
