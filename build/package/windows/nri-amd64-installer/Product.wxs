@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <?define Version = "$(var.IntegrationVersion)" ?>
     <?define ProductId = "*" ?>
-    <?define UpgradeCode = "{f2334d3a-10f1-4a4c-9185-08d197f95b2b}" ?>
+    <?define UpgradeCode = "{73d03306-78f5-4b3b-a444-fa87381ddadc}" ?>
 
     <Product Id="$(var.ProductId)"
              Name="New Relic Infrastructure Integration, nri-$(var.IntegrationName)"
@@ -49,17 +49,17 @@
 
     <Fragment>
         <DirectoryRef Id="PluginConfigsFolder">
-            <Component Id="CMP_V1_PLUGIN_CONFIGS" Guid="07bbd5f7-913c-46fa-b6c6-65ab2ca5f695" KeyPath="yes">
+            <Component Id="CMP_V1_PLUGIN_CONFIGS" Guid="803C978C-B2A1-47C7-BB17-A2DE9E6D3145" KeyPath="yes">
                 <CreateFolder/>
             </Component>
         </DirectoryRef>
         <DirectoryRef Id="CustomPluginsFolder">
-            <Component Id="CMP_V1_CUSTOM_PLUGINS" Guid="74d7da1e-44bd-4c3b-9ed8-08400a0e2385" KeyPath="yes">
+            <Component Id="CMP_V1_CUSTOM_PLUGINS" Guid="0EE4AAF4-9923-499C-A1D0-FF55B205A76C" KeyPath="yes">
                 <CreateFolder/>
             </Component>
         </DirectoryRef>
         <DirectoryRef Id="CustomPluginsBinFolder">
-            <Component Id="CMP_V1_CUSTOM_PLUGINS_BIN" Guid="65d4f14f-6894-4d3e-b533-73fe7dfe8001" KeyPath="yes">
+            <Component Id="CMP_V1_CUSTOM_PLUGINS_BIN" Guid="e4509a7a-409e-4a38-8705-37de9cf0d72d" KeyPath="yes">
                 <CreateFolder/>
             </Component>
         </DirectoryRef>
@@ -67,19 +67,19 @@
 
     <Fragment>
         <ComponentGroup Id="CustomPluginsBinComponent" Directory="CustomPluginsBinFolder">
-            <Component Id="CMP_NRI_$(var.IntegrationName)_EXE" Guid="d6dc2dfa-f9cc-4a8c-b730-79d73c261da1" Win64="yes">
+            <Component Id="CMP_NRI_$(var.IntegrationName)_EXE" Guid="ee588d29-c9d4-4e12-bb72-d26cad377588" Win64="yes">
                 <File Id="FILE_NRI_$(var.IntegrationName)_EXE"
                       Source="$(var.BinariesPath)New Relic\newrelic-infra\newrelic-integrations\bin\nri-$(var.IntegrationName).exe"
                       KeyPath="yes"/>
             </Component>
-            <Component Id="CMP_NRI_$(var.IntegrationName)_LICENSE" Guid="0f8628b3-41d1-4f34-b290-b62736ecf0f7" Win64="yes">
+            <Component Id="CMP_NRI_$(var.IntegrationName)_LICENSE" Guid="acc7e790-80c7-4960-834a-ffe12f369316" Win64="yes">
                 <File Id="FILE_NRI_$(var.IntegrationName)_LICENSE"
                       Source="$(var.ProjectRootPath)LICENSE"
                       KeyPath="yes"/>
             </Component>
         </ComponentGroup>
         <ComponentGroup Id="CustomPluginsComponent" Directory="CustomPluginsFolder">
-            <Component Id="CMP_NRI_$(var.IntegrationName)_DEFINITION_YML" Guid="0b4101ad-ae49-4104-9cf2-93e1e217a9a7" Win64="yes">
+            <Component Id="CMP_NRI_$(var.IntegrationName)_DEFINITION_YML" Guid="cd9eb557-bbe7-4100-a9c1-a6274d77a9af" Win64="yes">
                 <File Id="FILE_NRI_$(var.IntegrationName)_DEFINITION_YML"
                       Name="$(var.IntegrationName)-win-definition.yml"
                       Source="$(var.BinariesPath)New Relic\newrelic-infra\newrelic-integrations\$(var.IntegrationName)-win-definition.yml"
