@@ -2,8 +2,11 @@
 package main
 
 import (
+	"fmt"
 	"os"
+	"runtime"
 	"strconv"
+	"strings"
 	"sync"
 
 	"github.com/newrelic/infra-integrations-sdk/integration"
@@ -14,18 +17,32 @@ import (
 )
 
 const (
-	integrationName    = "com.newrelic.f5"
-	integrationVersion = "2.2.0"
+	integrationName = "com.newrelic.f5"
 )
 
 var (
-	args arguments.ArgumentList
+	args               arguments.ArgumentList
+	integrationVersion = "0.0.0"
+	gitCommit          = ""
+	buildDate          = ""
 )
 
 func main() {
 	// Create Integration
 	i, err := integration.New(integrationName, integrationVersion, integration.Args(&args))
 	exitOnErr(err)
+
+	if args.ShowVersion {
+		fmt.Printf(
+			"New Relic %s integration Version: %s, Platform: %s, GoVersion: %s, GitCommit: %s, BuildDate: %s\n",
+			strings.Title(strings.Replace(integrationName, "com.newrelic.", "", 1)),
+			integrationVersion,
+			fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
+			runtime.Version(),
+			gitCommit,
+			buildDate)
+		os.Exit(0)
+	}
 
 	log.SetupLogging(args.Verbose)
 

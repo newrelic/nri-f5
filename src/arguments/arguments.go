@@ -20,6 +20,7 @@ type ArgumentList struct {
 	CABundleDir           string `default:"" help:"Alternative Certificate Authority bundle directory"`
 	PartitionFilter       string `default:"[\"Common\"]" help:"JSON array of partitions to collect"`
 	MaxConcurrentRequests int    `default:"10" help:"Maximum number of requests running concurrently"`
+	ShowVersion           bool   `default:"false" help:"Print build information and exit"`
 }
 
 // Parse validates and parses out regex patterns from the input arguments
