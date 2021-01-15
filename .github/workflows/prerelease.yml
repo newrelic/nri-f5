@@ -18,7 +18,6 @@ env:
   PFX_CERTIFICATE_BASE64: ${{ secrets.OHAI_PFX_CERTIFICATE_BASE64 }} # base64 encoded
   PFX_CERTIFICATE_DESCRIPTION: 'New Relic'
   PFX_PASSPHRASE:  ${{ secrets.OHAI_PFX_PASSPHRASE }}
-  SNYK_TOKEN: ${{ secrets.COREINT_SNYK_TOKEN }}
   REPO_FULL_NAME: ${{ github.event.repository.full_name }}
   TAG: ${{ github.event.release.tag_name }}
 
@@ -40,6 +39,8 @@ jobs:
   snyk:
     name: Run security checks via snyk
     runs-on: ubuntu-20.04
+    env:
+      SNYK_TOKEN: ${{ secrets.COREINT_SNYK_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - name: Login to DockerHub
