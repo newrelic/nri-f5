@@ -107,7 +107,7 @@ archives:
       - nri-win
     name_template: "{{ .ProjectName }}-{{ .Arch }}.{{ .Version }}_dirty"
     files:
-      - f5-win-config.yml.sample
+      - f5-config.yml.sample
       - f5-win-definition.yml
     format: zip
 
