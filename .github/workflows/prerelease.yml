@@ -12,9 +12,6 @@ env:
   GO_VERSION: '1.9.7'
   INTEGRATION: "f5"
   ORIGINAL_REPO_NAME: 'newrelic/nri-f5'
-  PFX_CERTIFICATE_BASE64: ${{ secrets.OHAI_PFX_CERTIFICATE_BASE64 }} # base64 encoded
-  PFX_CERTIFICATE_DESCRIPTION: 'New Relic'
-  PFX_PASSPHRASE:  ${{ secrets.OHAI_PFX_PASSPHRASE }}
   REPO_FULL_NAME: ${{ github.event.repository.full_name }}
   TAG: ${{ github.event.release.tag_name }}
 
