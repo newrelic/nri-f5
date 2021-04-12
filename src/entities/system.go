@@ -27,6 +27,7 @@ func CollectSystem(integration *integration.Integration, client *client.F5Client
 		metric.Attribute{Key: "url", Value: client.BaseURL},
 	)
 
+	log.Debug("collecting system metrics")
 	var systemWg sync.WaitGroup
 	if args.HasInventory() {
 		systemWg.Add(1)
@@ -39,6 +40,7 @@ func CollectSystem(integration *integration.Integration, client *client.F5Client
 		go marshalCPUStats(systemMetrics, client, &systemWg)
 	}
 	systemWg.Wait()
+	log.Debug("system metrics collected")
 }
 
 func marshalSystemInfo(systemEntity *integration.Entity, client *client.F5Client, wg *sync.WaitGroup) {

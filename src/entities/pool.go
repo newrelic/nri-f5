@@ -42,6 +42,7 @@ func CollectPools(i *integration.Integration, client *client.F5Client, wg *sync.
 }
 
 func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPool, ltmPoolStats definition.LtmPoolStats, partitionFilter *arguments.PathMatcher, hostPort string) {
+	log.Debug("processing inventory for %d pools (%d entries)", len(ltmPool.Items), len(ltmPoolStats.Entries))
 	for _, pool := range ltmPool.Items {
 		if !partitionFilter.Matches(pool.FullPath) {
 			continue
@@ -83,9 +84,11 @@ func populatePoolsInventory(i *integration.Integration, ltmPool definition.LtmPo
 			_ = poolEntity.SetInventoryItem(k, "value", v)
 		}
 	}
+	log.Debug("%d pools (%d entries) processed", len(ltmPool.Items), len(ltmPoolStats.Entries))
 }
 
 func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.LtmPoolStats, partitionFilter *arguments.PathMatcher, hostPort string) {
+	log.Debug("processing metrics for %d pools", len(ltmPoolStats.Entries))
 	for _, pool := range ltmPoolStats.Entries {
 		entries := pool.NestedStats.Entries
 		poolName := entries.FullPath.Description
@@ -116,4 +119,5 @@ func populatePoolsMetrics(i *integration.Integration, ltmPoolStats definition.Lt
 			log.Error("Failed to populate metrics for pool %s: %s", poolName, err)
 		}
 	}
+	log.Debug("%d pools processed", len(ltmPoolStats.Entries))
 }

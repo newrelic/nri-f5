@@ -76,7 +76,7 @@ func init() {
 // SetupLogging redirects global logs to stderr and configures the log level.
 func SetupLogging(verbose bool) {
 	globalLogger = defaultLogger{
-		logger: log.New(os.Stderr, "", 0),
+		logger: log.New(os.Stderr, "", log.Ltime | log.LUTC),
 		debug:  verbose,
 	}
 }

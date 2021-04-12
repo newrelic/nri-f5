@@ -24,6 +24,7 @@ func CollectApplications(i *integration.Integration, client *client.F5Client, wg
 		return
 	}
 
+	log.Debug("processing application metrics for % services", len(appResponse.Items))
 	for _, applicationItem := range appResponse.Items {
 		if !pathFilter.Matches(applicationItem.FullPath) {
 			continue
@@ -59,4 +60,5 @@ func CollectApplications(i *integration.Integration, client *client.F5Client, wg
 			}
 		}
 	}
+	log.Debug("%d application metrics processed", len(appResponse.Items))
 }

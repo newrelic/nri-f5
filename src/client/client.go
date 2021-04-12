@@ -3,6 +3,7 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/newrelic/infra-integrations-sdk/log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -49,6 +50,7 @@ func (c *F5Client) Request(endpoint string, model interface{}) error {
 // DoRequest makes a request to the given endpoint using the given request body, storing the result in the model if possible.
 // An error is returned if either step cannot be completed.
 func (c *F5Client) DoRequest(method, endpoint, body string, model interface{}) error {
+	log.Debug("request to %s queued", endpoint)
 	c.RequestSemaphore <- struct{}{}
 	defer func() { <-c.RequestSemaphore }()
 
@@ -67,6 +69,7 @@ func (c *F5Client) DoRequest(method, endpoint, body string, model interface{}) e
 
 	req.SetBasicAuth(c.Username, c.Password)
 
+	log.Debug("requesting %s", endpoint)
 	res, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return err
@@ -76,10 +79,12 @@ func (c *F5Client) DoRequest(method, endpoint, body string, model interface{}) e
 		return fmt.Errorf("request failed for endpoint %s: %s", endpoint, err.Error())
 	}
 
+	log.Debug("request to %s done, deserializing", endpoint)
 	err = json.NewDecoder(res.Body).Decode(model)
 	if err != nil {
 		return err
 	}
+	log.Debug("finished deserializing request to %s", endpoint)
 
 	return nil
 }

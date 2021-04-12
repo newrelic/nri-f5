@@ -33,6 +33,7 @@ func CollectVirtualServers(i *integration.Integration, client *client.F5Client, 
 }
 
 func populateVirtualServerInventory(i *integration.Integration, ltmVirtual definition.LtmVirtual, pathFilter *arguments.PathMatcher, hostPort string) {
+	log.Debug("processing inventory for %d virtual servers", len(ltmVirtual.Items))
 	for _, virtual := range ltmVirtual.Items {
 		if !pathFilter.Matches(virtual.FullPath) {
 			continue
@@ -59,11 +60,12 @@ func populateVirtualServerInventory(i *integration.Integration, ltmVirtual defin
 
 		}
 	}
+	log.Debug("%d virtual servers processed", len(ltmVirtual.Items))
 }
 
 func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats definition.LtmVirtualStats, pathFilter *arguments.PathMatcher, hostPort string) {
+	log.Debug("processing metrics for %d virtual servers", len(ltmVirtualStats.Entries))
 	for _, virtual := range ltmVirtualStats.Entries {
-
 		entries := virtual.NestedStats.Entries
 		virtualName := entries.TmName.Description
 		if !pathFilter.Matches(virtualName) {
@@ -97,4 +99,5 @@ func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats de
 			log.Error("Failed to populate metrics for virtual server %s: %s", virtualName, err)
 		}
 	}
+	log.Debug("%d virtual servers processed", len(ltmVirtualStats.Entries))
 }

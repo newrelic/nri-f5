@@ -33,6 +33,7 @@ func CollectNodes(i *integration.Integration, client *client.F5Client, wg *sync.
 }
 
 func populateNodesInventory(i *integration.Integration, ltmNode definition.LtmNode, pathFilter *arguments.PathMatcher, hostPort string) {
+	log.Debug("processing inventory for %d nodes", len(ltmNode.Items))
 	for _, node := range ltmNode.Items {
 		if !pathFilter.Matches(node.FullPath) {
 			continue
@@ -57,9 +58,11 @@ func populateNodesInventory(i *integration.Integration, ltmNode definition.LtmNo
 			}
 		}
 	}
+	log.Debug("inventory for %d nodes processed", len(ltmNode.Items))
 }
 
 func populateNodesMetrics(i *integration.Integration, ltmNodeStats definition.LtmNodeStats, pathFilter *arguments.PathMatcher, hostPort string) {
+	log.Debug("processing metrics for %d nodes", len(ltmNodeStats.Entries))
 	for _, node := range ltmNodeStats.Entries {
 		if !pathFilter.Matches(node.NestedStats.Entries.TmName.Description) {
 			continue
@@ -92,4 +95,5 @@ func populateNodesMetrics(i *integration.Integration, ltmNodeStats definition.Lt
 			log.Error("Failed to populate metrics for node %s: %s", nodeName, err)
 		}
 	}
+	log.Debug("metrics for %d nodes processed", len(ltmNodeStats.Entries))
 }

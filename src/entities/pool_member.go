@@ -32,6 +32,7 @@ func CollectPoolMembers(fullPath string, i *integration.Integration, client *cli
 }
 
 func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *integration.Integration, hostPort string) {
+	log.Debug("processing inventory for %d pools members", len(memberStats.Entries))
 	for poolURL, poolMember := range memberStats.Entries {
 		entries := poolMember.NestedStats.Entries
 		memberName, err := buildPoolMemberPath(poolURL)
@@ -60,9 +61,11 @@ func populatePoolMembersInventory(memberStats definition.LtmPoolMemberStats, i *
 			}
 		}
 	}
+	log.Debug("%d pools members processed", len(memberStats.Entries))
 }
 
 func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *integration.Integration, url string, hostPort string) {
+	log.Debug("processing metrics for %d pools members", len(memberStats.Entries))
 	for poolURL, poolMember := range memberStats.Entries {
 		entries := poolMember.NestedStats.Entries
 		memberName, err := buildPoolMemberPath(poolURL)
@@ -99,7 +102,7 @@ func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *in
 			continue
 		}
 	}
-
+	log.Debug("%d pools members processed", len(memberStats.Entries))
 }
 
 func buildPoolMemberPath(url string) (string, error) {
