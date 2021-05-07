@@ -4,6 +4,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/newrelic/infra-integrations-sdk/data/attribute"
 	"github.com/newrelic/infra-integrations-sdk/data/metric"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
@@ -22,9 +23,9 @@ func CollectSystem(integration *integration.Integration, client *client.F5Client
 		return
 	}
 	systemMetrics := systemEntity.NewMetricSet("F5BigIpSystemSample",
-		metric.Attribute{Key: "displayName", Value: systemEntity.Metadata.Name},
-		metric.Attribute{Key: "entityName", Value: systemEntity.Metadata.Namespace + ":" + systemEntity.Metadata.Name},
-		metric.Attribute{Key: "url", Value: client.BaseURL},
+		attribute.Attribute{Key: "displayName", Value: systemEntity.Metadata.Name},
+		attribute.Attribute{Key: "entityName", Value: systemEntity.Metadata.Namespace + ":" + systemEntity.Metadata.Name},
+		attribute.Attribute{Key: "url", Value: client.BaseURL},
 	)
 
 	var systemWg sync.WaitGroup

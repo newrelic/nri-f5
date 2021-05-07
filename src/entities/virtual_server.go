@@ -3,7 +3,7 @@ package entities
 import (
 	"sync"
 
-	"github.com/newrelic/infra-integrations-sdk/data/metric"
+	"github.com/newrelic/infra-integrations-sdk/data/attribute"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
 	"github.com/newrelic/nri-f5/src/arguments"
@@ -88,8 +88,8 @@ func populateVirtualServerMetrics(i *integration.Integration, ltmVirtualStats de
 		entries.EphemeralBytesOut.ProcessedValue = &ephemeralBytesOut
 
 		ms := virtualEntity.NewMetricSet("F5BigIpVirtualServerSample",
-			metric.Attribute{Key: "displayName", Value: virtualName},
-			metric.Attribute{Key: "entityName", Value: "virtualServer:" + virtualName},
+			attribute.Attribute{Key: "displayName", Value: virtualName},
+			attribute.Attribute{Key: "entityName", Value: "virtualServer:" + virtualName},
 		)
 
 		err = ms.MarshalMetrics(entries)

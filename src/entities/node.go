@@ -3,7 +3,7 @@ package entities
 import (
 	"sync"
 
-	"github.com/newrelic/infra-integrations-sdk/data/metric"
+	"github.com/newrelic/infra-integrations-sdk/data/attribute"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
 	"github.com/newrelic/nri-f5/src/arguments"
@@ -83,8 +83,8 @@ func populateNodesMetrics(i *integration.Integration, ltmNodeStats definition.Lt
 		entries.DataOut.ProcessedValue = &dataOut
 
 		ms := nodeEntity.NewMetricSet("F5BigIpNodeSample",
-			metric.Attribute{Key: "displayName", Value: nodeName},
-			metric.Attribute{Key: "entityName", Value: "node:" + nodeName},
+			attribute.Attribute{Key: "displayName", Value: nodeName},
+			attribute.Attribute{Key: "entityName", Value: "node:" + nodeName},
 		)
 
 		err = ms.MarshalMetrics(entries)
