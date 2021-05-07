@@ -19,7 +19,7 @@ func TestCollectSystem(t *testing.T) {
 		res.WriteHeader(200)
 
 		if req.URL.String() == "/mgmt/tm/cloud/sys/host-info-stat" {
-			res.Write([]byte(`{
+			_, err := res.Write([]byte(`{
 				"items": [{
 					"hostId": "0",
 					"memoryTotal": 33767403520,
@@ -115,8 +115,9 @@ func TestCollectSystem(t *testing.T) {
 				"kind": "tm:cloud:sys:host-info-stat:ltmhostinfostatcollectionstate",
 				"selfLink": "https://localhost/mgmt/tm/cloud/sys/host-info-stat"
 			}`))
+			assert.NoError(t, err)
 		} else if req.URL.String() == "/mgmt/tm/sys/cpu" {
-			res.Write([]byte(`{
+			_, err := res.Write([]byte(`{
 				"kind": "tm:sys:cpu:cpucollectionstats",
 				"selfLink": "https://localhost/mgmt/tm/sys/cpu?ver=12.1.1",
 				"entries": {
@@ -446,8 +447,9 @@ func TestCollectSystem(t *testing.T) {
 				"usageRatio": { "value": 1 },
 				"user": { "value": 8971205 }
 			} } } } } }, "hostId": { "description": "0" } } } } } }`))
+			assert.NoError(t, err)
 		} else if req.URL.String() == "/mgmt/tm/cloud/net/system-information" {
-			res.Write([]byte(`{
+			_, err := res.Write([]byte(`{
 				"items": [{
 					"chassisSerialNumber": "f5-njcu-trbd",
 					"product": "5000",
@@ -460,6 +462,7 @@ func TestCollectSystem(t *testing.T) {
 				"kind": "tm:cloud:net:system-information:syssysteminfocollectionstate",
 				"selfLink": "https://localhost/mgmt/tm/cloud/net/system-information"
 			}`))
+			assert.NoError(t, err)
 		}
 	}))
 

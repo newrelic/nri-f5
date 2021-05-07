@@ -19,7 +19,7 @@ func TestCollectNodes(t *testing.T) {
 		res.WriteHeader(200)
 
 		if req.URL.String() == "/mgmt/tm/ltm/node" {
-			res.Write([]byte(`{
+			_, err := res.Write([]byte(`{
 				"kind": "tm:ltm:node:nodecollectionstate",
 				"selfLink": "https://localhost/mgmt/tm/ltm/node?ver=12.1.1",
 				"items": [{
@@ -47,8 +47,9 @@ func TestCollectNodes(t *testing.T) {
 					"state": "unchecked"
 				}]
 			}`))
+			assert.NoError(t, err)
 		} else if req.URL.String() == "/mgmt/tm/ltm/node/stats" {
-			res.Write([]byte(`{
+			_, err := res.Write([]byte(`{
 					"kind": "tm:ltm:node:nodecollectionstats",
 					"selfLink": "https://localhost/mgmt/tm/ltm/node/stats?ver=12.1.1",
 					"entries": {
@@ -78,6 +79,7 @@ func TestCollectNodes(t *testing.T) {
 					}
 				}
 			}`))
+			assert.NoError(t, err)
 		}
 	}))
 
@@ -93,7 +95,7 @@ func TestCollectNodes(t *testing.T) {
 	}
 
 	var wg sync.WaitGroup
-	partitionFilter := &arguments.PathMatcher{[]string{"Common"}}
+	partitionFilter := &arguments.PathMatcher{Partitions: []string{"Common"}}
 
 	wg.Add(1)
 	CollectNodes(i, client, &wg, partitionFilter, testServer.URL, arguments.ArgumentList{})

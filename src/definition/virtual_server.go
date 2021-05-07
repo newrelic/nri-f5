@@ -71,10 +71,10 @@ type LtmVirtualStatsNestedStats struct {
 		} `json:"tmName"`
 		EvictedConns struct {
 			Value int `metric_name:"virtualserver.evictedConnsPerSecond" source_type:"rate"`
-		} `clientside.evictedConns`
+		} `json:"clientside.evictedConns"`
 		SlowKilled struct {
 			Value int `metric_name:"virtualserver.slowKilledPerSecond" source_type:"rate"`
-		} `clientside.slowKilled`
+		} `json:"clientside.slowKilled"`
 		TotalConns struct {
 			Value int `metric_name:"virtualserver.clientsideConnectionsPerSecond" source_type:"rate"`
 		} `json:"clientside.totConns"`

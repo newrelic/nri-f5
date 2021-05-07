@@ -19,7 +19,7 @@ func TestCollectApplications(t *testing.T) {
 		res.WriteHeader(200)
 
 		if req.URL.String() == "/mgmt/tm/sys/application/service" {
-			res.Write([]byte(`{
+			_, err := res.Write([]byte(`{
 				"kind": "tm:sys:application:service:servicecollectionstate",
 				"selfLink": "https://localhost/mgmt/tm/sys/application/service?ver=12.1.1",
 				"items": [{
@@ -99,6 +99,7 @@ func TestCollectApplications(t *testing.T) {
 					]
 				}]
 			}`))
+			assert.NoError(t, err)
 		}
 		//else if pattern := regexp.MustCompile(".*"); pattern.Match([]byte(req.URL.String())) {
 		//res.Write([]byte())
@@ -117,7 +118,7 @@ func TestCollectApplications(t *testing.T) {
 	}
 
 	var wg sync.WaitGroup
-	partitionFilter := &arguments.PathMatcher{[]string{"Common"}}
+	partitionFilter := &arguments.PathMatcher{Partitions: []string{"Common"}}
 
 	wg.Add(1)
 	CollectApplications(i, client, &wg, partitionFilter, testServer.URL, arguments.ArgumentList{})

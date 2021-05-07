@@ -42,10 +42,12 @@ func Test_LogIn(t *testing.T) {
 			assert.Equal(t, "testUser", bodyJSON["username"])
 			assert.Equal(t, "testPass", bodyJSON["password"])
 
-			res.Write([]byte("{\"token\":{\"token\":\"this-is-a-token\"}}"))
+			_, err := res.Write([]byte("{\"token\":{\"token\":\"this-is-a-token\"}}"))
+			assert.NoError(t, err)
 		} else {
 			assert.Equal(t, "this-is-a-token", req.Header.Get("X-F5-Auth-Token"))
-			res.Write([]byte("{\"ok\":true}"))
+			_, err := res.Write([]byte("{\"ok\":true}"))
+			assert.NoError(t, err)
 		}
 	}))
 	defer func() { testServer.Close() }()
