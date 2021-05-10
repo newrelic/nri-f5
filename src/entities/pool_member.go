@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/newrelic/infra-integrations-sdk/data/metric"
+	"github.com/newrelic/infra-integrations-sdk/data/attribute"
 	"github.com/newrelic/infra-integrations-sdk/integration"
 	"github.com/newrelic/infra-integrations-sdk/log"
 	"github.com/newrelic/nri-f5/src/arguments"
@@ -87,10 +87,10 @@ func populatePoolMembersMetrics(memberStats definition.LtmPoolMemberStats, i *in
 		entries.DataOut.ProcessedValue = &dataOut
 
 		ms := entity.NewMetricSet("F5BigIpPoolMemberSample",
-			metric.Attribute{Key: "displayName", Value: memberName},
-			metric.Attribute{Key: "entityName", Value: "poolmember:" + memberName},
-			metric.Attribute{Key: "poolName", Value: entries.PoolName.Description},
-			metric.Attribute{Key: "url", Value: url},
+			attribute.Attribute{Key: "displayName", Value: memberName},
+			attribute.Attribute{Key: "entityName", Value: "poolmember:" + memberName},
+			attribute.Attribute{Key: "poolName", Value: entries.PoolName.Description},
+			attribute.Attribute{Key: "url", Value: url},
 		)
 
 		err = ms.MarshalMetrics(entries)

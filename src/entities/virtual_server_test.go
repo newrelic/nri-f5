@@ -19,7 +19,7 @@ func TestCollectVirtualServers(t *testing.T) {
 		res.WriteHeader(200)
 
 		if req.URL.String() == "/mgmt/tm/ltm/virtual" {
-			res.Write([]byte(`{
+			_, err := res.Write([]byte(`{
 				"kind": "tm:ltm:virtual:virtualcollectionstate",
 				"selfLink": "https://localhost/mgmt/tm/ltm/virtual?ver=12.1.1",
 				"items": [{
@@ -70,8 +70,9 @@ func TestCollectVirtualServers(t *testing.T) {
 					}
 				}]
 			}`))
+			assert.NoError(t, err)
 		} else if req.URL.String() == "/mgmt/tm/ltm/virtual/stats" {
-			res.Write([]byte(`{
+			_, err := res.Write([]byte(`{
 				"kind": "tm:ltm:virtual:virtualcollectionstats",
 				"selfLink": "https://localhost/mgmt/tm/ltm/virtual/stats?ver=12.1.1",
 				"entries": {
@@ -128,6 +129,7 @@ func TestCollectVirtualServers(t *testing.T) {
 				}
 			}
 		}`))
+			assert.NoError(t, err)
 		}
 	}))
 
@@ -143,7 +145,7 @@ func TestCollectVirtualServers(t *testing.T) {
 	}
 
 	var wg sync.WaitGroup
-	partitionFilter := &arguments.PathMatcher{[]string{"Common"}}
+	partitionFilter := &arguments.PathMatcher{Partitions: []string{"Common"}}
 
 	wg.Add(1)
 	CollectVirtualServers(i, client, &wg, partitionFilter, testServer.URL, arguments.ArgumentList{})

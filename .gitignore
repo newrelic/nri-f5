@@ -48,6 +48,7 @@ test-runner-output/*
 
 bin/
 dist/
+vendor/
 
 # Local development tools/files
 .idea
