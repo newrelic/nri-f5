@@ -15,13 +15,15 @@ clean:
 	@echo "=== $(INTEGRATION) === [ clean ]: Removing binaries and coverage file..."
 	@rm -rfv bin coverage.xml
 
-validate: 
-	@echo "=== $(INTEGRATION) === [ validate ]: Validating source code running golangci-lint..."
-	@go run $(GOFLAGS) $(GOLANGCI_LINT) run --verbose
+validate:
+	@printf "=== $(INTEGRATION) === [ validate ]: running golangci-lint & semgrep... "
+	@go run  $(GOFLAGS) $(GOLANGCI_LINT) run --verbose
+	@[ -f .semgrep.yml ] && semgrep_config=".semgrep.yml" || semgrep_config="p/golang" ; \
+	docker run --rm -v "${PWD}:/src:ro" --workdir /src returntocorp/semgrep -c "$$semgrep_config"
 
 test:
 	@echo "=== $(INTEGRATION) === [ test ]: Running unit tests..."
-	@go run $(GOFLAGS) $(GOCOV) test ./... | go run $(GOFLAGS) $(GOCOV_XML) > coverage.xml
+	@go test -race ./... -count=1
 
 compile: 
 	@echo "=== $(INTEGRATION) === [ compile ]: Building $(BINARY_NAME)..."
