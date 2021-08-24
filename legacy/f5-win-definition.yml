@@ -1,22 +1,22 @@
 name: com.newrelic.f5
-description: Reports status and metrics for nri-f5 service
-protocol_version: 2
-os: linux
+description: Reports status and metrics for F5 service. Legacy file kept for compatibility.
+protocol_version: 1
+os: windows
 
 commands:
   all_data:
     command:
-      - ./bin/nri-f5
+      - .\bin\nri-f5.exe
     prefix: config/f5
     interval: 15
   metrics:
     command:
-      - ./bin/nri-f5
+      - .\bin\nri-f5.exe
       - --metrics
     interval: 15
   inventory:
     command:
-      - ./bin/nri-f5
+      - .\bin\nri-f5.exe
       - --inventory
     prefix: config/f5
     interval: 15

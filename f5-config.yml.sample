@@ -1,24 +1,26 @@
-integration_name: com.newrelic.f5
+integrations:
+- name: nri-f5
+  env:
+    # Username of the F5 instance
+    USERNAME: admin
+    # Password of the F5 instance
+    PASSWORD: admin
+    
+    # Hostname of the F5 instance
+    HOSTNAME: f5-host
+    # Port of the F5 instance
+    PORT: "443"
+    
+    # CA certificate file
+    CA_BUNDLE_FILE: /etc/ca_certificate.crt
 
-instances:
-  - name: nri-f5
-    # command can be all_data, metrics, or inventory
-    command: all_data
-    arguments:
-      # Username of the F5 instance
-      username: admin
-      # Password of the F5 instance
-      password: admin
-      # Hostname of the F5 instance
-      hostname: f5-host
-      # Port of the F5 instance
-      port: 443
-      # CA certificate file
-      ca_bundle_file: /etc/ca_certificate.crt
-      # A JSON array of BIG-IP partitions to collect from.
-      # The partition name should have no leading slash.
-      # Defaults to '["Common"]'
-      partition_filter: '["Common","MyOtherPartition"]'
-      # The number of seconds to wait before a request times out
-      # Defaults to 30
-      timeout: 10
+    # A JSON array of BIG-IP partitions to collect from.
+    # The partition name should have no leading slash.
+    # Defaults to '["Common"]'
+    PARTITION_FILTER: '["Common","MyOtherPartition"]'
+    
+    # The number of seconds to wait before a request times out
+    # Defaults to 30
+    TIMEOUT: "10"
+  interval: 15s
+  inventory_source: config/f5
