@@ -11,13 +11,17 @@ integrations:
     # Port of the F5 instance
     PORT: "443"
     
-    # CA certificate file
-    CA_BUNDLE_FILE: /etc/ca_certificate.crt
+    # Alternative Certificate Authority bundle directory and file
+    # CA_BUNDLE_FILE: /etc/ca_certificate.crt
+    # CA_BUNDLE_DIR:
 
     # A JSON array of BIG-IP partitions to collect from.
     # The partition name should have no leading slash.
     # Defaults to '["Common"]'
     PARTITION_FILTER: '["Common","MyOtherPartition"]'
+
+    # Maximum number of requests running concurrently
+    # MAX_CONCURRENT_REQUESTS: 10
     
     # The number of seconds to wait before a request times out
     # Defaults to 30
