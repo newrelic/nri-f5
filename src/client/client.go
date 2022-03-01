@@ -22,7 +22,10 @@ type F5Client struct {
 	RequestSemaphore chan struct{}
 }
 
-const loginEndpoint = "/mgmt/shared/authn/login"
+const (
+	loginEndpoint  = "/mgmt/shared/authn/login"
+	logoutEndpoint = "/mgmt/shared/authz/tokens/%s"
+)
 
 // NewClient takes in arguments and creates and returns a client that will talk to the F5 API, or an error if one cannot be created
 func NewClient(args *arguments.ArgumentList) (*F5Client, error) {
@@ -109,6 +112,25 @@ func (c *F5Client) LogIn() error {
 
 	// successful request, extract token
 	c.AuthToken = *loginResponse.Token.Token
+	return nil
+}
+
+// LogOut attempts to delete the auth token used in the actual session in order to not reach the maximum of 100 active tokens
+// per user F5 Big Ip has (By default the tokens retrieved with the logIn call expire after 20 minutes)
+func (c *F5Client) LogOut() error {
+	logoutCall := fmt.Sprintf(logoutEndpoint, c.AuthToken)
+
+	var logoutResponse tokenStruct
+	err := c.DoRequest(http.MethodDelete, logoutCall, "", &logoutResponse)
+	if err != nil {
+		return err
+	}
+
+	if logoutResponse.Token == nil {
+		return fmt.Errorf("couldn't delete auth token")
+	}
+
+	c.AuthToken = ""
 	return nil
 }
 
