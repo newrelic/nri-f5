@@ -45,29 +45,45 @@ func CollectSystem(integration *integration.Integration, client *client.F5Client
 func marshalSystemInfo(systemEntity *integration.Entity, client *client.F5Client, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	var sysInfo definition.CloudNetSystemInformation
-	endpoint := "/mgmt/tm/cloud/net/system-information"
-	if err := client.Request(endpoint, &sysInfo); err != nil {
-		log.Error("Couldn't get response from API for endpoint '%s': %v", endpoint, err)
+	sysInfo := marshalDeviceSystemInfo(client)
+	if sysInfo == nil {
 		return
 	}
 
-	if len(sysInfo.Items) == 0 {
+	if sysInfo.NumItems() == 0 {
 		log.Error("Couldn't get system information: no items returned from system endpoint")
 		return
 	}
 
-	sysInfoItem := sysInfo.Items[0]
-
 	for k, v := range map[string]interface{}{
-		"chassisSerialNumber": sysInfoItem.ChassisSerialNumber,
-		"platform":            sysInfoItem.Platform,
-		"product":             sysInfoItem.Product,
+		"chassisSerialNumber": sysInfo.ChassisSerialNumber(),
+		"platform":            sysInfo.Platform(),
+		"product":             sysInfo.Product(),
 	} {
 		if err := systemEntity.SetInventoryItem(k, "value", v); err != nil {
 			log.Error("Couldn't set inventory item '%s' on system entity: %v", k, err)
 		}
 	}
+}
+
+func marshalDeviceSystemInfo(client *client.F5Client) definition.DeviceSystemInfo {
+	var cloudNetSystemInfo definition.CloudNetSystemInformation
+	smInfoEndpoint := "/mgmt/tm/cloud/net/system-information"
+	errSmInfo := client.Request(smInfoEndpoint, &cloudNetSystemInfo)
+	if errSmInfo == nil {
+		return cloudNetSystemInfo
+	}
+
+	var cmDevice definition.CMDevice
+	cmDeviceEndpoint := "/mgmt/tm/cm/device"
+	errDevice := client.Request(cmDeviceEndpoint, &cmDevice)
+	if errDevice == nil {
+		return cmDevice
+	}
+
+	log.Error("Couldn't get response from API for endpoint '%s': %v", smInfoEndpoint, errSmInfo)
+	log.Error("Couldn't get response from API for endpoint '%s': %v", cmDeviceEndpoint, errDevice)
+	return nil
 }
 
 func marshalMemoryStats(systemMetrics *metric.Set, client *client.F5Client, wg *sync.WaitGroup) {
