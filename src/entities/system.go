@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"errors"
 	"strings"
 	"sync"
 
@@ -12,6 +13,8 @@ import (
 	"github.com/newrelic/nri-f5/src/client"
 	"github.com/newrelic/nri-f5/src/definition"
 )
+
+var errDeviceSystemInfoNotFound = errors.New("system info couldn't be retrieved")
 
 // CollectSystem collects the system entity from F5 and adds it to the integration
 func CollectSystem(integration *integration.Integration, client *client.F5Client, wg *sync.WaitGroup, hostPort string, args arguments.ArgumentList) {
@@ -45,8 +48,8 @@ func CollectSystem(integration *integration.Integration, client *client.F5Client
 func marshalSystemInfo(systemEntity *integration.Entity, client *client.F5Client, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	sysInfo := marshalDeviceSystemInfo(client)
-	if sysInfo == nil {
+	sysInfo, err := marshalDeviceSystemInfo(client)
+	if err != nil {
 		return
 	}
 
@@ -66,24 +69,24 @@ func marshalSystemInfo(systemEntity *integration.Entity, client *client.F5Client
 	}
 }
 
-func marshalDeviceSystemInfo(client *client.F5Client) definition.DeviceSystemInfo {
+func marshalDeviceSystemInfo(client *client.F5Client) (definition.DeviceSystemInfo, error) {
 	var cloudNetSystemInfo definition.CloudNetSystemInformation
 	smInfoEndpoint := "/mgmt/tm/cloud/net/system-information"
 	errSmInfo := client.Request(smInfoEndpoint, &cloudNetSystemInfo)
 	if errSmInfo == nil {
-		return cloudNetSystemInfo
+		return cloudNetSystemInfo, nil
 	}
+	log.Warn("Couldn't get response from API for endpoint '%s': %v", smInfoEndpoint, errSmInfo)
 
 	var cmDevice definition.CMDevice
 	cmDeviceEndpoint := "/mgmt/tm/cm/device"
 	errDevice := client.Request(cmDeviceEndpoint, &cmDevice)
 	if errDevice == nil {
-		return cmDevice
+		return cmDevice, nil
 	}
+	log.Warn("Couldn't get response from API for endpoint '%s': %v", cmDeviceEndpoint, errDevice)
 
-	log.Error("Couldn't get response from API for endpoint '%s': %v", smInfoEndpoint, errSmInfo)
-	log.Error("Couldn't get response from API for endpoint '%s': %v", cmDeviceEndpoint, errDevice)
-	return nil
+	return nil, errDeviceSystemInfoNotFound
 }
 
 func marshalMemoryStats(systemMetrics *metric.Set, client *client.F5Client, wg *sync.WaitGroup) {

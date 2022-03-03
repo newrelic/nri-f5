@@ -50,7 +50,7 @@ func Test_LogIn(t *testing.T) {
 			assert.NoError(t, err)
 		}
 	}))
-	defer func() { testServer.Close() }()
+	defer testServer.Close()
 
 	client := F5Client{
 		BaseURL:          testServer.URL,
@@ -90,7 +90,7 @@ func Test_LogOut(t *testing.T) {
 			res.WriteHeader(401)
 		}
 	}))
-	defer func() { testServer.Close() }()
+	defer testServer.Close()
 
 	client := F5Client{
 		BaseURL:          testServer.URL,
