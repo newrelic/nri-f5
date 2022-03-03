@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"errors"
 	nrHttp "github.com/newrelic/infra-integrations-sdk/http"
 	"github.com/newrelic/nri-f5/src/arguments"
 )
@@ -26,6 +27,8 @@ const (
 	loginEndpoint  = "/mgmt/shared/authn/login"
 	logoutEndpoint = "/mgmt/shared/authz/tokens/%s"
 )
+
+var errDeleteAuthToken = errors.New("couldn't delete auth token")
 
 // NewClient takes in arguments and creates and returns a client that will talk to the F5 API, or an error if one cannot be created
 func NewClient(args *arguments.ArgumentList) (*F5Client, error) {
@@ -137,7 +140,7 @@ func (c *F5Client) LogOut() error {
 	}
 
 	if logoutResponse.Token == nil {
-		return fmt.Errorf("couldn't delete auth token")
+		return errDeleteAuthToken
 	}
 
 	c.AuthToken = ""
