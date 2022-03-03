@@ -50,6 +50,7 @@ func marshalSystemInfo(systemEntity *integration.Entity, client *client.F5Client
 
 	sysInfo, err := marshalDeviceSystemInfo(client)
 	if err != nil {
+		log.Error("%v", err)
 		return
 	}
 
@@ -76,7 +77,7 @@ func marshalDeviceSystemInfo(client *client.F5Client) (definition.DeviceSystemIn
 	if errSmInfo == nil {
 		return cloudNetSystemInfo, nil
 	}
-	log.Warn("Couldn't get response from API for endpoint '%s': %v", smInfoEndpoint, errSmInfo)
+	log.Debug("Couldn't get response from API for endpoint '%s': %v", smInfoEndpoint, errSmInfo)
 
 	var cmDevice definition.CMDevice
 	cmDeviceEndpoint := "/mgmt/tm/cm/device"
@@ -84,7 +85,7 @@ func marshalDeviceSystemInfo(client *client.F5Client) (definition.DeviceSystemIn
 	if errDevice == nil {
 		return cmDevice, nil
 	}
-	log.Warn("Couldn't get response from API for endpoint '%s': %v", cmDeviceEndpoint, errDevice)
+	log.Debug("Couldn't get response from API for endpoint '%s': %v", cmDeviceEndpoint, errDevice)
 
 	return nil, errDeviceSystemInfoNotFound
 }
