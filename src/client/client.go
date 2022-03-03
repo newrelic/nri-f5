@@ -2,13 +2,13 @@ package client
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
-	"errors"
 	nrHttp "github.com/newrelic/infra-integrations-sdk/http"
 	"github.com/newrelic/nri-f5/src/arguments"
 )
