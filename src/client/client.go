@@ -2,6 +2,7 @@ package client
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -22,11 +23,26 @@ type F5Client struct {
 	RequestSemaphore chan struct{}
 }
 
-const loginEndpoint = "/mgmt/shared/authn/login"
+const (
+	loginEndpoint  = "/mgmt/shared/authn/login"
+	logoutEndpoint = "/mgmt/shared/authz/tokens/%s"
+)
+
+var errDeleteAuthToken = errors.New("couldn't delete auth token")
 
 // NewClient takes in arguments and creates and returns a client that will talk to the F5 API, or an error if one cannot be created
 func NewClient(args *arguments.ArgumentList) (*F5Client, error) {
-	httpClient, err := nrHttp.New(args.CABundleFile, args.CABundleDir, time.Duration(args.Timeout)*time.Second)
+	var options []nrHttp.ClientOption
+
+	if args.CABundleDir != "" {
+		options = append(options, nrHttp.WithCABundleDir(args.CABundleDir))
+	}
+	if args.CABundleFile != "" {
+		options = append(options, nrHttp.WithCABundleFile(args.CABundleFile))
+	}
+	options = append(options, nrHttp.WithTimeout(time.Duration(args.Timeout)*time.Second))
+
+	httpClient, err := nrHttp.New(options...)
 	if err != nil {
 		return nil, err
 	}
@@ -109,6 +125,25 @@ func (c *F5Client) LogIn() error {
 
 	// successful request, extract token
 	c.AuthToken = *loginResponse.Token.Token
+	return nil
+}
+
+// LogOut attempts to delete the auth token used in the actual session in order to not reach the maximum of 100 active tokens
+// per user F5 Big Ip has (By default the tokens retrieved with the logIn call expire after 20 minutes)
+func (c *F5Client) LogOut() error {
+	logoutCall := fmt.Sprintf(logoutEndpoint, c.AuthToken)
+
+	var logoutResponse tokenStruct
+	err := c.DoRequest(http.MethodDelete, logoutCall, "", &logoutResponse)
+	if err != nil {
+		return err
+	}
+
+	if logoutResponse.Token == nil {
+		return errDeleteAuthToken
+	}
+
+	c.AuthToken = ""
 	return nil
 }
 

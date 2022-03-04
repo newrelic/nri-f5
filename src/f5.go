@@ -56,6 +56,7 @@ func main() {
 	exitOnErr(err)
 
 	collectEntities(i, client, pathFilter)
+	_ = client.LogOut()
 
 	exitOnErr(i.Publish())
 }

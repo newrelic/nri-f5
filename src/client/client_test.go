@@ -50,7 +50,7 @@ func Test_LogIn(t *testing.T) {
 			assert.NoError(t, err)
 		}
 	}))
-	defer func() { testServer.Close() }()
+	defer testServer.Close()
 
 	client := F5Client{
 		BaseURL:          testServer.URL,
@@ -74,6 +74,37 @@ func Test_LogIn(t *testing.T) {
 	err = client.Request("/some-endpoint", &okResp)
 	assert.NoError(t, err)
 	assert.Equal(t, true, *okResp.OK)
+}
+
+func Test_LogOut(t *testing.T) {
+	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		t.Logf("Received request for %s", req.URL)
+
+		if req.URL.String() == "/mgmt/shared/authz/tokens/a-valid-token" {
+			res.WriteHeader(200)
+			assert.Equal(t, "a-valid-token", req.Header.Get("X-F5-Auth-Token"))
+
+			_, err := res.Write([]byte("{\"token\":\"a-valid-token\",\"another-param\":\"another\"}"))
+			assert.NoError(t, err)
+		} else {
+			res.WriteHeader(401)
+		}
+	}))
+	defer testServer.Close()
+
+	client := F5Client{
+		BaseURL:          testServer.URL,
+		AuthToken:        "a-valid-token",
+		HTTPClient:       http.DefaultClient,
+		RequestSemaphore: make(chan struct{}, 1),
+	}
+
+	err := client.LogOut()
+	assert.NoError(t, err)
+
+	client.AuthToken = "an-invalid-token"
+	err = client.LogOut()
+	assert.Error(t, err)
 }
 
 func Test_BadStatusCode(t *testing.T) {

@@ -14,6 +14,7 @@ import (
 
 func TestCollectSystem(t *testing.T) {
 	i, _ := integration.New("test", "test")
+	var inventoryCalls int
 
 	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		res.WriteHeader(200)
@@ -448,7 +449,8 @@ func TestCollectSystem(t *testing.T) {
 				"user": { "value": 8971205 }
 			} } } } } }, "hostId": { "description": "0" } } } } } }`))
 			assert.NoError(t, err)
-		} else if req.URL.String() == "/mgmt/tm/cloud/net/system-information" {
+		} else if req.URL.String() == "/mgmt/tm/cloud/net/system-information" && inventoryCalls == 0 {
+			inventoryCalls++
 			_, err := res.Write([]byte(`{
 				"items": [{
 					"chassisSerialNumber": "f5-njcu-trbd",
@@ -461,6 +463,23 @@ func TestCollectSystem(t *testing.T) {
 				"lastUpdateMicros": 0,
 				"kind": "tm:cloud:net:system-information:syssysteminfocollectionstate",
 				"selfLink": "https://localhost/mgmt/tm/cloud/net/system-information"
+			}`))
+			assert.NoError(t, err)
+		} else if req.URL.String() == "/mgmt/tm/cm/device" {
+			_, err := res.Write([]byte(`{
+				"items": [{
+					"chassisId": "f5-xrr-llbd",
+					"product": "BIG-IP",
+					"platform": "Z100",
+					"generation": 1,
+					"lastUpdateMicros": 0,
+					"edition": "Point Release 1",
+      				"failoverState": "active"
+				}],
+				"generation": 1,
+				"lastUpdateMicros": 0,
+				"kind": "tm:cm:device:devicecollectionstate",
+				"selfLink": "https://localhost/mgmt/tm/cm/device?ver=16.1.2.1"
 			}`))
 			assert.NoError(t, err)
 		}
@@ -490,4 +509,17 @@ func TestCollectSystem(t *testing.T) {
 
 	inventory := systemEntity.Inventory.Items()
 	assert.Equal(t, "f5-njcu-trbd", inventory["chassisSerialNumber"]["value"])
+
+	wg.Add(1)
+	CollectSystem(i, client, &wg, testServer.URL, arguments.ArgumentList{})
+	wg.Wait()
+
+	assert.Equal(t, 1, len(i.Entities))
+	systemEntity, _ = i.EntityReportedVia(testServer.URL, testServer.URL, "f5-system")
+	metrics = systemEntity.Metrics[0].Metrics
+	assert.Equal(t, float64(0.0), metrics["system.cpuUserUtilization"])
+
+	// Second time "/mgmt/tm/cm/device" will be called because inventoryCalls will not be 0
+	inventory = systemEntity.Inventory.Items()
+	assert.Equal(t, "f5-xrr-llbd", inventory["chassisSerialNumber"]["value"])
 }

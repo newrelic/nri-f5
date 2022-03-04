@@ -1,5 +1,12 @@
 package definition
 
+type DeviceSystemInfo interface {
+	ChassisSerialNumber() string
+	Platform() string
+	Product() string
+	NumItems() int
+}
+
 // CloudNetSystemInformation is an unmarshalling struct
 type CloudNetSystemInformation struct {
 	Kind  string                          `json:"kind"`
@@ -11,6 +18,44 @@ type CloudNetSystemInformationItem struct {
 	ChassisSerialNumber string `json:"chassisSerialNumber"`
 	Platform            string `json:"platform"`
 	Product             string `json:"product"`
+}
+
+func (c CloudNetSystemInformation) ChassisSerialNumber() string {
+	return c.Items[0].ChassisSerialNumber
+}
+func (c CloudNetSystemInformation) Platform() string {
+	return c.Items[0].ChassisSerialNumber
+}
+func (c CloudNetSystemInformation) Product() string {
+	return c.Items[0].ChassisSerialNumber
+}
+func (c CloudNetSystemInformation) NumItems() int {
+	return len(c.Items)
+}
+
+type CMDevice struct {
+	Kind  string         `json:"kind"`
+	Items []CMDeviceItem `json:"items"`
+}
+
+// CMDeviceItem is an unmarshalling struct
+type CMDeviceItem struct {
+	ChassisSerialNumber string `json:"chassisId"`
+	Platform            string `json:"platform"`
+	Product             string `json:"product"`
+}
+
+func (c CMDevice) ChassisSerialNumber() string {
+	return c.Items[0].ChassisSerialNumber
+}
+func (c CMDevice) Platform() string {
+	return c.Items[0].ChassisSerialNumber
+}
+func (c CMDevice) Product() string {
+	return c.Items[0].ChassisSerialNumber
+}
+func (c CMDevice) NumItems() int {
+	return len(c.Items)
 }
 
 // =====================
