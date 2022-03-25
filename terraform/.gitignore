@@ -1,0 +1,7 @@
+.DS_Store
+*.swp
+.vscode/
+**/.terraform/
+graph.dot
+graph.png
+server.crt
