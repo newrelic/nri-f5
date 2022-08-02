@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.6.0 (2022-08-01)
+### Fixed
+Bumped the goversion used to build the integration. Upgrading the goversion to 1.18,
+
+In particular in the new golang version the CommonName is no longer taken into consideration while validating certificates.
+> The deprecated, legacy behavior of treating the CommonName field on X.509 certificates as a host name when no Subject Alternative Names are present is now disabled by default.
+
+This could be an issue for users still relying on legacy `commonName` and not on `Subject Alternative Name`. In that case they would see an error message like:
+```
+[ERR] Encountered fatal error: Post [...] x509:  certificate relies on legacy Common Name field, use SANs instead
+```
+
+To overcome this issue the user should update the certificate relying on `Subject Alternative Name`. 
+In the meanwhile as a workaround they could also pass the new argument `--ssl_insecure_skip_verify` to skip the certificate validation.
+
 ## 2.5.3 (2022-06-20)
 ### Changed
 - Updated dependencies
