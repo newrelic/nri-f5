@@ -15,8 +15,6 @@ For installation and usage instructions, see our [documentation web site](https:
 
 ## Building
 
-Golang is required to build the integration. We recommend Golang 1.18.
-
 After cloning this repository, go to the directory of the F5 integration and build it:
 
 ```bash

@@ -18,7 +18,7 @@ This could be an issue for users still relying on legacy `commonName` and not on
 ```
 
 To overcome this issue the user should update the certificate relying on `Subject Alternative Name`. 
-In the meanwhile as a workaround they could also pass the new argument `--tls_insecure_skip_verify` to skip the certificate validation.
+While the certificate is not updated, certificate validation could be disabled setting --tls_insecure_skip_verify` to true.
 
 ## 2.5.3 (2022-06-20)
 ### Changed
