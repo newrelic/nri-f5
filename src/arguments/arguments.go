@@ -21,7 +21,7 @@ type ArgumentList struct {
 	PartitionFilter       string `default:"[\"Common\"]" help:"JSON array of partitions to collect"`
 	MaxConcurrentRequests int    `default:"10" help:"Maximum number of requests running concurrently"`
 	ShowVersion           bool   `default:"false" help:"Print build information and exit"`
-	SslInsecureSkipVerify bool   `default:"false" help:"Skip verification of the certificate sent by the host."`
+	TLSInsecureSkipVerify bool   `default:"false" help:"Skip verification of the certificate sent by the host."`
 }
 
 // Parse validates and parses out regex patterns from the input arguments

@@ -40,7 +40,7 @@ func NewClient(args *arguments.ArgumentList) (*F5Client, error) {
 	if args.CABundleFile != "" {
 		options = append(options, nrHttp.WithCABundleFile(args.CABundleFile))
 	}
-	if args.SslInsecureSkipVerify {
+	if args.TLSInsecureSkipVerify {
 		options = append(options, nrHttp.WithTLSInsecureSkipVerify())
 	}
 
