@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 2.6.0 (2022-08-01)
+## 3.0.0 (2022-08-01)
 ### Fixed
 Bumped the goversion used to build the integration. Upgrading the goversion to 1.18,
 
