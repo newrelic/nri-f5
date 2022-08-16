@@ -40,6 +40,10 @@ func NewClient(args *arguments.ArgumentList) (*F5Client, error) {
 	if args.CABundleFile != "" {
 		options = append(options, nrHttp.WithCABundleFile(args.CABundleFile))
 	}
+	if args.TLSInsecureSkipVerify {
+		options = append(options, nrHttp.WithTLSInsecureSkipVerify())
+	}
+
 	options = append(options, nrHttp.WithTimeout(time.Duration(args.Timeout)*time.Second))
 
 	httpClient, err := nrHttp.New(options...)
