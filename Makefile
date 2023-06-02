@@ -9,17 +9,11 @@ GOCOV_XML        = github.com/AlekSi/gocov-xml
 
 all: build
 
-build: clean validate test compile
+build: clean test compile
 
 clean:
 	@echo "=== $(INTEGRATION) === [ clean ]: Removing binaries and coverage file..."
 	@rm -rfv bin coverage.xml
-
-validate:
-	@printf "=== $(INTEGRATION) === [ validate ]: running golangci-lint & semgrep... "
-	@go run  $(GOFLAGS) $(GOLANGCI_LINT) run --verbose
-	@[ -f .semgrep.yml ] && semgrep_config=".semgrep.yml" || semgrep_config="p/golang" ; \
-	docker run --rm -v "${PWD}:/src:ro" --workdir /src returntocorp/semgrep -c "$$semgrep_config"
 
 test:
 	@echo "=== $(INTEGRATION) === [ test ]: Running unit tests..."
@@ -33,4 +27,4 @@ compile:
 include $(CURDIR)/build/ci.mk
 include $(CURDIR)/build/release.mk
 
-.PHONY: all build clean validate compile test
+.PHONY: all build clean compile test
