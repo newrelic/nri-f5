@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.7.1 (2023-08-22)
+# Fixed
+- Removes config validation that prevents to run the integration without a custom CA certificates
+
 ## 2.7.0 (2023-06-06)
 # Changed
 - Upgrade Go version to 1.20

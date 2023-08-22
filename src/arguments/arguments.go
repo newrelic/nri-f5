@@ -8,6 +8,11 @@ import (
 	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
 )
 
+var (
+	ErrMissingUserOrPass             = errors.New("both username and password must be provided")
+	ErrNegativeMaxConcurrentRequests = errors.New("max_concurrent_requests must be a positive integer")
+)
+
 // ArgumentList contains all the arguments available for the F5 integration
 type ArgumentList struct {
 	sdkArgs.DefaultArgumentList
@@ -27,21 +32,17 @@ type ArgumentList struct {
 // Parse validates and parses out regex patterns from the input arguments
 func (al *ArgumentList) Parse() (*PathMatcher, error) {
 	if al.Username == "" || al.Password == "" {
-		return nil, errors.New("both username and password must be provided")
+		return nil, ErrMissingUserOrPass
 	}
 
 	if al.MaxConcurrentRequests <= 0 {
-		return nil, errors.New("max_concurrent_requests must be a positive integer")
+		return nil, ErrNegativeMaxConcurrentRequests
 	}
 
 	var partitions []string
 	err := json.Unmarshal([]byte(al.PartitionFilter), &partitions)
 	if err != nil {
 		return nil, err
-	}
-
-	if al.CABundleFile == "" && al.CABundleDir == "" {
-		return nil, errors.New("CABundleFile or CABundleDir must be specified")
 	}
 
 	return &PathMatcher{partitions}, nil
