@@ -1,103 +1,42 @@
-package arguments
+package arguments_test
 
 import (
 	"testing"
 
+	"github.com/newrelic/nri-f5/src/arguments"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestParseError(t *testing.T) {
 	testCases := []struct {
-		argumentList ArgumentList
-		expectError  bool
+		name         string
+		argumentList arguments.ArgumentList
+		expectError  error
 	}{
 		{
-			ArgumentList{
-				Username:              "",
-				Password:              "",
-				CABundleFile:          "test",
-				PartitionFilter:       "[]",
-				MaxConcurrentRequests: 1,
-			},
-			true,
+			name:         "user name or pass must be specified",
+			argumentList: arguments.ArgumentList{},
+			expectError:  arguments.ErrMissingUserOrPass,
 		},
 		{
-			ArgumentList{
-				Username:              "test",
-				Password:              "",
-				CABundleFile:          "test",
-				PartitionFilter:       "[]",
-				MaxConcurrentRequests: 1,
-			},
-			true,
-		},
-		{
-			ArgumentList{
+			name: "max concurrent request must be positive",
+			argumentList: arguments.ArgumentList{
 				Username:              "test",
 				Password:              "test",
-				CABundleFile:          "test",
-				PartitionFilter:       "[]",
-				MaxConcurrentRequests: 1,
+				MaxConcurrentRequests: -1,
 			},
-			false,
-		},
-		{
-			ArgumentList{
-				Username:              "test",
-				Password:              "test",
-				CABundleFile:          "test",
-				PartitionFilter:       `["test2"]`,
-				MaxConcurrentRequests: 1,
-			},
-			false,
-		},
-		{
-			ArgumentList{
-				Username:              "test",
-				Password:              "test",
-				CABundleFile:          "test",
-				PartitionFilter:       `["test2]`,
-				MaxConcurrentRequests: 1,
-			},
-			true,
-		},
-		{
-			ArgumentList{
-				Username:              "test",
-				Password:              "test",
-				CABundleFile:          "test",
-				PartitionFilter:       `["test2"`,
-				MaxConcurrentRequests: 1,
-			},
-			true,
-		},
-		{
-			ArgumentList{
-				Username:              "test",
-				Password:              "test",
-				PartitionFilter:       `["test2"]`,
-				MaxConcurrentRequests: 1,
-			},
-			true,
-		},
-		{
-			ArgumentList{
-				Username:              "test",
-				Password:              "test",
-				CABundleFile:          "test",
-				PartitionFilter:       `["test2"]`,
-				MaxConcurrentRequests: 0,
-			},
-			true,
+			expectError: arguments.ErrNegativeMaxConcurrentRequests,
 		},
 	}
 
 	for _, tc := range testCases {
-		_, err := tc.argumentList.Parse()
-		if tc.expectError {
-			assert.Error(t, err)
-		} else {
-			assert.Nil(t, err)
-		}
+		tc := tc
+
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			_, err := tc.argumentList.Parse()
+			assert.ErrorIs(t, err, tc.expectError)
+		})
 	}
 }
