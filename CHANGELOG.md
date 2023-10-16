@@ -1,16 +1,20 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+Unreleased section should follow [Release Toolkit](https://github.com/newrelic/release-toolkit#render-markdown-and-update-markdown)
+
+## Unreleased
+
 ## 2.7.1 (2023-08-22)
-# Fixed
+### Fixed
 - Removes config validation that prevents to run the integration without a custom CA certificates
 
 ## 2.7.0 (2023-06-06)
-# Changed
+### Changed
 - Upgrade Go version to 1.20
 
 ## 2.6.0 (2022-08-01)
