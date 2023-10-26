@@ -9,6 +9,11 @@ Unreleased section should follow [Release Toolkit](https://github.com/newrelic/r
 
 ## Unreleased
 
+## v2.7.2 - 2023-10-26
+
+### ⛓️ Dependencies
+- Updated golang version to 1.21
+
 ## 2.7.1 (2023-08-22)
 ### Fixed
 - Removes config validation that prevents to run the integration without a custom CA certificates
