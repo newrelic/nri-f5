@@ -5,9 +5,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/newrelic/infra-integrations-sdk/data/attribute"
-	"github.com/newrelic/infra-integrations-sdk/integration"
-	"github.com/newrelic/infra-integrations-sdk/log"
+	"github.com/newrelic/infra-integrations-sdk/v3/data/attribute"
+	"github.com/newrelic/infra-integrations-sdk/v3/integration"
+	"github.com/newrelic/infra-integrations-sdk/v3/log"
 	"github.com/newrelic/nri-f5/src/arguments"
 	"github.com/newrelic/nri-f5/src/client"
 	"github.com/newrelic/nri-f5/src/definition"
