@@ -6,7 +6,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/newrelic/infra-integrations-sdk/integration"
+	"github.com/newrelic/infra-integrations-sdk/v3/integration"
 	"github.com/newrelic/nri-f5/src/arguments"
 	"github.com/newrelic/nri-f5/src/client"
 	"github.com/stretchr/testify/assert"

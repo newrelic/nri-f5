@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strings"
 
-	sdkArgs "github.com/newrelic/infra-integrations-sdk/args"
+	sdkArgs "github.com/newrelic/infra-integrations-sdk/v3/args"
 )
 
 var (

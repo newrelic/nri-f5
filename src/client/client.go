@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	nrHttp "github.com/newrelic/infra-integrations-sdk/http"
+	nrHttp "github.com/newrelic/infra-integrations-sdk/v3/http"
 	"github.com/newrelic/nri-f5/src/arguments"
 )
 
