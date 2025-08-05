@@ -13,4 +13,5 @@ jobs:
     with:
       integration: f5
       tag: ${{ github.event.release.tag_name }}
+      upload_fips_packages: true
     secrets: inherit
