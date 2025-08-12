@@ -15,6 +15,6 @@ jobs:
       integration: "f5"
       run_integration_nix: false
       upload_fips_packages: true
-      dest_prefix: fips-test-nri-f5-rahul/
+      dest_prefix: fips-test-two-nri-f5-rahul/
       test_package: false
     secrets: inherit
