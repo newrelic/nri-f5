@@ -21,7 +21,7 @@ builds:
       - goos: darwin
         goarch: 386
 
-  - id: nri-f5-nix-fips
+  - id: nri-nix-fips
     main: ./src
     binary: nri-f5
     ldflags:
@@ -111,7 +111,7 @@ nfpms:
     license: "https://newrelic.com/terms (also see LICENSE installed with this package)"
 
     builds:
-      - nri-f5-nix-fips
+      - nri-nix-fips
 
     dependencies:
       - newrelic-infra-fips (>= 1.60.0)
@@ -156,9 +156,9 @@ archives:
         strip_parent: true
     format: tar.gz
 
-  - id: nri-f5-nix-fips
+  - id: nri-nix-fips
     builds:
-      - nri-f5-nix-fips
+      - nri-nix-fips
     name_template: "{{ .ProjectName }}-fips_{{ .Os }}_{{ .Version }}_{{ .Arch }}_dirty"
     files:
       - f5-config.yml.sample
