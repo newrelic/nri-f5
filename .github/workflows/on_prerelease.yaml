@@ -9,7 +9,7 @@ on:
 
 jobs:
   pre-release:
-    uses: newrelic/coreint-automation/.github/workflows/reusable_pre_release.yaml@v3
+    uses: newrelic/coreint-automation/.github/workflows/reusable_pre_release.yaml@fix_seperating_runner_for_fips
     with:
       tag: ${{ github.event.release.tag_name }}
       integration: "f5"
