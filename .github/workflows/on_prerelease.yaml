@@ -9,12 +9,10 @@ on:
 
 jobs:
   pre-release:
-    uses: newrelic/coreint-automation/.github/workflows/reusable_pre_release.yaml@fix_seperating_runner_for_fips
+    uses: newrelic/coreint-automation/.github/workflows/reusable_pre_release.yaml@v3
     with:
       tag: ${{ github.event.release.tag_name }}
       integration: "f5"
       run_integration_nix: false
       upload_fips_packages: true
-      dest_prefix: fips-test-four-nri-f5-rahul/
-      test_package: false
     secrets: inherit
