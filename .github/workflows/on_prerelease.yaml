@@ -14,4 +14,5 @@ jobs:
       tag: ${{ github.event.release.tag_name }}
       integration: "f5"
       run_integration_nix: false
+      upload_fips_packages: true
     secrets: inherit
